@@ -308,14 +308,14 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .howc .hp{flex:none;width:84px;height:84px;font-size:58px;display:flex;align-items:center;justify-content:center}.howc .hp svg{width:84px;height:84px}
 .howc p{margin:0;flex:1;font-size:clamp(22px,2.6vw,27px);line-height:1.3;font-weight:700}
 .howc .hs{flex:none;width:54px;height:54px;border-radius:50%;border:0;background:#eef0fb;font-size:26px}
-#howBtn{box-shadow:0 6px 0 #b9c0e8}
+#howBtn{height:60px;padding:0 20px;border-radius:999px;background:#fff;color:var(--dark);font-weight:800;font-size:22px;box-shadow:0 5px 0 #b9c0e8}
 </style>
 </head>
 <body>
 <div id="sky"><div class="hill"></div><div class="hill b"></div></div>
 
 <section class="screen on" id="home">
-  <div id="homeTop"><div class="coins" data-coins></div><button class="icon" id="gear" aria-label="Grown-ups: press and hold"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button></div>
+  <div id="homeTop"><div class="coins" data-coins></div><div style="display:flex;gap:10px"><button id="howBtn" data-go="howto">❓ How to Play</button><button class="icon" id="gear" aria-label="Grown-ups: press and hold"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button></div></div>
   <div id="parade"></div>
   <button id="visit" class="visit"></button>
   <h1>Max's <b>Critter</b> World</h1>
@@ -327,7 +327,6 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
     <button class="big alt" data-go="book">Critter Book</button>
     <button class="big alt" data-go="play">Critter Fun</button>
   </div>
-  <button class="big alt" id="howBtn" data-go="howto" style="min-height:60px;font-size:24px">❓ How to Play</button>
 </section>
 
 <section class="screen" id="menu">

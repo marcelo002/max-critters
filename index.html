@@ -289,7 +289,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <section class="screen" id="shop">
   <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>Critter Packs</h2><small>Bigger packs have more critters and find rarer ones.</small></div><div class="coins" data-coins></div></div>
-  <div class="scroll"><div class="packs" id="packs"></div></div>
+  <div class="scroll"><div id="pity" class="hint" style="text-align:center;margin-bottom:10px"></div><div class="packs" id="packs"></div></div>
 </section>
 
 <section class="screen" id="book">
@@ -343,6 +343,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <h2 id="openTitle">Tap the cards!</h2>
   <div id="openRow"></div>
   <div id="openSum" class="small"></div>
+  <div id="bonusBox" style="display:none"><h3>Bonus pick! Choose one to keep.</h3><div id="bonusRow" class="row"></div></div>
   <div class="row"><button class="big" id="openDone" style="display:none">Yay!</button><button class="big alt" id="openAgain" style="display:none">Open another</button></div>
 </div></div>
 
@@ -843,13 +844,13 @@ const PRAISE=['Great job!','You got it!','Awesome!','Super smart!','Nice work!',
 function mastery(st,first){if(R.review)return 0;st.hist=st.hist||[];st.hist.push(first?1:0);if(st.hist.length>10)st.hist.shift();const h=st.hist,l5=h.slice(-5),l3=h.slice(-3);
  if(l5.length>=5&&l5.filter(x=>x).length>=4)return 1;if((l3.length>=3&&l3.every(x=>!x))||(h.length>=10&&h.filter(x=>x).length<6))return -1;return 0}
 function evt(t){S.events=S.events||[];S.events.unshift({t:Date.now(),g:G.key,m:t});if(S.events.length>40)S.events.length=40}
-function win(){busy=true;const st=gs(G.key);stat(true);const c=miss===0?5:miss===1?3:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
- const p=pick(PRAISE);const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
+function win(){busy=true;const st=gs(G.key);stat(true);const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
+ const p=praise();const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
  if(R.after)R.after();let up=false,big=false;
- if(mv>0){big=true;st.hist=[];if(st.lvl<G.max){st.lvl++;up=true;evt(`Mastered level ${st.lvl-1}, moved up to ${st.lvl}`)}else evt(`Mastered the top level again`);S.coins+=up?20:10}
+ let gl=0,bonus=0;if(mv>0){big=true;st.hist=[];const ml=st.lvl;if(addGuard(G.key,ml))gl=ml;if(st.lvl<G.max){st.lvl++;up=true;evt(`Mastered level ${ml}, moved up to ${st.lvl}`)}else evt(gl?`Mastered the top level`:`Mastered the top level again`);bonus=(up||gl?25:10)+(gl?10:0);S.coins+=bonus}
  if(mv<0&&st.lvl>1){st.lvl--;st.hist=[];evt(`Eased down to level ${st.lvl} (was struggling)`)}else if(mv<0){st.hist=[]}
  save();drawHead();
- setTimeout(()=>{if(big){drawCoins(true);levelUp(up,st.lvl)}else nextRound()},R.after?2100:1500)}
+ setTimeout(()=>{if(big){drawCoins(true);levelUp(up,st.lvl,gl,bonus)}else nextRound()},R.after?2100:1500)}
 function lose(g){miss++;SFX.bad();const m=$('#msg');if(m){m.textContent=miss>=2?'Here is a little help!':'Not quite. Try again!';m.style.color='#c2410c'}
  if(miss===1){S.due=S.due||[];const now=Date.now();[1,3].forEach(dd=>S.due.push({g:G.key,l:R.lvl,seed:R.seed,ptr:R.ptr,at:now+dd*864e5}));if(S.due.length>60)S.due.splice(0,S.due.length-60)}
  if(miss===1)buddySay(pick(['Try again!','Almost! Look again.','You can do it!']));
@@ -857,9 +858,9 @@ function lose(g){miss++;SFX.bad();const m=$('#msg');if(m){m.textContent=miss>=2?
  if(miss===2&&R.why&&m){try{const h=R.why();if(h){let w=document.querySelector('.why');if(!w){w=document.createElement('div');w.className='why';m.after(w)}const bi=buddyId();if(bi!=null){w.classList.add('bd');w.innerHTML=`<div class="bf">${art(bi,tierOf(S.owned[bi]))}</div><div>${h}</div>`}else w.innerHTML=h}}catch(e){}}
  const p=document.querySelector('#eq,.mcols,.slots,.tiles');if(p){p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake')}
  S.log.unshift({t:Date.now(),g:G.key,l:R.lvl||gs(G.key).lvl,q:R.txt||'',a:String(g||'').slice(0,40)});if(S.log.length>60)S.log.length=60;save()}
-function levelUp(up,l){SFX.fanfare();confetti(50);const owned=Object.keys(S.owned).map(Number);const pk=owned.length?pick(owned):0;$('#lvlArt').innerHTML=art(pk,tierOf(S.owned[pk]|0));
- $('#lvlTitle').textContent=up?`Level ${l}!`:'Mastered!';$('#lvlText').innerHTML=`${up?`You mastered it! Now you're on level ${l} of ${esc(G.name)}.`:`You mastered the top level of ${esc(G.name)} again!`} Bonus: <b>+${up?20:10} coins</b>!`;
- say(up?`Level up! Level ${l}!`:'Bonus coins!');$('#lvlOv').classList.add('on')}
+function levelUp(up,l,gl,bonus){SFX.fanfare();confetti(gl?80:50);const owned=Object.keys(S.owned).map(Number);const pk=owned.length?pick(owned):0;
+ if(gl){$('#lvlArt').innerHTML=gArt(G.key,gl);$('#lvlTitle').textContent='New Guardian!';$('#lvlText').innerHTML=`You mastered level ${gl} of ${esc(G.name)} and earned <b>${esc(gName(G.key,gl))}</b>!${up?` Now you're on level ${l}.`:''} Bonus: <b>+${bonus} coins</b>!<div class="small">Find your guardians in the Critter Book.</div>`;say(`You earned ${gName(G.key,gl)}, a new guardian!`)}
+ else{$('#lvlArt').innerHTML=art(pk,tierOf(S.owned[pk]|0));$('#lvlTitle').textContent=up?`Level ${l}!`:'Mastered!';$('#lvlText').innerHTML=`${up?`You mastered it! Now you're on level ${l} of ${esc(G.name)}.`:`You mastered the top level of ${esc(G.name)} again!`} Bonus: <b>+${bonus} coins</b>!`;say(up?`Level up! Level ${l}!`:'Bonus coins!')}$('#lvlOv').classList.add('on')}
 $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound()};
 $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
 
@@ -879,24 +880,30 @@ const PACKS=[{n:'Starter',cards:3,cost:25,odds:[70,22,7,1,0],col:['#9aa5b1','#d6
  {n:'Mega',cards:4,cost:200,odds:[15,30,32,17,6],min:2,col:['#3b8eea','#bcdcff']},{n:'Legend',cards:5,cost:500,odds:[0,15,40,30,15],min:3,col:['#f6ad1e','#ffe6a8']}];
 function packArt(p){return `<svg viewBox="0 0 100 130"><path d="M14 10h72l-4 8 4 8v84l-4 8 4 8H14l4-8-4-8V26l4-8z" fill="${p.col[0]}"/><path d="M22 30h56v70H22z" fill="${p.col[1]}" opacity=".7"/>
  <path d="m50 42 6 14h15l-12 9 5 15-14-9-14 9 5-15-12-9h15z" fill="#fff"/><text x="50" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${p.n.toUpperCase()}</text></svg>`}
-function drawShop(){$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div><div style="font-weight:800">${p.cards} critters</div>
+function drawShop(){const nb=5-(S.packs%5),nl=15-(S.pity|0);$('#pity').innerHTML=`Bonus pick in <b>${nb}</b> pack${nb>1?'s':''} · Legendary for sure within <b>${nl}</b> pack${nl>1?'s':''}`;$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div><div style="font-weight:800">${p.cards} critters</div>
  <div class="odds">${p.odds.map((o,r)=>o?`<div><span><i style="background:${RAR[r].c}"></i>${RAR[r].n}</span><span>${o}%</span></div>`:'').join('')}${p.min?`<div class="small">At least one ${RAR[p.min].n} or better!</div>`:''}</div>
  <button class="buy" data-p="${i}" ${S.coins<p.cost?'disabled':''}>${COIN}${p.cost}</button>${S.coins<p.cost?`<div class="small">${p.cost-S.coins} more coins</div>`:''}</div>`).join('');
  $$('.buy').forEach(b=>b.onclick=()=>{ac();buy(+b.dataset.p)})}
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<5;i++){r-=odds[i];if(r<0)return i}return 0}
 function pickMon(rar){const pool=MON.filter(m=>m.rar===rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
 let lastPack=0;
-function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;const rars=Array.from({length:p.cards},()=>rollRar(p.odds));
- if(p.min&&Math.max(...rars)<p.min)rars[rars.length-1]=p.min;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
- save();drawCoins(true);SFX.tap();openPack(got)}
+function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;S.pity=(S.pity|0)+1;const rars=Array.from({length:p.cards},()=>rollRar(p.odds));
+ if(p.min&&Math.max(...rars)<p.min)rars[rars.length-1]=p.min;if(!rars.includes(4)&&S.pity>=15)rars[rars.length-1]=4;if(rars.includes(4))S.pity=0;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
+ let bon=null;if(S.packs%5===0){bon=[];let t=0;while(bon.length<3&&t++<50){const id=pickMon(Math.max(1,rollRar(p.odds)));if(!bon.includes(id))bon.push(id)}}
+ save();drawCoins(true);SFX.tap();openPack(got,bon)}
 function dupeMsg(g){const n=g.n;if(n==3)return'Shiny unlocked! ✨';if(n==6)return'Golden unlocked! ★';if(n<3)return`Copy ${n} of 3 to Shiny`;if(n<6)return`Copy ${n} of 6 to Golden`;return`Golden already! +${g.refund} coins`}
-function openPack(got){let opened=0;$('#openTitle').textContent='Tap each card to flip it!';$('#openSum').textContent='';$('#openDone').style.display='none';$('#openAgain').style.display='none';
+function openPack(got,bon){let opened=0;$('#bonusBox').style.display='none';$('#openTitle').textContent='Tap each card to flip it!';$('#openSum').textContent='';$('#openDone').style.display='none';$('#openAgain').style.display='none';
  $('#openRow').style.setProperty('--fw',got.length>3?'17vw':'26vw');$('#openRow').innerHTML=got.map((g,i)=>{const m=MON[g.id];return `<button class="flip${m.rar==4?' glowL':''}" data-i="${i}" style="--r:${RAR[m.rar].c}"><div class="in"><div class="fa">?</div><div class="ba">${art(g.id,tierOf(g.n))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div>${g.isNew?'<div class="tag">NEW!</div>':`<div class="tag${g.n==3||g.n==6?'':' d'}">${dupeMsg(g)}</div>`}</div></div></button>`}).join('');
  $$('#openRow .flip').forEach(b=>b.onclick=()=>{if(b.classList.contains('open'))return;b.classList.add('open');opened++;const g=got[+b.dataset.i],m=MON[g.id];
   if(m.rar>=3){SFX.fanfare();confetti(m.rar==4?80:40)}else if(g.isNew)SFX.good();else SFX.flip();if(g.n==3||g.n==6)say(`${m.name} is now ${TIER[tierOf(g.n)]}!`);else if(g.isNew&&m.rar>=2)say(`Wow! A ${RAR[m.rar].n.toLowerCase()} critter: ${m.name}!`);
   if(opened===got.length){const n=got.filter(g=>g.isNew).length,up=got.filter(g=>g.n==3||g.n==6).length;$('#openTitle').textContent=n?`${n} new critter${n>1?'s':''}!`:up?'Your critters powered up!':'Repeats help your critters power up!';
-   $('#openSum').textContent='Collect 3 copies of a critter to make it Shiny, and 6 to make it Golden.';$('#openDone').style.display='';$('#openAgain').style.display=S.coins>=PACKS[lastPack].cost?'':'none';drawCoins(true)}});
+   $('#openSum').textContent='Collect 3 copies of a critter to make it Shiny, and 6 to make it Golden.';const fin=()=>{$('#openDone').style.display='';$('#openAgain').style.display=S.coins>=PACKS[lastPack].cost?'':'none';drawCoins(true)};
+   if(bon&&bon.length){setTimeout(()=>showBonus(bon,fin),700)}else fin()}});
  $('#openOv').classList.add('on')}
+function showBonus(bon,fin){const B=$('#bonusBox');B.style.display='';SFX.fanfare();say('Bonus pick! Choose one critter to keep.');
+ $('#bonusRow').innerHTML=bon.map(id=>{const m=MON[id],n=S.owned[id]|0;return `<button class="mc" data-b="${id}" style="--r:${RAR[m.rar].c};width:150px">${art(id,tierOf(n))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div><div class="small">${n?`You have ${n}`:'New!'}</div></button>`}).join('');
+ $$('#bonusRow .mc').forEach(b=>b.onclick=()=>{const id=+b.dataset.b,m=MON[id];S.owned[id]=(S.owned[id]|0)+1;if(S.owned[id]>6)S.coins+=5;save();SFX.good();confetti(30);
+  $('#bonusRow').innerHTML=`<div class="mc" style="--r:${RAR[m.rar].c};width:170px">${art(id,tierOf(S.owned[id]))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div></div>`;$('#bonusBox h3').textContent=`You picked ${m.name}!`;fin()})}
 $('#openDone').onclick=()=>{SFX.tap();$('#openOv').classList.remove('on');drawShop()};
 $('#openAgain').onclick=()=>{$('#openOv').classList.remove('on');buy(lastPack)};
 
@@ -904,11 +911,15 @@ $('#openAgain').onclick=()=>{$('#openOv').classList.remove('on');buy(lastPack)};
 let bf=-1;
 function drawBook(){const own=MON.filter(m=>S.owned[m.id]);const sh=own.filter(m=>S.owned[m.id]>=3).length,gd=own.filter(m=>S.owned[m.id]>=6).length;$('#bookTitle').textContent=`Critter Book ${own.length}/${MON.length}`+(sh?` · ✨${sh}`:'')+(gd?` · ★${gd}`:'');
  $('#chips').innerHTML=`<button class="chip${bf<0?' on':''}" data-f="-1">All</button>`+RAR.map((r,i)=>`<button class="chip${bf===i?' on':''}" data-f="${i}" style="${bf===i?'':`box-shadow:inset 0 0 0 3px ${r.c}`}">${r.n} ${own.filter(m=>m.rar===i).length}/${MON.filter(m=>m.rar===i).length}</button>`).join('');
- $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=+b.dataset.f;drawBook()});
+ $('#chips').innerHTML+=`<button class="chip${bf==='g'?' on':''}" data-f="g">Guardians ${gCount()}/${GTOTAL()}</button>`;
+ $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=b.dataset.f==='g'?'g':+b.dataset.f;drawBook()});
+ if(bf==='g'){$('#bgrid').innerHTML=GAMES.map(g=>`<h3 style="grid-column:1/-1;margin:6px 0 0">${esc(g.name)} guardians</h3>`+Array.from({length:g.max},(_,i)=>{const l=i+1,h=hasG(g.key,l);return `<button class="mc${h?'':' no'}" data-gk="${g.key}" data-gl="${l}" style="--r:${g.bg}">${gArt(g.key,l)}<div class="nm">${h?esc(gName(g.key,l)):'???'}</div><div class="rr">Level ${l}</div></button>`}).join('')).join('');
+  $$('#bgrid [data-gk]').forEach(b=>b.onclick=()=>{const k=b.dataset.gk,l=+b.dataset.gl,g=GKEY[k];if(!hasG(k,l)){SFX.bad();toast(`Master level ${l} of ${g.name} to earn it!`);return}SFX.tap();
+   $('#detArt').innerHTML=gArt(k,l);$('#detName').textContent=gName(k,l);$('#detInfo').innerHTML=`<div style="font-weight:800">Guardian of ${esc(g.name)}, level ${l}</div><p>You earned this guardian by mastering level ${l}. Guardians protect the things you have learned!</p>`;$('#detBuddy').style.display='none';say(gName(k,l));$('#detOv').classList.add('on')});return}
  $('#bgrid').innerHTML=MON.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
  $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast('Open packs to find it!');return}SFX.tap();
   const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
-  $('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
+  $('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
 $('#detClose').onclick=()=>$('#detOv').classList.remove('on');
 
 /* =============== play with critters: art =============== */
@@ -1076,6 +1087,23 @@ function viewStory(i,from){svFrom=from||'play';const st=S.stories[i];if(!st)retu
 $('#svBack').onclick=()=>{SFX.tap();if(svFrom==='gallery')gallery('stories');else show('play')};
 $('#detBuddy').onclick=()=>{const id=+$('#detBuddy').dataset.id;if(!S.owned[id])return;S.buddy=id;save();SFX.good();$('#detBuddy').textContent='My buddy ♥';toast(`${MON[id].name} is your buddy!`)};
 
+/* =============== guardians, praise =============== */
+const GWORD={sym:'Signo',miss:'Hiddo',bal:'Scalio',jump:'Hoppit',tgt:'Targo',pat:'Patrix',word:'Lettra',sent:'Senta',story:'Taleo',match:'Rhymo',rid:'Riddlo'};
+const GADJ=['Little','Brave','Clever','Mighty','Grand','Super','Mega','Ultra'];
+const gName=(k,l)=>`${GADJ[l-1]||'Ultra'} ${GWORD[k]||'Guardo'}`;
+const GTOTAL=()=>GAMES.reduce((a,g)=>a+g.max,0);
+function gArt(k,l){const gi=Math.max(0,GAMES.findIndex(g=>g.key===k)),g=GAMES[gi]||GAMES[0],b=((gi*3+l*7)%10)*12+((gi+l)%8);
+ return `<svg viewBox="0 0 120 120" role="img" aria-label="${esc(gName(k,l))}"><path d="M60 3 109 17v38c0 31-22 53-49 61C33 108 11 86 11 55V17z" fill="${g.bg}" stroke="#fff" stroke-width="4"/><path d="M60 11 101 23v32c0 26-18 45-41 52C37 100 19 81 19 55V23z" fill="#fff" opacity=".22"/><g transform="translate(14 16) scale(.77)">${inner(art(b))}</g><circle cx="98" cy="97" r="16" fill="#ffd23f" stroke="#fff" stroke-width="3"/><text x="98" y="103.5" text-anchor="middle" font-size="19" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${l}</text></svg>`}
+const hasG=(k,l)=>!!(S.guard&&S.guard[k]&&S.guard[k].includes(l));
+function addGuard(k,l){S.guard=S.guard||{};const a=S.guard[k]=S.guard[k]||[];if(a.includes(l))return false;a.push(l);a.sort((x,y)=>x-y);return true}
+const gCount=()=>Object.values(S.guard||{}).reduce((a,x)=>a+x.length,0);
+if((S.ph|0)<2){GAMES.forEach(g=>{const st=S.games[g.key];if(st)for(let l=1;l<Math.min(st.lvl,g.max+1);l++)addGuard(g.key,l)});S.ph=2;try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const GPRAISE={sym:['You found the right signs!','Those signs make it true!'],miss:['You found the missing number!'],bal:['Balanced! Both sides match.'],jump:['Great jumping!','You counted the jumps!'],tgt:['You made the target!'],
+ pat:['You spotted the pattern!'],word:['You built the word!','Great spelling!'],sent:['That sentence makes sense now!'],story:['Great reading!','You found it in the story!'],match:['Great matching!'],rid:['You solved the riddle!']};
+let streak=0;
+function praise(){if(miss===0)streak++;else streak=0;if(streak>=3&&streak%5===0)return `${streak} in a row! Amazing!`;if(miss>=2)return pick(['You kept trying and got it!','Using the help was smart!']);if(miss===1)return pick(['You fixed it! Great job!','Second try, nice work!']);
+ return Math.random()<.6&&GPRAISE[G.key]?pick(GPRAISE[G.key]):pick(PRAISE)}
+
 /* =============== grown-ups =============== */
 const gear=$('#gear');let hold=0,ht=0;
 function holdStop(){clearInterval(ht);hold=0;gear.classList.remove('hold');gear.style.setProperty('--p','0%')}
@@ -1104,7 +1132,7 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
   <button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
-  <p class="small">Coins: 5 for a right answer on the first try, 3 after one miss, 1 after more. 20 bonus coins when he masters a level and moves up (10 if he is already at the top level). Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
+  <p class="small">Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
   $('#oS').onclick=()=>{S.sound=!S.sound;save();drawParent()};$('#oV').onclick=()=>{S.voice=!S.voice;save();drawParent()};
   $('#oC').onclick=()=>{S.coins+=100;save();drawCoins(true);toast('+100 coins')};
   $('#oR').onclick=()=>{if(!resetArm){resetArm=true;drawParent();return}const s=S.sound,v=S.voice;S=fresh();S.sound=s;S.voice=v;S.total=0;save();try{localStorage.removeItem(OLD)}catch(e){}resetArm=false;drawParent();drawCoins();toast('Progress erased')}}}
@@ -1114,7 +1142,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>

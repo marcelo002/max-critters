@@ -261,6 +261,23 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .kb button{flex:1;max-width:76px;min-height:64px;border-radius:16px;background:#fff;color:var(--dark);font-size:30px;font-weight:800;box-shadow:0 5px 0 #c7cde8}.kb button:active{transform:translateY(4px);box-shadow:0 1px 0 #c7cde8}.kb .del{max-width:110px;background:#ffd9d9}
 .ch svg{display:block;margin:auto}.ch svg.cg{width:auto;height:48px;max-width:100%}
 .visit{display:flex;align-items:center;gap:10px;background:#ffffff22;border:3px solid var(--add);border-radius:24px;padding:6px 18px 6px 8px;text-align:left;line-height:1.15;animation:glow 2s infinite}.visit svg{width:72px;height:72px}.visit small{font-size:15px;opacity:.9}.visit.done{border-color:#ffffff44;animation:none;opacity:.85}
+.wscroll{flex:1;width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;border-radius:24px;min-height:0}
+#wline{display:flex;height:100%;width:max-content}
+.zone{position:relative;width:min(640px,86vw);height:100%;overflow:hidden;flex:none}
+.zone>svg{position:absolute;inset:0;width:100%;height:100%}
+.zl{position:absolute;top:12px;left:0;right:0;text-align:center;font-size:26px;font-weight:800;color:#fff;text-shadow:0 3px 0 #0006}
+.ze{position:absolute;bottom:30%;left:0;right:0;text-align:center;font-weight:800;color:#16204fb0;font-size:20px}
+.wc{position:absolute;width:clamp(100px,19vh,170px);animation:wander var(--d) ease-in-out infinite alternate}
+.wc svg{width:100%;height:auto;display:block;animation:bob 1.6s ease-in-out infinite}
+.wh{position:absolute;top:-6px;left:50%;transform:translateX(-50%);background:#fff;color:#e5484d;border-radius:999px;padding:0 8px;font-size:15px;font-weight:800;z-index:2}
+@keyframes wander{from{transform:translateX(0)}to{transform:translateX(var(--dx))}}
+.hearts{display:flex;gap:2px;justify-content:center;font-size:24px}.hearts i{font-style:normal;color:#e3dccd}.hearts i.on{color:#e5484d}
+.citems{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.citem{background:#fff;border-radius:18px;padding:8px;display:flex;flex-direction:column;align-items:center;box-shadow:0 5px 0 #e3dccd;color:var(--dark)}
+.citem svg{width:60px;height:60px}.citem span{font-size:15px;display:flex;align-items:center;gap:3px}.citem span svg{width:18px;height:18px}.citem[disabled]{opacity:.45}
+#careArt.hop>svg{animation:bhop .5s ease-in-out 2}#careArt.spin>svg{animation:spin360 .8s ease-in-out}@keyframes spin360{to{transform:rotate(360deg)}}
+.cpop{position:absolute;left:50%;top:40%;width:70px;transform:translate(-50%,-50%);animation:cpop 1.2s ease-out forwards;pointer-events:none}@keyframes cpop{0%{transform:translate(-50%,40%) scale(.4);opacity:0}30%{opacity:1;transform:translate(-50%,-30%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(.8)}}
+#qTeam svg{width:110px;height:110px}
 </style>
 </head>
 <body>
@@ -366,6 +383,19 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <div class="ov" id="visOv"><div class="box">
   <div id="visArt" style="width:200px"></div><h2 id="visName"></h2><div id="visText"></div>
   <button class="big" id="visHome">Home</button>
+</div></div>
+<section class="screen" id="world">
+  <div class="top"><button class="icon" data-go="play" aria-label="Back"><svg viewBox="0 0 24 24" fill="#fff"><path d="M15 4 7 12l8 8 2-2-6-6 6-6z"/></svg></button><div class="ttl"><h2>Critter World</h2><small>Swipe to explore. Tap a critter to feed it or play.</small></div><div class="coins" data-coins></div></div>
+  <div class="wscroll"><div id="wline"></div></div>
+</section>
+<div class="ov" id="careOv"><div class="box">
+  <div id="careArt" style="width:170px;position:relative"></div><h2 id="careName"></h2><div id="careH"></div>
+  <div id="careItems" class="citems"></div>
+  <button class="big alt" id="careClose">Done</button>
+</div></div>
+<div class="ov" id="questOv"><div class="box">
+  <div id="qTeam" class="row" style="gap:6px"></div><h2 id="qTitle"></h2><div id="qText" style="line-height:1.4"></div>
+  <button class="big" id="qHome">Yay!</button>
 </div></div>
 <div class="ov" id="openOv"><div class="box" style="max-width:1120px">
   <h2 id="openTitle">Tap the cards!</h2>
@@ -930,7 +960,7 @@ let G=null,R=null,miss=0,usedHint=false,busy=false,REPLAY_PTR=null;
 const api={win:()=>win(),lose:(g)=>lose(g),get miss(){return miss},hinted:()=>{usedHint=true}};
 function openGame(k){if(limitHit()){rest();return}G=GKEY[k];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(pick(['Let\'s play!','I am ready!','You can do it!'])),400)}
 function mbar(st){const h=(st.hist||[]).slice(-5);return `<span class="pbar" style="display:inline-flex;vertical-align:middle">${Array.from({length:5},(_,i)=>`<i class="${h[i]==null?'':h[i]?'on':'off'}"></i>`).join('')}</span>`}
-function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">${ADV.kind==='visit'?'Visitor challenge':'Adventure'} ${Math.min(ADV.n||12,ADV.q+1)} of ${ADV.n||12}</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
+function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">${ADV.kind==='visit'?'Visitor challenge':ADV.kind==='quest'?'Team quest':'Adventure'} ${Math.min(ADV.n||12,ADV.q+1)} of ${ADV.n||12}</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
 function makeRound(g,l,seed,replay,ptr){RNGF=rng(seed);REPLAY=replay;REPLAY_PTR=ptr==null?null:ptr;let r;try{r=g.make(l)}finally{RNGF=Math.random;REPLAY=false;if(REPLAY_PTR!=null){const st=gs('story');st.ptr=st._p;delete st._p}REPLAY_PTR=null}return r}
 function nextRound(){if(ADV&&advNext())return;const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
  if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place={l:1};const plc=!ADV&&st.place&&!st.place.done;
@@ -953,7 +983,7 @@ const PRAISE=['Great job!','You got it!','Awesome!','Super smart!','Nice work!',
 function mastery(st,first){if(R.review)return 0;st.hist=st.hist||[];st.hist.push(first?1:0);if(st.hist.length>10)st.hist.shift();const h=st.hist,l5=h.slice(-5),l3=h.slice(-3);
  if(l5.length>=5&&l5.filter(x=>x).length>=4)return 1;if((l3.length>=3&&l3.every(x=>!x))||(h.length>=10&&h.filter(x=>x).length<6))return -1;return 0}
 function evt(t){S.events=S.events||[];S.events.unshift({t:Date.now(),g:G.key,m:t});if(S.events.length>40)S.events.length=40}
-function win(){busy=true;const st=gs(G.key);stat(true);if(ADV)ADV.q++;const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
+function win(){busy=true;const st=gs(G.key);stat(true);if(ADV){ADV.q++;if(miss===0)ADV.first=(ADV.first|0)+1}const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
  const p=praise();const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
  if(R.after)R.after();let up=false,big=false;
  if(R.review==='place'&&st.place){const P=st.place;if(miss===0&&P.l<Math.min(G.max,4))P.l++;else{const start=miss===0?P.l:Math.max(1,P.l-1);P.done=1;st.lvl=start;st.hist=[];for(let q=1;q<start;q++)addGuard(G.key,q);evt(`Warm-up check: started at level ${start}`);setTimeout(()=>toast(start>1?`Warm-up done! Level ${start}`:'Warm-up done!'),700)}}
@@ -975,7 +1005,7 @@ $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound(
 $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
 
 /* =============== screens =============== */
-function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub()}
+function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
 function drawHome(){drawVisit();const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
@@ -1029,7 +1059,7 @@ function drawBook(){const own=BASE.filter(m=>S.owned[m.id]);const sh=own.filter(
  $('#bgrid').innerHTML=bf==='sp'?specHTML():BASE.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
  $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast(m.sp==='v'?'This visitor comes on its own week!':m.sp==='s'?'Find it in Snowy Packs!':'Open packs to find it!');return}SFX.tap();
   const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
-  $('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
+  $('#detInfo').innerHTML+=`<div style="margin-top:6px">${heartRow(m.id)}</div>`;$('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
 $('#detClose').onclick=()=>$('#detOv').classList.remove('on');
 
 /* =============== play with critters: art =============== */
@@ -1071,8 +1101,10 @@ function drawHub(){const n=ownedIds().length,b=buddyId();const t=(c,ic,ti,sub,go
  const ps=i=>`<svg viewBox="0 0 120 120">${PROPS[i][1]}</svg>`;
  $('#hub').innerHTML=t('#3fbf6a',ps(0),'Sticker Scenes','Make a picture with your critters','new')+t('#2f9fd0',`<svg viewBox="0 0 1000 750">${SCN[1].s}</svg>`,'My Scenes',`${(S.scenes||[]).length} saved`,'scenes')
   +t('#d94f70',ps(16),'Story Maker','Pick critters, a place and a problem','mk')+t('#7a55c9',ps(12),'My Stories',`${(S.stories||[]).length} saved`,'stories')
+  +t('#2f9e44',`<svg viewBox="0 0 600 400">${ZONE[0][3]}<ellipse cx="300" cy="420" rx="420" ry="150" fill="#6cc96a"/></svg>`,'Critter World','Visit your critters, feed them and play','world')+t('#b07a1d',ps(17),'Team Quest','Pick a team of 3 for a 6-question quest','quest')
   +t('#e8743b',b!=null?art(b,tierOf(S.owned[b])):ps(7),'My Buddy',b!=null?`${esc(MON[b].name)} helps you in games`:'Open packs to get one!','buddy');
  $$('#hub .hcard').forEach(c=>c.onclick=()=>{ac();SFX.tap();const h=c.dataset.h;
+  if(h==='world'){show('world');return}if(h==='quest'){if(!n){toast('Open a pack to get critters first!');return}startQuest();return}
   if(h==='new')newScene();else if(h==='scenes')gallery('scenes');else if(h==='stories')gallery('stories');
   else if(h==='mk'){if(!n){toast('Open a pack to get critters first!');return}startMk()}
   else if(h==='buddy'){if(!n){toast('Open a pack to get critters first!');return}pickCritters({title:'Pick your buddy',sub:'Your buddy cheers you on and helps when a question is tricky.',max:1,sel:b!=null?[b]:[],done:ids=>{S.buddy=ids[0];save();drawHub();toast(`${MON[ids[0]].name} is your buddy!`);say(`Hi Max! I am ${MON[ids[0]].name}. Let's play!`)}})}})}
@@ -1137,7 +1169,7 @@ let PK=null;
 function pickCritters(o){PK=Object.assign({min:1},o);PK.sel=[...(o.sel||[])];$('#pickT').textContent=o.title;$('#pickS').textContent=o.sub||'';drawPick();$('#pickOv').classList.add('on')}
 function pkGrid(sel,max){return ownedIds().map(id=>{const k=sel.indexOf(id);return `<button class="pk${k>=0?' on':''}" data-id="${id}">${k>=0&&max>1?`<span class="nb">${k+1}</span>`:''}${art(id,tierOf(S.owned[id]))}<div>${esc(MON[id].name)}</div></button>`}).join('')}
 function pkTap(sel,max,id){const k=sel.indexOf(id);if(k>=0)sel.splice(k,1);else if(max===1){sel.length=0;sel.push(id)}else if(sel.length<max)sel.push(id);else{toast(`Pick up to ${max}`);return false}SFX.tap();return true}
-function drawPick(){$('#pickG').innerHTML=pkGrid(PK.sel,PK.max);$$('#pickG .pk').forEach(b=>b.onclick=()=>{if(pkTap(PK.sel,PK.max,+b.dataset.id))drawPick()});$('#pickDone').disabled=PK.sel.length<PK.min}
+function drawPick(){$('#pickG').innerHTML=pkGrid(PK.sel,PK.max);$$('#pickG .pk').forEach(b=>b.onclick=()=>{if(pkTap(PK.sel,PK.max,+b.dataset.id))drawPick()});$('#pickDone').disabled=PK.sel.length<PK.min;if(PK.info)$('#pickS').innerHTML=PK.info(PK.sel)}
 $('#pickDone').onclick=()=>{if(PK.sel.length<PK.min)return;SFX.tap();$('#pickOv').classList.remove('on');PK.done(PK.sel)};
 
 /* buddy */
@@ -1228,7 +1260,7 @@ function limitHit(){return S.limit>0&&day().sec>=(S.limit+(day().extra|0))*60}
 function rest(){$('#restT').textContent=`You played ${Math.round(day().sec/60)} minutes today.`;const b=buddyId();$('#restArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#restOv').classList.add('on');say('Time for a rest! See you tomorrow.')}
 function startAdv(){if(limitHit()){rest();return}ADV={games:advGames(),q:0,talk:S.talk!==false?7+Math.floor(Math.random()*3):-1};G=GKEY[ADV.games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();ADV.on=1;nextRound();
  setTimeout(()=>buddySay('Adventure time! 12 questions.'),400);say("Adventure time! Let's go!")}
-function advNext(){if(ADV.q>=(ADV.n||12)){if(ADV.kind==='visit')finishVisit();else finishAdv();return true}
+function advNext(){if(ADV.q>=(ADV.n||12)){if(ADV.kind==='visit')finishVisit();else if(ADV.kind==='quest')finishQuest();else finishAdv();return true}
  if(ADV.q===ADV.talk){ADV.talk=-2;$('#talkT').textContent=pick(TALK);const b=buddyId();$('#talkArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#talkOv').classList.add('on');SFX.flip();say('Grown-up time! '+$('#talkT').textContent);return true}
  const k=ADV.games[Math.min(ADV.games.length-1,Math.floor(ADV.q/(ADV.per||4)))];if(G.key!==k){G=GKEY[k];$('#gTitle').textContent=G.name;toast(`Next: ${G.name}!`);buddySay(`Now ${G.name}!`)}return false}
 $('#advBtn').onclick=()=>{ac();SFX.tap();startAdv()};
@@ -1303,6 +1335,54 @@ function specHTML(){const cur=weekIdx();const V=MON.filter(m=>m.sp==='v'),Sx=MON
  const vd=i=>{const d=((i-(cur%12))%12+12)%12;if(d===0)return 'Here this week!';const t=new Date(EPOCH+(cur+d)*7*864e5);return 'Visits '+t.toLocaleDateString([],{month:'short',day:'numeric'})};
  return `<h3 style="grid-column:1/-1;margin:6px 0 0">Weekly visitors ${V.filter(m=>S.owned[m.id]).length}/12</h3>`+V.map((m,i)=>card(m,vd(i))).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Snowy Season ${Sx.filter(m=>S.owned[m.id]).length}/10</h3>`+Sx.map(m=>card(m,'Snowy Packs')).join('')}
 
+/* =============== critter world: habitat, care, team quests =============== */
+const ZONE=[['Leafy Meadow','#bfeec0','#6cc96a','<circle cx="480" cy="70" r="40" fill="#ffe066"/><path d="M60 300V180" stroke="#8a5a33" stroke-width="18"/><circle cx="60" cy="160" r="56" fill="#3fa653"/>'],
+ ['Fire Mountain','#ffd9b8','#e8743b','<path d="M330 260 430 80l100 180z" fill="#8a4b2a"/><path d="M405 120h50l-25-40z" fill="#ff8c42"/><circle cx="430" cy="60" r="16" fill="#ffd23f" opacity=".8"/>'],
+ ['Splash Pond','#bfe9ff','#5cb85a','<ellipse cx="300" cy="320" rx="220" ry="46" fill="#3fa9e0"/><path d="M120 320q30-14 60 0M380 330q30-14 60 0" stroke="#bfeaff" stroke-width="6" fill="none"/>'],
+ ['Spark Tower','#fff3b0','#c9b458','<path d="M440 300 470 60l30 240z" fill="#9aa5b1"/><path d="M466 40l-20 34h18l-12 30 30-40h-18l14-24z" fill="#ffd23f"/>'],
+ ['Rocky Cave','#e1e5ea','#9aa5b1','<path d="M380 300q0-170 110-170t110 170z" fill="#7c8794"/><path d="M440 300q0-80 50-80t50 80z" fill="#3a4250"/>'],
+ ['Ice Glacier','#e8f6ff','#ffffff','<path d="M380 290 450 110l60 90 50-60 40 150z" fill="#bfe6ff"/><path d="M450 110l20 50-20 20z" fill="#fff"/>'],
+ ['Moon Garden','#3b3a7a','#4b4a93','<circle cx="470" cy="80" r="44" fill="#fff6c8"/><circle cx="490" cy="70" r="40" fill="#3b3a7a"/><g fill="#fff"><circle cx="100" cy="60" r="3"/><circle cx="260" cy="40" r="2.5"/><circle cx="340" cy="100" r="2"/></g>'],
+ ['Star Hill','#22306f','#3a4fa0','<path d="m460 60 10 22 24 3-18 16 5 24-21-12-21 12 5-24-18-16 24-3z" fill="#ffd23f"/><g fill="#fff"><circle cx="80" cy="50" r="3"/><circle cx="200" cy="90" r="2"/><circle cx="320" cy="40" r="3"/></g>'],
+ ['Cloud Cliffs','#cdeaff','#e6f4ff','<g fill="#fff"><ellipse cx="120" cy="90" rx="70" ry="26"/><ellipse cx="170" cy="74" rx="50" ry="26"/><ellipse cx="450" cy="120" rx="80" ry="28"/></g>'],
+ ['Candy Land','#ffd1e8','#ffb3d1','<path d="M470 300V170" stroke="#fff" stroke-width="10"/><circle cx="470" cy="150" r="40" fill="#ff5c8a"/><path d="M470 150m-26 0a26 26 0 0 1 52 0a17 17 0 0 1-34 0" fill="none" stroke="#fff" stroke-width="7"/>']];
+const ITEMS=[{n:'Berry',c:5,h:1,k:'s',svg:'<circle cx="52" cy="70" r="22" fill="#8b5cf6"/><circle cx="74" cy="64" r="20" fill="#a78bfa"/><path d="M62 46c0-10 6-18 14-20" stroke="#2f9e44" stroke-width="5" fill="none"/>'},
+ {n:'Cookie',c:10,h:1,k:'s',svg:'<circle cx="60" cy="64" r="36" fill="#d9955a"/><g fill="#5b3a1e"><circle cx="46" cy="52" r="5"/><circle cx="70" cy="48" r="4"/><circle cx="62" cy="70" r="5"/><circle cx="44" cy="76" r="4"/><circle cx="80" cy="72" r="4"/></g>'},
+ {n:'Big Treat',c:15,h:2,k:'s',svg:PROPS[11][1]},{n:'Ball',c:20,h:2,k:'t',svg:PROPS[10][1]},{n:'Kite',c:30,h:3,k:'t',svg:PROPS[19][1]},
+ {n:'Music Box',c:40,h:4,k:'t',svg:'<rect x="24" y="54" width="72" height="50" rx="8" fill="#ff7bac"/><rect x="24" y="44" width="72" height="16" rx="6" fill="#ff9fc8"/><path d="M70 36V16l16-4v18" stroke="#16204f" stroke-width="4" fill="none"/><circle cx="66" cy="36" r="6" fill="#16204f"/><circle cx="82" cy="30" r="6" fill="#16204f"/><circle cx="60" cy="80" r="10" fill="#ffd23f"/>'}];
+const HMAX=10;
+const care=id=>{S.care=S.care||{};return S.care[id]||(S.care[id]={h:0,d:'',s:0,t:0})};
+const hearts=id=>(S.care&&S.care[id]?S.care[id].h:0)|0;
+const heartRow=id=>{const h=hearts(id);return `<span class="hearts">${Array.from({length:HMAX},(_,i)=>`<i class="${i<h?'on':''}">♥</i>`).join('')}</span>`};
+function drawWorld(){const L=$('#wline');L.innerHTML=ZONE.map((z,t)=>{const own=ownedIds().filter(i=>MON[i].t===t).sort((a,b)=>hearts(b)-hearts(a)||MON[b].rar-MON[a].rar).slice(0,8);
+  const cr=own.map((id,k)=>{const x=4+((k*37)%62),y=3+((k*13)%26),d=8+((id*7)%9),dx=40+((id*11)%90);return `<button class="wc" data-id="${id}" style="left:${x}%;bottom:${y}%;--d:${d}s;--dx:${dx}px;animation-delay:-${(id%7)}s;z-index:${30-y}" aria-label="${esc(MON[id].name)}">${hearts(id)?`<span class="wh">♥${hearts(id)}</span>`:''}${art(id,tierOf(S.owned[id]))}</button>`}).join('');
+  return `<div class="zone"><svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice"><rect width="600" height="400" fill="${z[1]}"/>${z[3]}<ellipse cx="300" cy="430" rx="440" ry="215" fill="${z[2]}"/></svg><div class="zl">${z[0]}</div>${cr||`<div class="ze">No ${TYPES[t].n} critters yet</div>`}</div>`}).join('');
+ L.querySelectorAll('.wc').forEach(b=>b.onclick=()=>{ac();SFX.tap();openCare(+b.dataset.id)})}
+let careId=null;
+function openCare(id){careId=id;drawCare();$('#careOv').classList.add('on')}
+function drawCare(){const id=careId,m=MON[id],c=care(id),today=dkey();if(c.d!==today){c.d=today;c.s=0;c.t=0}
+ $('#careArt').innerHTML=art(id,tierOf(S.owned[id]));$('#careName').textContent=m.name;$('#careH').innerHTML=heartRow(id)+(c.h>=HMAX?'<div style="font-weight:800;color:var(--pink)">Best friends!</div>':`<div class="small">${HMAX-c.h} more hearts to be best friends</div>`);
+ $('#careItems').innerHTML=ITEMS.map((it,i)=>{const full=it.k==='s'?c.s>=3:c.t>=2;return `<button class="citem" data-i="${i}" ${S.coins<it.c||full?'disabled':''}><svg viewBox="0 0 120 120">${it.svg}</svg><b>${it.n}</b><span>${full?(it.k==='s'?'Full today':'Tired today'):`${COIN}${it.c} · +${it.h}♥`}</span></button>`}).join('');
+ $$('#careItems .citem').forEach(b=>b.onclick=()=>{const it=ITEMS[+b.dataset.i];if(S.coins<it.c)return;ac();S.coins-=it.c;if(it.k==='s')c.s++;else c.t++;const was=c.h;c.h=Math.min(HMAX,c.h+it.h);save();drawCoins(true);
+  const a=$('#careArt');a.classList.remove('hop','spin');void a.offsetWidth;a.classList.add(it.k==='s'?'hop':'spin');const pop=document.createElement('div');pop.className='cpop';pop.innerHTML=`<svg viewBox="0 0 120 120">${it.svg}</svg>`;a.appendChild(pop);setTimeout(()=>pop.remove(),1200);
+  SFX.good();confetti(12);if(c.h>=HMAX&&was<HMAX){SFX.fanfare();confetti(50);say(`${m.name} is your best friend!`)}else say(it.k==='s'?`${m.name} loves the ${it.n.toLowerCase()}!`:`${m.name} loves to play!`);setTimeout(drawCare,700)})}
+$('#careClose').onclick=()=>{SFX.tap();$('#careOv').classList.remove('on');if($('#world').classList.contains('on'))drawWorld()};
+const TBON=[['Leaf','+1 heart for each teammate'],['Fire','+5 coins'],['Water','+1 coin for each first-try answer'],['Spark','+10 coins if 5 or more are right on the first try'],['Rock','+8 coins'],['Ice','+1 coin for every question'],['Moon','+2 hearts for itself'],['Star','+3 coins for each teammate'],['Wind','+4 coins and +1 heart for itself'],['Candy','+1 heart for each teammate']];
+const QUESTS=['Find the Golden Acorn','Rescue the Lost Kite','Cross Sparkle River','Climb Cloud Mountain','Light the Moon Lantern','Bake the Giant Cake','Fix the Rainbow Bridge','Wake the Sleepy Volcano'];
+function teamInfo(sel){return sel.length?sel.map(id=>`<b>${esc(MON[id].name)}</b> (${TBON[MON[id].t][0]}): ${TBON[MON[id].t][1]}`).join('<br>'):'Pick up to 3 critters. Each type gives the team a different bonus!'}
+function startQuest(){if(limitHit()){rest();return}pickCritters({title:'Pick your quest team',sub:'',max:3,info:teamInfo,done:team=>{const played=GAMES.filter(g=>S.stats[g.key]).map(g=>g.key);const pool=played.length>=3?played:GAMES.map(g=>g.key);
+ ADV={kind:'quest',team,name:pick(QUESTS),games:Array.from({length:6},()=>pool[Math.floor(Math.random()*pool.length)]),per:1,n:6,q:0,first:0,talk:-1};G=GKEY[ADV.games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();
+ setTimeout(()=>buddySay(`Quest: ${ADV.name}!`),400);say(`Team quest! ${ADV.name}!`)}})}
+function finishQuest(){const Q=ADV;ADV=null;let coins=15;const lines=[`Quest complete: <b>+15 coins</b>`];const heart=(id,n)=>{const c=care(id);c.h=Math.min(HMAX,c.h+n)};
+ Q.team.forEach(id=>{const m=MON[id],t=m.t,n=m.name;let txt='';
+  if(t===0||t===9){Q.team.forEach(x=>heart(x,1));txt='+1 heart for each teammate'}else if(t===1){coins+=5;txt='+5 coins'}else if(t===2){coins+=Q.first;txt=`+${Q.first} coins`}
+  else if(t===3){if(Q.first>=5){coins+=10;txt='+10 coins'}else txt='needed 5 first-try answers this time'}else if(t===4){coins+=8;txt='+8 coins'}else if(t===5){coins+=6;txt='+6 coins'}
+  else if(t===6){heart(id,2);txt='+2 hearts'}else if(t===7){coins+=3*Q.team.length;txt=`+${3*Q.team.length} coins`}else{coins+=4;heart(id,1);txt='+4 coins and +1 heart'}
+  lines.push(`${esc(n)} (${TBON[t][0]}): ${txt}`)});
+ S.coins+=coins;S.quests=(S.quests|0)+1;save();drawCoins(true);SFX.fanfare();confetti(60);
+ $('#qTeam').innerHTML=Q.team.map(id=>art(id,tierOf(S.owned[id]))).join('');$('#qTitle').textContent=Q.name+'!';$('#qText').innerHTML=lines.join('<br>')+`<div style="margin-top:6px"><b>Total: +${coins} coins</b> · ${Q.first} of 6 right on the first try</div>`;$('#questOv').classList.add('on');say(`Quest complete! You earned ${coins} coins!`)}
+$('#qHome').onclick=()=>{SFX.tap();$('#questOv').classList.remove('on');show('play')};
+
 /* =============== grown-ups =============== */
 const gear=$('#gear');let hold=0,ht=0;
 function holdStop(){clearInterval(ht);hold=0;gear.classList.remove('hold');gear.style.setProperty('--p','0%')}
@@ -1332,7 +1412,7 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
   <button class="opt" id="oT">Grown-up time cards in the Adventure <b>${S.talk!==false?'On':'Off'}</b></button><button class="opt" id="oL">Daily play limit <b>${S.limit?S.limit+' minutes':'Off'}</b></button>${S.limit?`<button class="opt" id="oX">Give 15 more minutes today <b>›</b></button>`:''}<button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
-  <p class="small">New games start with a short warm-up check (one question per level, up to level 4) to pick his starting level. In reading games he can tap any word to hear it. Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). The daily Adventure is 12 questions from 3 games, picked from what he finds hardest and questions due for review; the first one each day gives a free critter and 30 coins. Each week a new visitor critter comes; answering a 5-question challenge adds it to his book (+20 coins), and missed visitors come back 12 weeks later. Snowy Packs (150 coins) appear from mid-November to the end of February. Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
+  <p class="small">New games start with a short warm-up check (one question per level, up to level 4) to pick his starting level. In reading games he can tap any word to hear it. Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). The daily Adventure is 12 questions from 3 games, picked from what he finds hardest and questions due for review; the first one each day gives a free critter and 30 coins. Each week a new visitor critter comes; answering a 5-question challenge adds it to his book (+20 coins), and missed visitors come back 12 weeks later. Snowy Packs (150 coins) appear from mid-November to the end of February. In Critter World he can feed critters (snacks 5–15 coins, up to 3 a day each) and play with them (toys 20–40 coins, 2 a day each) to fill up to 10 hearts; hearts never go down. Team Quests are 6 questions with a team of up to 3; each type adds one bonus. Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
   $('#oS').onclick=()=>{S.sound=!S.sound;save();drawParent()};$('#oV').onclick=()=>{S.voice=!S.voice;save();drawParent()};
   $('#oT').onclick=()=>{S.talk=S.talk===false;save();drawParent()};$('#oL').onclick=()=>{const L=[0,15,30,45,60,90];S.limit=L[(L.indexOf(S.limit|0)+1)%L.length];save();drawParent()};if($('#oX'))$('#oX').onclick=()=>{day().extra=(day().extra|0)+15;save();toast('+15 minutes today')};
   $('#oC').onclick=()=>{S.coins+=100;save();drawCoins(true);toast('+100 coins')};
@@ -1343,7 +1423,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={drawWorld,openCare,startQuest,finishQuest,care,visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>

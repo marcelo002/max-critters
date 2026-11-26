@@ -184,6 +184,9 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .tabs button{min-height:44px;padding:0 16px;border-radius:999px;background:#e5e7f2;font-weight:800;color:var(--dark)}
 .tabs button.on{background:var(--dark);color:#fff}
 .tscroll{overflow-x:auto}
+.rays{transform-origin:60px 64px;animation:spin 16s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.flip.glowL.open .ba{animation:legend 1.4s ease-out}@keyframes legend{0%{box-shadow:0 0 0 0 #ffd23f;transform:rotateY(180deg) scale(.8)}50%{box-shadow:0 0 80px 40px #ffd23f;transform:rotateY(180deg) scale(1.08)}}
+.tier{font-size:14px;font-weight:800;color:#c48a00}
 #fx{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden}
 #fx i{position:absolute;width:14px;height:20px;border-radius:4px;top:-30px;animation:fall 1.6s ease-in forwards}
 @keyframes fall{to{transform:translate(var(--dx),110vh) rotate(720deg)}}
@@ -337,6 +340,7 @@ const GENTOP=['<circle cx="34" cy="42" r="11" fill="C3"/><circle cx="86" cy="42"
 const GENTAIL=['','<circle cx="98" cy="90" r="9" fill="C2" stroke="C3" stroke-width="2"/>','<path d="M94 86c14 0 16-16 6-18-6-1-8 6-3 8" stroke="C3" stroke-width="5" fill="none" stroke-linecap="round"/>'];
 /* the eight first critters keep their original looks */
 const ORIG={0:{top:0,tail:-1},12:{top:0,tail:0},24:{top:0,tail:0},36:{top:0,tail:0},48:{top:0,tail:-1,spots:1},60:{top:0,tail:0},81:{top:0,tail:0},95:{top:0,tail:0,crest:1}};
+const LEG={"0": ["<path d=\"M44 40 36 22 28 18M36 22l-2-12M76 40l8-18 8-4M84 22l2-12\" stroke=\"#7a4a21\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"/><ellipse cx=\"27\" cy=\"16\" rx=\"7\" ry=\"4.5\" fill=\"#3f9b56\"/><ellipse cx=\"34\" cy=\"8\" rx=\"4.5\" ry=\"6\" fill=\"#59b86c\"/><ellipse cx=\"93\" cy=\"16\" rx=\"7\" ry=\"4.5\" fill=\"#3f9b56\"/><ellipse cx=\"86\" cy=\"8\" rx=\"4.5\" ry=\"6\" fill=\"#59b86c\"/><circle cx=\"60\" cy=\"30\" r=\"5\" fill=\"#ff9fc8\"/>", "<path d=\"M94 92c16 2 22-8 18-18-3-6-10-4-9 2\" stroke=\"#3f9b56\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"/><ellipse cx=\"112\" cy=\"70\" rx=\"6\" ry=\"4\" fill=\"#59b86c\"/>"], "1": ["", "<path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(0 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(30 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(60 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(90 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(120 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(150 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(180 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(210 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(240 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(270 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ff6b5b\" transform=\"rotate(300 60 66)\"/><path d=\"M60 66 52 18q8-8 16 0z\" fill=\"#ffd23f\" transform=\"rotate(330 60 66)\"/>"], "2": ["<path d=\"M40 42 44 18 52 34 60 10 68 34 76 18 80 42z\" fill=\"C3\"/>", "<path d=\"M86 96c24 6 30-14 20-26s-26-4-22 8c2 6 10 6 12 0\" stroke=\"C3\" stroke-width=\"10\" fill=\"none\" stroke-linecap=\"round\"/>"], "3": ["<path d=\"M42 42 34 18l14 18zM78 42l8-24-14 18z\" fill=\"#fff6cc\" stroke=\"#e0a400\" stroke-width=\"2\"/>", "<path d=\"M28 60 4 30l10 4-2-14 16 22zM92 60l24-30-10 4 2-14-16 22z\" fill=\"#ffd23f\" stroke=\"#e0a400\" stroke-width=\"2\"/><path d=\"m90 80 18-10-6 10 12-2-18 16 4-10z\" fill=\"#e0a400\"/>"], "4": ["<path d=\"M40 44C24 40 18 26 24 14c4 12 12 18 22 20zM80 44c16-4 22-18 16-30-4 12-12 18-22 20z\" fill=\"#c9b48f\" stroke=\"#5a4f44\" stroke-width=\"3\"/>", "<path d=\"m92 66 10-18 4 16zm-4-14 6-20 6 18z\" fill=\"#9ad1ff\" stroke=\"#5b8fc7\" stroke-width=\"2\"/>"], "5": ["<path d=\"m42 40 6-22 6 16 6-24 6 24 6-16 6 22z\" fill=\"#e0f7ff\" stroke=\"#5ea9d6\" stroke-width=\"2.5\"/>", "<g stroke=\"#9fd8f5\" stroke-width=\"5\" stroke-linecap=\"round\"><path d=\"M18 36v40M1 46l34 20M1 66l34-20M102 36v40M85 46l34 20M85 66l34-20\"/></g>"], "6": ["<path d=\"M66 6a16 16 0 1 0 6 28 12 12 0 1 1-6-28z\" fill=\"#ffd23f\"/>", "<ellipse cx=\"14\" cy=\"50\" rx=\"16\" ry=\"30\" fill=\"#ffb3e6\" transform=\"rotate(-20 14 50)\"/><ellipse cx=\"106\" cy=\"50\" rx=\"16\" ry=\"30\" fill=\"#ffb3e6\" transform=\"rotate(20 106 50)\"/><ellipse cx=\"16\" cy=\"86\" rx=\"10\" ry=\"15\" fill=\"#ffd6f0\"/><ellipse cx=\"104\" cy=\"86\" rx=\"10\" ry=\"15\" fill=\"#ffd6f0\"/><circle cx=\"11\" cy=\"46\" r=\"6\" fill=\"#ffd23f\"/><circle cx=\"109\" cy=\"46\" r=\"6\" fill=\"#ffd23f\"/>"], "8": ["<path d=\"M60 38c-10 0-12-12-4-16s16 4 10 10\" stroke=\"#fff\" stroke-width=\"5\" fill=\"none\" stroke-linecap=\"round\"/>", "<path d=\"M26 62C8 54 0 36 4 22c6 8 10 10 14 10-2-6 0-12 4-16 2 8 6 14 12 18 0-6 2-10 6-12 0 14 2 26-14 40zM94 62c18-8 26-26 22-40-6 8-10 10-14 10 2-6 0-12-4-16-2 8-6 14-12 18 0-6-2-10-6-12 0 14-2 26 14 40z\" fill=\"#fff\" stroke=\"#7a9cc2\" stroke-width=\"2\"/>"], "9": ["<rect x=\"44\" y=\"24\" width=\"32\" height=\"12\" rx=\"4\" fill=\"#ffd0e6\" stroke=\"#e0569b\" stroke-width=\"2\"/><rect x=\"50\" y=\"14\" width=\"20\" height=\"10\" rx=\"3\" fill=\"#fff\" stroke=\"#e0569b\" stroke-width=\"2\"/><circle cx=\"60\" cy=\"10\" r=\"4\" fill=\"#e63946\"/>", "<path d=\"M92 92 108 64\" stroke=\"#fff\" stroke-width=\"4\"/><circle cx=\"109\" cy=\"60\" r=\"8\" fill=\"#ff5c8a\"/><path d=\"m109 54 1.5 4 4 .5-3 2.5 1 4-3.5-2-3.5 2 1-4-3-2.5 4-.5z\" fill=\"#fff\"/>"]};
 function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const MON=[];
 TYPES.forEach((T,t)=>T.names.split(' ').forEach((name,j)=>{const id=t*12+j,r=rng(id*7919+13),o=ORIG[id];
@@ -346,12 +350,16 @@ TYPES.forEach((T,t)=>T.names.split(' ').forEach((name,j)=>{const id=t*12+j,r=rng
   Object.assign(m,{pal:Math.floor(ri()*3),top:tops[Math.floor(ri()*tops.length)],tail:tails[Math.floor(ri()*tails.length)],
   body:[[38,35],[40,32],[34,36],[36,34]][Math.floor(ri()*4)],eye:Math.floor(ri()*5),mouth:Math.floor(ri()*5),pat:Math.floor(ri()*4),belly:ri()<.8?1:0})}
  if(id===95)m.tail+='<path d="M92 90c20 2 24-14 20-24l-8 12z" fill="C3"/>';
+ if(j===11){const L=LEG[t];if(L){m.top=L[0];m.tail=L[1]}m.eye=1;m.mouth=t==1?2:0;m.body=[38,35];m.belly=1;m.pat=0}
  m.fact=`${name} ${T.facts[id%3]}`;MON.push(m)}));
-function art(id){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T.a;const col=s=>s.replace(/C1/g,c1).replace(/C2/g,c2).replace(/C3/g,c3).replace(/="A"/g,`="${A}"`);
+const tierOf=n=>n>=6?2:n>=3?1:0,TIER=['','Shiny','Golden'];
+function art(id,tier=0){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T.a;const col=s=>s.replace(/"C1"/g,`"${c1}"`).replace(/"C2"/g,`"${c2}"`).replace(/"C3"/g,`"${c3}"`).replace(/="A"/g,`="${A}"`);
  const[rx,ry]=m.body,dy=35-ry,cy=70;let s='';
+ if(m.rar==4)s+=`<g class="rays">${Array.from({length:12},(_,k)=>`<path d="M60 64 54 0h12z" fill="#ffd23f" opacity=".3" transform="rotate(${k*30} 60 64)"/>`).join('')}</g>`;
+ if(tier==2&&m.rar<3)s+=`<circle cx="60" cy="66" r="54" fill="#ffe08a" opacity=".5"/>`;
  if(m.rar>=3)s+=`<circle cx="60" cy="66" r="56" fill="${m.rar==4?'#ffd86b':'#d7b8ff'}" opacity=".45"/><circle cx="60" cy="66" r="46" fill="${m.rar==4?'#fff1b8':'#efe2ff'}" opacity=".5"/>`;
  s+=`<ellipse cx="60" cy="110" rx="34" ry="6" fill="#0003"/>${col(m.tail)}<g transform="translate(0 ${dy})">${col(m.top)}</g>`;
- s+=`<ellipse cx="44" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="76" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="60" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c1}"/>`;
+ s+=`<ellipse cx="44" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="76" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="60" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c1}"${tier==2?' stroke="#ffc93c" stroke-width="5"':tier==1?' stroke="#fff" stroke-width="3.5"':''}/>`;
  if(m.belly)s+=`<ellipse cx="60" cy="84" rx="${rx*.6}" ry="17" fill="${c2}"/>`;
  if(m.pat==1)s+=`<circle cx="${60-rx+8}" cy="66" r="4" fill="${c3}" opacity=".5"/><circle cx="${60+rx-10}" cy="74" r="5" fill="${c3}" opacity=".5"/><circle cx="${60+rx-18}" cy="56" r="3" fill="${c3}" opacity=".5"/>`;
  if(m.pat==2)s+=`<path d="M48 ${cy-ry+6}q12-5 24 0M50 ${cy-ry+13}q10-4 20 0" stroke="${c3}" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".6"/>`;
@@ -366,7 +374,9 @@ function art(id){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T.a;cons
  const sm=`<path d="M53 77q7 7 14 0" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
  s+=[sm,`<ellipse cx="60" cy="80" rx="5" ry="4.5" fill="${D}"/>`,sm+`<path d="M55 78.5l2.5 4 2.5-4z" fill="#fff"/>`,sm+`<path d="M57 80q3 6 6 0z" fill="#ff7bac"/>`,`<path d="M52 77q4 4 8 0q4 4 8 0" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>`][m.mouth];
  if(m.rar>=2)s+=`<path d="m102 20 2 6 6 2-6 2-2 6-2-6-6-2 6-2zM18 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="${m.rar==4?'#ffd23f':'#fff'}"/>`;
- if(m.rar==4&&!m.top.includes('m60 12 5 13'))s+=`<path d="M44 ${cy-ry-2+dy*0}l4-14 8 8 4-12 4 12 8-8 4 14z" fill="#ffd23f" stroke="#c48a00" stroke-width="2"/>`;
+ if(m.rar==4)s+=`<path d="m60 44 5 6-5 6-5-6z" fill="#ff5c8a" stroke="#fff" stroke-width="1.5"/>`;
+ if(tier>=1)s+=`<path d="m14 86 1.6 4.4 4.4 1.6-4.4 1.6L14 98l-1.6-4.4L8 92l4.4-1.6zM104 92l1.4 3.6 3.6 1.4-3.6 1.4-1.4 3.6-1.4-3.6L99 97l3.6-1.4zM96 8l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="${tier==2?'#ffc93c':'#ff9fe0'}"/>`;
+ if(tier==2)s+=`<circle cx="18" cy="18" r="11" fill="#ffc93c" stroke="#c48a00" stroke-width="2"/><path d="m18 11 2 5 5 .5-4 3.5 1.2 5L18 22.5 13.8 25l1.2-5-4-3.5 5-.5z" fill="#fff"/>`;
  return `<svg viewBox="0 0 120 120" role="img" aria-label="${esc(m.name)}">${s}</svg>`}
 
 /* =============== state =============== */
@@ -716,7 +726,7 @@ function win(){busy=true;const st=gs(G.key);stat(true);const c=miss===0?5:miss==
 function lose(g){miss++;SFX.bad();const m=$('#msg');if(m){m.textContent=miss>=2?'Here is a little help!':'Not quite. Try again!';m.style.color='#c2410c'}
  const p=document.querySelector('#eq,.mcols,.slots,.tiles');if(p){p.classList.remove('shake');void p.offsetWidth;p.classList.add('shake')}
  S.log.unshift({t:Date.now(),g:G.key,l:gs(G.key).lvl,q:R.txt||'',a:String(g||'').slice(0,40)});if(S.log.length>60)S.log.length=60;save()}
-function levelUp(up,l){SFX.fanfare();confetti(50);const owned=Object.keys(S.owned).map(Number);$('#lvlArt').innerHTML=owned.length?art(pick(owned)):art(0);
+function levelUp(up,l){SFX.fanfare();confetti(50);const owned=Object.keys(S.owned).map(Number);const pk=owned.length?pick(owned):0;$('#lvlArt').innerHTML=art(pk,tierOf(S.owned[pk]|0));
  $('#lvlTitle').textContent=up?`Level ${l}!`:'5 in a row!';$('#lvlText').innerHTML=`${up?`You reached level ${l} in ${esc(G.name)}.`:`You finished another round of ${esc(G.name)}.`} Bonus: <b>+${up?20:10} coins</b>!`;
  say(up?`Level up! Level ${l}!`:'Bonus coins!');$('#lvlOv').classList.add('on')}
 $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound()};
@@ -726,8 +736,8 @@ $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;
 function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
-function drawHome(){const owned=Object.keys(S.owned).map(Number).sort((a,b)=>MON[b].rar-MON[a].rar);const p=owned.slice(0,3);
- $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i)).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
+function drawHome(){const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
+ $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i,tierOf(S.owned[i]|0))).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
  $('#homeHint').textContent=owned.length?`You have ${owned.length} of ${MON.length} critters. Play games to earn coins, then open packs!`:'Play games to earn coins, then open packs to collect critters!'}
 function drawMenu(){const card=g=>{const st=gs(g.key);return `<button class="gcard" data-g="${g.key}" style="background:${g.bg}"><span class="gi">${g.icon}</span><span class="gn">${g.name}</span><span class="gl">Level ${st.lvl} of ${g.max}</span><span class="pbar">${Array.from({length:5},(_,i)=>`<i class="${i<st.prog?'on':''}"></i>`).join('')}</span></button>`};
  $('#gMath').innerHTML=GAMES.filter(g=>g.kind=='math').map(card).join('');$('#gRead').innerHTML=GAMES.filter(g=>g.kind=='read').map(card).join('');
@@ -736,7 +746,6 @@ function drawMenu(){const card=g=>{const st=gs(g.key);return `<button class="gca
 /* =============== packs =============== */
 const PACKS=[{n:'Starter',cost:25,odds:[70,22,7,1,0],col:['#9aa5b1','#d6dde6']},{n:'Super',cost:75,odds:[45,32,16,6,1],col:['#3fbf6a','#b8f0c9']},
  {n:'Mega',cost:200,odds:[15,30,32,17,6],min:2,col:['#3b8eea','#bcdcff']},{n:'Legend',cost:500,odds:[0,15,40,30,15],min:3,col:['#f6ad1e','#ffe6a8']}];
-const DUPE=[2,4,8,15,40];
 function packArt(p){return `<svg viewBox="0 0 100 130"><path d="M14 10h72l-4 8 4 8v84l-4 8 4 8H14l4-8-4-8V26l4-8z" fill="${p.col[0]}"/><path d="M22 30h56v70H22z" fill="${p.col[1]}" opacity=".7"/>
  <path d="m50 42 6 14h15l-12 9 5 15-14-9-14 9 5-15-12-9h15z" fill="#fff"/><text x="50" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${p.n.toUpperCase()}</text></svg>`}
 function drawShop(){$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div>
@@ -747,26 +756,27 @@ function rollRar(odds){let r=Math.random()*100;for(let i=0;i<5;i++){r-=odds[i];i
 function pickMon(rar){const pool=MON.filter(m=>m.rar===rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
 let lastPack=0;
 function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;const rars=[0,1,2].map(()=>rollRar(p.odds));
- if(p.min&&Math.max(...rars)<p.min)rars[2]=p.min;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const refund=isNew?0:DUPE[r];S.coins+=refund;return{id,isNew,refund}});
+ if(p.min&&Math.max(...rars)<p.min)rars[2]=p.min;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
  save();drawCoins(true);SFX.tap();openPack(got)}
+function dupeMsg(g){const n=g.n;if(n==3)return'Shiny unlocked! ✨';if(n==6)return'Golden unlocked! ★';if(n<3)return`Copy ${n} of 3 to Shiny`;if(n<6)return`Copy ${n} of 6 to Golden`;return`Golden already! +${g.refund} coins`}
 function openPack(got){let opened=0;$('#openTitle').textContent='Tap each card to flip it!';$('#openSum').textContent='';$('#openDone').style.display='none';$('#openAgain').style.display='none';
- $('#openRow').innerHTML=got.map((g,i)=>{const m=MON[g.id];return `<button class="flip${m.rar==4?' glowL':''}" data-i="${i}" style="--r:${RAR[m.rar].c}"><div class="in"><div class="fa">?</div><div class="ba">${art(g.id)}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div>${g.isNew?'<div class="tag">NEW!</div>':`<div class="tag d">Again! +${g.refund} coins</div>`}</div></div></button>`}).join('');
+ $('#openRow').innerHTML=got.map((g,i)=>{const m=MON[g.id];return `<button class="flip${m.rar==4?' glowL':''}" data-i="${i}" style="--r:${RAR[m.rar].c}"><div class="in"><div class="fa">?</div><div class="ba">${art(g.id,tierOf(g.n))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div>${g.isNew?'<div class="tag">NEW!</div>':`<div class="tag${g.n==3||g.n==6?'':' d'}">${dupeMsg(g)}</div>`}</div></div></button>`}).join('');
  $$('#openRow .flip').forEach(b=>b.onclick=()=>{if(b.classList.contains('open'))return;b.classList.add('open');opened++;const g=got[+b.dataset.i],m=MON[g.id];
-  if(m.rar>=3){SFX.fanfare();confetti(m.rar==4?80:40)}else if(g.isNew)SFX.good();else SFX.flip();if(g.isNew&&m.rar>=2)say(`Wow! A ${RAR[m.rar].n.toLowerCase()} critter: ${m.name}!`);
-  if(opened===got.length){const n=got.filter(g=>g.isNew).length,c=got.reduce((a,g)=>a+g.refund,0);$('#openTitle').textContent=n?`${n} new critter${n>1?'s':''}!`:'All repeats this time!';
-   $('#openSum').textContent=c?`Repeats gave you ${c} bonus coins.`:'';$('#openDone').style.display='';$('#openAgain').style.display=S.coins>=PACKS[lastPack].cost?'':'none';drawCoins(true)}});
+  if(m.rar>=3){SFX.fanfare();confetti(m.rar==4?80:40)}else if(g.isNew)SFX.good();else SFX.flip();if(g.n==3||g.n==6)say(`${m.name} is now ${TIER[tierOf(g.n)]}!`);else if(g.isNew&&m.rar>=2)say(`Wow! A ${RAR[m.rar].n.toLowerCase()} critter: ${m.name}!`);
+  if(opened===got.length){const n=got.filter(g=>g.isNew).length,up=got.filter(g=>g.n==3||g.n==6).length;$('#openTitle').textContent=n?`${n} new critter${n>1?'s':''}!`:up?'Your critters powered up!':'Repeats help your critters power up!';
+   $('#openSum').textContent='Collect 3 copies of a critter to make it Shiny, and 6 to make it Golden.';$('#openDone').style.display='';$('#openAgain').style.display=S.coins>=PACKS[lastPack].cost?'':'none';drawCoins(true)}});
  $('#openOv').classList.add('on')}
 $('#openDone').onclick=()=>{SFX.tap();$('#openOv').classList.remove('on');drawShop()};
 $('#openAgain').onclick=()=>{$('#openOv').classList.remove('on');buy(lastPack)};
 
 /* =============== book =============== */
 let bf=-1;
-function drawBook(){const own=MON.filter(m=>S.owned[m.id]);$('#bookTitle').textContent=`Critter Book ${own.length}/${MON.length}`;
+function drawBook(){const own=MON.filter(m=>S.owned[m.id]);const sh=own.filter(m=>S.owned[m.id]>=3).length,gd=own.filter(m=>S.owned[m.id]>=6).length;$('#bookTitle').textContent=`Critter Book ${own.length}/${MON.length}`+(sh?` · ✨${sh}`:'')+(gd?` · ★${gd}`:'');
  $('#chips').innerHTML=`<button class="chip${bf<0?' on':''}" data-f="-1">All</button>`+RAR.map((r,i)=>`<button class="chip${bf===i?' on':''}" data-f="${i}" style="${bf===i?'':`box-shadow:inset 0 0 0 3px ${r.c}`}">${r.n} ${own.filter(m=>m.rar===i).length}/${MON.filter(m=>m.rar===i).length}</button>`).join('');
  $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=+b.dataset.f;drawBook()});
- $('#bgrid').innerHTML=MON.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id)}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div></button>`}).join('');
+ $('#bgrid').innerHTML=MON.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
  $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast('Open packs to find it!');return}SFX.tap();
-  $('#detArt').innerHTML=art(m.id);$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${S.owned[m.id]}.</div>`;
+  const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
   say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
 $('#detClose').onclick=()=>$('#detOv').classList.remove('on');
 
@@ -797,7 +807,7 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
   <button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
-  <p class="small">Coins: 5 for a right answer on the first try, 3 after one miss, 1 after more. 10 bonus coins every 5 right answers, or 20 when he reaches a new level. Repeat critters give back 2, 4, 8, 15 or 40 coins, by rarity. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
+  <p class="small">Coins: 5 for a right answer on the first try, 3 after one miss, 1 after more. 10 bonus coins every 5 right answers, or 20 when he reaches a new level. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
   $('#oS').onclick=()=>{S.sound=!S.sound;save();drawParent()};$('#oV').onclick=()=>{S.voice=!S.voice;save();drawParent()};
   $('#oC').onclick=()=>{S.coins+=100;save();drawCoins(true);toast('+100 coins')};
   $('#oR').onclick=()=>{if(!resetArm){resetArm=true;drawParent();return}const s=S.sound,v=S.voice;S=fresh();S.sound=s;S.voice=v;S.total=0;save();try{localStorage.removeItem(OLD)}catch(e){}resetArm=false;drawParent();drawCoins();toast('Progress erased')}}}

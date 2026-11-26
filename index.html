@@ -160,7 +160,7 @@ display:flex;align-items:center;justify-content:center;gap:8px}
 .box h2{text-shadow:none}
 .box.wide{max-width:1000px;text-align:left;align-items:stretch}
 #openRow{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-.flip{width:clamp(150px,26vw,220px);aspect-ratio:3/4;perspective:800px}
+.flip{width:clamp(120px,var(--fw,26vw),220px);aspect-ratio:3/4;perspective:800px}
 .flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
 .flip.open .in{transform:rotateY(180deg)}
 .flip .fa,.flip .ba{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px}
@@ -227,7 +227,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 </section>
 
 <section class="screen" id="shop">
-  <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>Critter Packs</h2><small>Each pack has 3 critters. Bigger packs find rarer critters.</small></div><div class="coins" data-coins></div></div>
+  <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>Critter Packs</h2><small>Bigger packs have more critters and find rarer ones.</small></div><div class="coins" data-coins></div></div>
   <div class="scroll"><div class="packs" id="packs"></div></div>
 </section>
 
@@ -237,7 +237,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="scroll"><div class="bgrid" id="bgrid"></div></div>
 </section>
 
-<div class="ov" id="openOv"><div class="box" style="max-width:760px">
+<div class="ov" id="openOv"><div class="box" style="max-width:1120px">
   <h2 id="openTitle">Tap the cards!</h2>
   <div id="openRow"></div>
   <div id="openSum" class="small"></div>
@@ -744,23 +744,23 @@ function drawMenu(){const card=g=>{const st=gs(g.key);return `<button class="gca
  $$('.gcard').forEach(b=>b.onclick=()=>{ac();SFX.tap();openGame(b.dataset.g)})}
 
 /* =============== packs =============== */
-const PACKS=[{n:'Starter',cost:25,odds:[70,22,7,1,0],col:['#9aa5b1','#d6dde6']},{n:'Super',cost:75,odds:[45,32,16,6,1],col:['#3fbf6a','#b8f0c9']},
- {n:'Mega',cost:200,odds:[15,30,32,17,6],min:2,col:['#3b8eea','#bcdcff']},{n:'Legend',cost:500,odds:[0,15,40,30,15],min:3,col:['#f6ad1e','#ffe6a8']}];
+const PACKS=[{n:'Starter',cards:3,cost:25,odds:[70,22,7,1,0],col:['#9aa5b1','#d6dde6']},{n:'Super',cards:3,cost:75,odds:[45,32,16,6,1],col:['#3fbf6a','#b8f0c9']},
+ {n:'Mega',cards:4,cost:200,odds:[15,30,32,17,6],min:2,col:['#3b8eea','#bcdcff']},{n:'Legend',cards:5,cost:500,odds:[0,15,40,30,15],min:3,col:['#f6ad1e','#ffe6a8']}];
 function packArt(p){return `<svg viewBox="0 0 100 130"><path d="M14 10h72l-4 8 4 8v84l-4 8 4 8H14l4-8-4-8V26l4-8z" fill="${p.col[0]}"/><path d="M22 30h56v70H22z" fill="${p.col[1]}" opacity=".7"/>
  <path d="m50 42 6 14h15l-12 9 5 15-14-9-14 9 5-15-12-9h15z" fill="#fff"/><text x="50" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${p.n.toUpperCase()}</text></svg>`}
-function drawShop(){$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div>
+function drawShop(){$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div><div style="font-weight:800">${p.cards} critters</div>
  <div class="odds">${p.odds.map((o,r)=>o?`<div><span><i style="background:${RAR[r].c}"></i>${RAR[r].n}</span><span>${o}%</span></div>`:'').join('')}${p.min?`<div class="small">At least one ${RAR[p.min].n} or better!</div>`:''}</div>
  <button class="buy" data-p="${i}" ${S.coins<p.cost?'disabled':''}>${COIN}${p.cost}</button>${S.coins<p.cost?`<div class="small">${p.cost-S.coins} more coins</div>`:''}</div>`).join('');
  $$('.buy').forEach(b=>b.onclick=()=>{ac();buy(+b.dataset.p)})}
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<5;i++){r-=odds[i];if(r<0)return i}return 0}
 function pickMon(rar){const pool=MON.filter(m=>m.rar===rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
 let lastPack=0;
-function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;const rars=[0,1,2].map(()=>rollRar(p.odds));
- if(p.min&&Math.max(...rars)<p.min)rars[2]=p.min;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
+function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;const rars=Array.from({length:p.cards},()=>rollRar(p.odds));
+ if(p.min&&Math.max(...rars)<p.min)rars[rars.length-1]=p.min;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
  save();drawCoins(true);SFX.tap();openPack(got)}
 function dupeMsg(g){const n=g.n;if(n==3)return'Shiny unlocked! ✨';if(n==6)return'Golden unlocked! ★';if(n<3)return`Copy ${n} of 3 to Shiny`;if(n<6)return`Copy ${n} of 6 to Golden`;return`Golden already! +${g.refund} coins`}
 function openPack(got){let opened=0;$('#openTitle').textContent='Tap each card to flip it!';$('#openSum').textContent='';$('#openDone').style.display='none';$('#openAgain').style.display='none';
- $('#openRow').innerHTML=got.map((g,i)=>{const m=MON[g.id];return `<button class="flip${m.rar==4?' glowL':''}" data-i="${i}" style="--r:${RAR[m.rar].c}"><div class="in"><div class="fa">?</div><div class="ba">${art(g.id,tierOf(g.n))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div>${g.isNew?'<div class="tag">NEW!</div>':`<div class="tag${g.n==3||g.n==6?'':' d'}">${dupeMsg(g)}</div>`}</div></div></button>`}).join('');
+ $('#openRow').style.setProperty('--fw',got.length>3?'17vw':'26vw');$('#openRow').innerHTML=got.map((g,i)=>{const m=MON[g.id];return `<button class="flip${m.rar==4?' glowL':''}" data-i="${i}" style="--r:${RAR[m.rar].c}"><div class="in"><div class="fa">?</div><div class="ba">${art(g.id,tierOf(g.n))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div>${g.isNew?'<div class="tag">NEW!</div>':`<div class="tag${g.n==3||g.n==6?'':' d'}">${dupeMsg(g)}</div>`}</div></div></button>`}).join('');
  $$('#openRow .flip').forEach(b=>b.onclick=()=>{if(b.classList.contains('open'))return;b.classList.add('open');opened++;const g=got[+b.dataset.i],m=MON[g.id];
   if(m.rar>=3){SFX.fanfare();confetti(m.rar==4?80:40)}else if(g.isNew)SFX.good();else SFX.flip();if(g.n==3||g.n==6)say(`${m.name} is now ${TIER[tierOf(g.n)]}!`);else if(g.isNew&&m.rar>=2)say(`Wow! A ${RAR[m.rar].n.toLowerCase()} critter: ${m.name}!`);
   if(opened===got.length){const n=got.filter(g=>g.isNew).length,up=got.filter(g=>g.n==3||g.n==6).length;$('#openTitle').textContent=n?`${n} new critter${n>1?'s':''}!`:up?'Your critters powered up!':'Repeats help your critters power up!';

@@ -265,7 +265,8 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <h1>Max's <b>Number</b> Critters</h1>
   <div class="hint" id="homeHint"></div>
   <div class="row">
-    <button class="big" data-go="menu">▶ Play</button>
+    <button class="big" id="advBtn">⭐ Adventure</button>
+    <button class="big alt" data-go="menu">▶ Play</button>
     <button class="big alt" data-go="shop">Packs</button>
     <button class="big alt" data-go="book">Critter Book</button>
     <button class="big alt" data-go="play">Critter Fun</button>
@@ -339,6 +340,21 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <button class="big alt" id="picClose">Close</button>
 </div></div>
 
+<div class="ov" id="talkOv"><div class="box">
+  <div id="talkArt" style="width:150px"></div><h2>Grown-up time!</h2>
+  <div id="talkT" style="font-size:26px;font-weight:800;line-height:1.25"></div>
+  <button class="big" id="talkGo">We did it! ▶</button>
+</div></div>
+<div class="ov night" id="advOv"><div class="box" style="background:linear-gradient(#22306f,#141d4d);color:#fff">
+  <svg viewBox="0 0 200 60" style="width:200px"><path d="M100 6a24 24 0 1 0 22 34 20 20 0 1 1-22-34z" fill="#ffe066"/><g fill="#fff"><circle cx="30" cy="20" r="2.5"/><circle cx="170" cy="14" r="2.5"/><circle cx="150" cy="44" r="2"/><circle cx="50" cy="48" r="2"/></g></svg>
+  <h2>Adventure complete!</h2><div id="advArt" style="width:90px"></div><div id="advBody" style="display:flex;flex-direction:column;align-items:center;gap:8px"></div>
+  <div class="small" style="color:#cdd6ff">Great work today, Max. Goodnight, critters!</div>
+  <button class="big" id="advHome">Home</button>
+</div></div>
+<div class="ov" id="restOv"><div class="box">
+  <div id="restArt" style="width:150px;opacity:.9"></div><h2>Time for a rest!</h2><div id="restT"></div><div>Your critters are sleepy. See you tomorrow!</div>
+  <button class="big alt" id="restHome">Home</button>
+</div></div>
 <div class="ov" id="openOv"><div class="box" style="max-width:1120px">
   <h2 id="openTitle">Tap the cards!</h2>
   <div id="openRow"></div>
@@ -359,7 +375,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 </div></div>
 
 <div class="ov" id="parentOv"><div class="box wide">
-  <div class="tabs" id="ptabs"><button data-t="stats" class="on">Progress</button><button data-t="log">Recent mistakes</button><button data-t="set">Settings</button></div>
+  <div class="tabs" id="ptabs"><button data-t="stats" class="on">Progress</button><button data-t="week">This week</button><button data-t="log">Recent mistakes</button><button data-t="set">Settings</button></div>
   <div id="pBody"></div>
   <button class="big alt" id="parentClose" style="align-self:center">Done</button>
 </div></div>
@@ -485,7 +501,7 @@ function art(id,tier=0){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T
 
 /* =============== state =============== */
 const KEY='maxCritters.v2',OLD='maxCritters.v1';
-const fresh=()=>({v:2,ph:1,scenes:[],stories:[],buddy:null,coins:0,total:0,owned:{},games:{},stats:{},log:[],due:[],events:[],sound:true,voice:true,packs:0,at:0});
+const fresh=()=>({days:{},limit:0,talk:true,v:2,ph:1,scenes:[],stories:[],buddy:null,coins:0,total:0,owned:{},games:{},stats:{},log:[],due:[],events:[],sound:true,voice:true,packs:0,at:0});
 let S=fresh();
 try{const raw=localStorage.getItem(KEY),d=JSON.parse(raw);if(d&&d.v===2){if((d.ph|0)<1){try{localStorage.setItem(KEY+'.backup0',raw)}catch(e){}}S=Object.assign(fresh(),d);S.ph=Math.max(S.ph|0,1)}
  else{const o=JSON.parse(localStorage.getItem(OLD));if(o&&Array.isArray(o.stars))migrate(o)}}catch(e){}
@@ -821,11 +837,11 @@ function matchRound(l){const mode=(gs('match').solved|0)%2?'opp':'rhy';const src
 /* =============== play loop =============== */
 let G=null,R=null,miss=0,usedHint=false,busy=false,REPLAY_PTR=null;
 const api={win:()=>win(),lose:(g)=>lose(g),get miss(){return miss},hinted:()=>{usedHint=true}};
-function openGame(k){G=GKEY[k];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(pick(['Let\'s play!','I am ready!','You can do it!'])),400)}
+function openGame(k){if(limitHit()){rest();return}G=GKEY[k];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(pick(['Let\'s play!','I am ready!','You can do it!'])),400)}
 function mbar(st){const h=(st.hist||[]).slice(-5);return `<span class="pbar" style="display:inline-flex;vertical-align:middle">${Array.from({length:5},(_,i)=>`<i class="${h[i]==null?'':h[i]?'on':'off'}"></i>`).join('')}</span>`}
-function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
+function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">Adventure ${Math.min(12,ADV.q+1)} of 12</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
 function makeRound(g,l,seed,replay,ptr){RNGF=rng(seed);REPLAY=replay;REPLAY_PTR=ptr==null?null:ptr;let r;try{r=g.make(l)}finally{RNGF=Math.random;REPLAY=false;if(REPLAY_PTR!=null){const st=gs('story');st.ptr=st._p;delete st._p}REPLAY_PTR=null}return r}
-function nextRound(){const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
+function nextRound(){if(ADV&&advNext())return;const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
  const di=S.due.findIndex(d=>d.g===G.key&&d.at<=now);
  if(di>=0){const d=S.due.splice(di,1)[0];lvl=Math.min(d.l,G.max);seed=d.seed;ptr=d.ptr;review='again'}
  else if(st.lvl>1&&Math.random()<.2){lvl=1+Math.floor(Math.random()*(st.lvl-1));review='review'}
@@ -839,12 +855,12 @@ function nextRound(){const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed
     if(miss>=2){const wrong=[...el.querySelectorAll('.ch:not(.no)')].filter(x=>!R.choices[+x.dataset.i].ok);if(wrong.length>1){wrong[0].classList.add('no');wrong[0].disabled=true;usedHint=true}}}});
   R.cheat=()=>{const i=R.choices.findIndex(c=>c.ok);el.querySelectorAll('.ch')[i].click()}}}
 function stat(ok){const k=G.key,l=R.lvl||gs(k).lvl;S.stats[k]=S.stats[k]||{};const s=S.stats[k][l]=S.stats[k][l]||{n:0,first:0,wrong:0,hint:0,tags:{}};
- s.n++;if(miss===0)s.first++;s.wrong+=miss;if(usedHint)s.hint++;if(R.tag){const t=s.tags[R.tag]=s.tags[R.tag]||[0,0];t[0]++;if(miss===0)t[1]++}}
+ s.n++;if(miss===0)s.first++;{const D=day();D.q++;if(miss===0)D.f++;D.g=D.g||{};const gg=D.g[k]=D.g[k]||[0,0];gg[0]++;if(miss===0)gg[1]++;pruneDays()}s.wrong+=miss;if(usedHint)s.hint++;if(R.tag){const t=s.tags[R.tag]=s.tags[R.tag]||[0,0];t[0]++;if(miss===0)t[1]++}}
 const PRAISE=['Great job!','You got it!','Awesome!','Super smart!','Nice work!','Wow, correct!','Brilliant!'];
 function mastery(st,first){if(R.review)return 0;st.hist=st.hist||[];st.hist.push(first?1:0);if(st.hist.length>10)st.hist.shift();const h=st.hist,l5=h.slice(-5),l3=h.slice(-3);
  if(l5.length>=5&&l5.filter(x=>x).length>=4)return 1;if((l3.length>=3&&l3.every(x=>!x))||(h.length>=10&&h.filter(x=>x).length<6))return -1;return 0}
 function evt(t){S.events=S.events||[];S.events.unshift({t:Date.now(),g:G.key,m:t});if(S.events.length>40)S.events.length=40}
-function win(){busy=true;const st=gs(G.key);stat(true);const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
+function win(){busy=true;const st=gs(G.key);stat(true);if(ADV)ADV.q++;const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;SFX.good();confetti(20);const mv=mastery(st,miss===0);
  const p=praise();const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
  if(R.after)R.after();let up=false,big=false;
  let gl=0,bonus=0;if(mv>0){big=true;st.hist=[];const ml=st.lvl;if(addGuard(G.key,ml))gl=ml;if(st.lvl<G.max){st.lvl++;up=true;evt(`Mastered level ${ml}, moved up to ${st.lvl}`)}else evt(gl?`Mastered the top level`:`Mastered the top level again`);bonus=(up||gl?25:10)+(gl?10:0);S.coins+=bonus}
@@ -865,10 +881,10 @@ $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound(
 $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
 
 /* =============== screens =============== */
-function show(id){$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub()}
+function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
-function drawHome(){const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
+function drawHome(){const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
  $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i,tierOf(S.owned[i]|0))).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
  $('#homeHint').textContent=owned.length?`You have ${owned.length} of ${MON.length} critters. Play games to earn coins, then open packs!`:'Play games to earn coins, then open packs to collect critters!'}
 function drawMenu(){const card=g=>{const st=gs(g.key);return `<button class="gcard" data-g="${g.key}" style="background:${g.bg}"><span class="gi">${g.icon}</span><span class="gn">${g.name}</span><span class="gl">Level ${st.lvl} of ${g.max}</span>${mbar(st)}</button>`};
@@ -1104,6 +1120,46 @@ let streak=0;
 function praise(){if(miss===0)streak++;else streak=0;if(streak>=3&&streak%5===0)return `${streak} in a row! Amazing!`;if(miss>=2)return pick(['You kept trying and got it!','Using the help was smart!']);if(miss===1)return pick(['You fixed it! Great job!','Second try, nice work!']);
  return Math.random()<.6&&GPRAISE[G.key]?pick(GPRAISE[G.key]):pick(PRAISE)}
 
+/* =============== daily adventure, time, week =============== */
+const dkey=(t=new Date())=>`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+function day(k=dkey()){S.days=S.days||{};const d=S.days[k]||(S.days[k]={q:0,f:0,sec:0,adv:0,g:{}});return d}
+function pruneDays(){const ks=Object.keys(S.days||{}).sort();while(ks.length>60)delete S.days[ks.shift()]}
+const TALK=['Tell a grown-up how you solved the last question.','Find 3 round things in the room. Count them with a grown-up!','Count by 2s with a grown-up, all the way to 20.','Ask a grown-up a math question. Then they ask you one!','Show a grown-up 7 fingers. Now show 3 more. How many is that?','Tell a grown-up a word that rhymes with cat.','Make up a short story about your buddy and tell it to a grown-up.','Find something in the room that starts with the letter B.','Clap 10 times with a grown-up. Now clap 10 more! How many claps?','Ask a grown-up: what is 5 plus 5? Check their answer!','Tell a grown-up which critter is your favorite and why.','Spell your name out loud for a grown-up.'];
+let ADV=null;
+function advGames(){const now=Date.now();const sc=GAMES.map(g=>{const ss=S.stats[g.key]||{};let n=0,f=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first});const due=(S.due||[]).filter(d=>d.g===g.key&&d.at<=now).length;
+  return{k:g.key,kind:g.kind,w:(n>=3?1-f/n:.25)+Math.min(due,3)*.2+Math.random()*.3}}).sort((a,b)=>b.w-a.w);
+ const out=[sc[0]];out.push(sc.find(x=>x.kind!==sc[0].kind));out.push(sc.find(x=>!out.includes(x)));return shuffle(out.map(x=>x.k))}
+const advDone=()=>day().adv>0;
+function limitHit(){return S.limit>0&&day().sec>=(S.limit+(day().extra|0))*60}
+function rest(){$('#restT').textContent=`You played ${Math.round(day().sec/60)} minutes today.`;const b=buddyId();$('#restArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#restOv').classList.add('on');say('Time for a rest! See you tomorrow.')}
+function startAdv(){if(limitHit()){rest();return}ADV={games:advGames(),q:0,talk:S.talk!==false?7+Math.floor(Math.random()*3):-1};G=GKEY[ADV.games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();ADV.on=1;nextRound();
+ setTimeout(()=>buddySay('Adventure time! 12 questions.'),400);say("Adventure time! Let's go!")}
+function advNext(){if(ADV.q>=12){finishAdv();return true}
+ if(ADV.q===ADV.talk){ADV.talk=-2;$('#talkT').textContent=pick(TALK);const b=buddyId();$('#talkArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#talkOv').classList.add('on');SFX.flip();say('Grown-up time! '+$('#talkT').textContent);return true}
+ const k=ADV.games[Math.min(2,Math.floor(ADV.q/4))];if(G.key!==k){G=GKEY[k];$('#gTitle').textContent=G.name;toast(`Next: ${G.name}!`);buddySay(`Now ${G.name}!`)}return false}
+$('#advBtn').onclick=()=>{ac();SFX.tap();startAdv()};
+$('#talkGo').onclick=()=>{SFX.tap();$('#talkOv').classList.remove('on');nextRound()};
+function finishAdv(){const first=!advDone();const D=day();D.adv++;ADV=null;let h='';
+ if(first){S.coins+=30;const id=pickMon(rollRar(PACKS[1].odds));const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;if(S.owned[id]>6)S.coins+=5;const m=MON[id];
+  h=`<div class="small">Your free critter:</div><button class="flip" id="advCard" style="--r:${RAR[m.rar].c};--fw:180px"><div class="in"><div class="fa">?</div><div class="ba">${art(id,tierOf(S.owned[id]))}<div class="nm">${esc(m.name)}</div><div class="rr">${RAR[m.rar].n}</div><div class="tag${isNew?'':' d'}">${isNew?'NEW!':dupeMsg({n:S.owned[id],refund:5})}</div></div></div></button><div><b>+30 coins!</b> Tap the card.</div>`}
+ else h=`<div>You did another adventure! Your free critter comes back tomorrow.</div>`;
+ save();drawCoins(true);const b=buddyId();$('#advArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#advBody').innerHTML=h;$('#advOv').classList.add('on');SFX.fanfare();confetti(60);say(first?'Adventure complete! Here is a free critter and 30 coins. Goodnight!':'Adventure complete! Great job!');
+ const c=$('#advCard');if(c)c.onclick=()=>{if(c.classList.contains('open'))return;c.classList.add('open');SFX.good();confetti(30)}}
+$('#advHome').onclick=()=>{SFX.tap();$('#advOv').classList.remove('on');show('home')};
+$('#restHome').onclick=()=>{SFX.tap();$('#restOv').classList.remove('on');show('home')};
+let tickN=0;setInterval(()=>{if(document.visibilityState!=='visible')return;const on=$('.screen.on');if(!on||!['game','scene','storymk','storyv'].includes(on.id))return;day().sec+=10;if(++tickN%6===0)save();
+ if(limitHit()&&!$('#restOv').classList.contains('on')&&!$('#advOv').classList.contains('on')){ADV=null;save();rest()}},10000);
+function weekHTML(){const days=[];for(let i=6;i>=0;i--){const t=new Date();t.setDate(t.getDate()-i);const k=dkey(t);days.push({k,t,d:(S.days||{})[k]||{q:0,f:0,sec:0,adv:0,g:{}}})}
+ let q=0,f=0,sec=0,adv=0;const gq={};days.forEach(x=>{q+=x.d.q;f+=x.d.f;sec+=x.d.sec;adv+=x.d.adv?1:0;Object.entries(x.d.g||{}).forEach(([k,v])=>{gq[k]=gq[k]||[0,0];gq[k][0]+=v[0];gq[k][1]+=v[1]})});
+ const wk=Date.now()-7*864e5,ev=(S.events||[]).filter(e=>e.t>=wk);
+ let h=`<h2>This week</h2><p><b>${q}</b> questions · <b>${pc(f,q)??0}%</b> right on the first try · <b>${Math.round(sec/60)}</b> minutes · adventures on <b>${adv}</b> of 7 days</p>
+ <div class="tscroll"><table><thead><tr><th>Day</th><th class="n">Questions</th><th class="n">First try</th><th class="n">Minutes</th><th>Adventure</th></tr></thead><tbody>${days.map(x=>{const p=pc(x.d.f,x.d.q);return `<tr><td>${x.t.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'})}</td><td class="n">${x.d.q}</td><td class="n">${p==null?'–':`<span class="pct" style="background:${pcol(p)}">${p}%</span>`}</td><td class="n">${Math.round(x.d.sec/60)}</td><td>${x.d.adv?'✓':''}</td></tr>`}).join('')}</tbody></table></div>`;
+ const gr=Object.entries(gq).map(([k,v])=>({g:GKEY[k]?.name||k,n:v[0],p:pc(v[1],v[0])})).sort((a,b)=>b.n-a.n);
+ if(gr.length)h+=`<h3>Games this week</h3><div class="tscroll"><table><thead><tr><th>Game</th><th class="n">Questions</th><th class="n">First try</th></tr></thead><tbody>${gr.map(x=>`<tr><td>${esc(x.g)}</td><td class="n">${x.n}</td><td class="n"><span class="pct" style="background:${pcol(x.p)}">${x.p}%</span></td></tr>`).join('')}</tbody></table></div>`;
+ const weak=gr.filter(x=>x.n>=5&&x.p<70);if(weak.length)h+=`<p><b>Could use practice:</b> ${weak.map(x=>esc(x.g)).join(', ')}. The Adventure picks these more often.</p>`;
+ h+=ev.length?`<h3>Wins this week</h3><ul>${ev.map(e=>`<li>${esc(GKEY[e.g]?.name||e.g)}: ${esc(e.m)}</li>`).join('')}</ul>`:'<p class="small">No level changes this week yet.</p>';
+ return h+`<p class="small">Days are counted on this iPad's clock. Minutes count time in games, scenes and stories.</p>`}
+
 /* =============== grown-ups =============== */
 const gear=$('#gear');let hold=0,ht=0;
 function holdStop(){clearInterval(ht);hold=0;gear.classList.remove('hold');gear.style.setProperty('--p','0%')}
@@ -1129,11 +1185,13 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
   const rows=Object.values(agg).filter(x=>x.n>=3).sort((a,b)=>a.f/a.n-b.f/b.n);
   if(rows.length)h+=`<h3>By skill (3 or more tries)</h3><div class="tscroll"><table><thead><tr><th>Game</th><th>Skill</th><th class="n">Tries</th><th class="n">First try</th></tr></thead><tbody>${rows.map(x=>{const p=pc(x.f,x.n);return `<tr><td>${x.g}</td><td>${esc(x.t)}</td><td class="n">${x.n}</td><td class="n"><span class="pct" style="background:${pcol(p)}">${p}%</span></td></tr>`}).join('')}</tbody></table></div>`;
   B.innerHTML=h;B.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{const g=GKEY[b.dataset.lv],st=gs(g.key);st.lvl=Math.max(1,Math.min(g.max,st.lvl+ +b.dataset.d));st.prog=0;st.hist=[];save();drawParent()})}
+ else if(ptab==='week'){B.innerHTML=weekHTML()}
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
-  <button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
-  <p class="small">Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
+  <button class="opt" id="oT">Grown-up time cards in the Adventure <b>${S.talk!==false?'On':'Off'}</b></button><button class="opt" id="oL">Daily play limit <b>${S.limit?S.limit+' minutes':'Off'}</b></button>${S.limit?`<button class="opt" id="oX">Give 15 more minutes today <b>›</b></button>`:''}<button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
+  <p class="small">Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). The daily Adventure is 12 questions from 3 games, picked from what he finds hardest and questions due for review; the first one each day gives a free critter and 30 coins. Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
   $('#oS').onclick=()=>{S.sound=!S.sound;save();drawParent()};$('#oV').onclick=()=>{S.voice=!S.voice;save();drawParent()};
+  $('#oT').onclick=()=>{S.talk=S.talk===false;save();drawParent()};$('#oL').onclick=()=>{const L=[0,15,30,45,60,90];S.limit=L[(L.indexOf(S.limit|0)+1)%L.length];save();drawParent()};if($('#oX'))$('#oX').onclick=()=>{day().extra=(day().extra|0)+15;save();toast('+15 minutes today')};
   $('#oC').onclick=()=>{S.coins+=100;save();drawCoins(true);toast('+100 coins')};
   $('#oR').onclick=()=>{if(!resetArm){resetArm=true;drawParent();return}const s=S.sound,v=S.voice;S=fresh();S.sound=s;S.voice=v;S.total=0;save();try{localStorage.removeItem(OLD)}catch(e){}resetArm=false;drawParent();drawCoins();toast('Progress erased')}}}
 $$('#ptabs button').forEach(b=>b.onclick=()=>{ptab=b.dataset.t;resetArm=false;drawParent()});
@@ -1142,7 +1200,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>

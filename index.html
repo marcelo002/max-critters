@@ -260,6 +260,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .kb{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%;max-width:900px}.kb div{display:flex;gap:6px;justify-content:center;width:100%}
 .kb button{flex:1;max-width:76px;min-height:64px;border-radius:16px;background:#fff;color:var(--dark);font-size:30px;font-weight:800;box-shadow:0 5px 0 #c7cde8}.kb button:active{transform:translateY(4px);box-shadow:0 1px 0 #c7cde8}.kb .del{max-width:110px;background:#ffd9d9}
 .ch svg{display:block;margin:auto}.ch svg.cg{width:auto;height:48px;max-width:100%}
+.visit{display:flex;align-items:center;gap:10px;background:#ffffff22;border:3px solid var(--add);border-radius:24px;padding:6px 18px 6px 8px;text-align:left;line-height:1.15;animation:glow 2s infinite}.visit svg{width:72px;height:72px}.visit small{font-size:15px;opacity:.9}.visit.done{border-color:#ffffff44;animation:none;opacity:.85}
 </style>
 </head>
 <body>
@@ -268,6 +269,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <section class="screen on" id="home">
   <div id="homeTop"><div class="coins" data-coins></div><button class="icon" id="gear" aria-label="Grown-ups: press and hold"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button></div>
   <div id="parade"></div>
+  <button id="visit" class="visit"></button>
   <h1>Max's <b>Number</b> Critters</h1>
   <div class="hint" id="homeHint"></div>
   <div class="row">
@@ -360,6 +362,10 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 <div class="ov" id="restOv"><div class="box">
   <div id="restArt" style="width:150px;opacity:.9"></div><h2>Time for a rest!</h2><div id="restT"></div><div>Your critters are sleepy. See you tomorrow!</div>
   <button class="big alt" id="restHome">Home</button>
+</div></div>
+<div class="ov" id="visOv"><div class="box">
+  <div id="visArt" style="width:200px"></div><h2 id="visName"></h2><div id="visText"></div>
+  <button class="big" id="visHome">Home</button>
 </div></div>
 <div class="ov" id="openOv"><div class="box" style="max-width:1120px">
   <h2 id="openTitle">Tap the cards!</h2>
@@ -484,7 +490,7 @@ function art(id,tier=0){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T
  if(m.rar==4)s+=`<g class="rays">${Array.from({length:12},(_,k)=>`<path d="M60 64 54 0h12z" fill="#ffd23f" opacity=".3" transform="rotate(${k*30} 60 64)"/>`).join('')}</g>`;
  if(tier==2&&m.rar<3)s+=`<circle cx="60" cy="66" r="54" fill="#ffe08a" opacity=".5"/>`;
  if(m.rar>=3)s+=`<circle cx="60" cy="66" r="56" fill="${m.rar==4?'#ffd86b':'#d7b8ff'}" opacity=".45"/><circle cx="60" cy="66" r="46" fill="${m.rar==4?'#fff1b8':'#efe2ff'}" opacity=".5"/>`;
- s+=`<ellipse cx="60" cy="110" rx="34" ry="6" fill="#0003"/>${col(m.tail)}<g transform="translate(0 ${dy})">${col(m.top)}</g>`;
+ if(m.accB)s+=m.accB;s+=`<ellipse cx="60" cy="110" rx="34" ry="6" fill="#0003"/>${col(m.tail)}<g transform="translate(0 ${dy})">${col(m.top)}</g>`;
  s+=`<ellipse cx="44" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="76" cy="102" rx="11" ry="7" fill="${c3}"/><ellipse cx="60" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c1}"${tier==2?' stroke="#ffc93c" stroke-width="5"':tier==1?' stroke="#fff" stroke-width="3.5"':''}/>`;
  if(m.belly)s+=`<ellipse cx="60" cy="84" rx="${rx*.6}" ry="17" fill="${c2}"/>`;
  if(m.pat==1)s+=`<circle cx="${60-rx+8}" cy="66" r="4" fill="${c3}" opacity=".5"/><circle cx="${60+rx-10}" cy="74" r="5" fill="${c3}" opacity=".5"/><circle cx="${60+rx-18}" cy="56" r="3" fill="${c3}" opacity=".5"/>`;
@@ -499,6 +505,7 @@ function art(id,tier=0){const m=MON[id],T=TYPES[m.t],[c1,c2,c3]=T.pal[m.pal],A=T
  s+=`<circle cx="${60-rx+12}" cy="77" r="5" fill="#ff7bac" opacity=".55"/><circle cx="${60+rx-12}" cy="77" r="5" fill="#ff7bac" opacity=".55"/>`;
  const sm=`<path d="M53 77q7 7 14 0" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>`;
  s+=[sm,`<ellipse cx="60" cy="80" rx="5" ry="4.5" fill="${D}"/>`,sm+`<path d="M55 78.5l2.5 4 2.5-4z" fill="#fff"/>`,sm+`<path d="M57 80q3 6 6 0z" fill="#ff7bac"/>`,`<path d="M52 77q4 4 8 0q4 4 8 0" stroke="${D}" stroke-width="3" fill="none" stroke-linecap="round"/>`][m.mouth];
+ if(m.acc)s+=m.acc;
  if(m.rar>=2)s+=`<path d="m102 20 2 6 6 2-6 2-2 6-2-6-6-2 6-2zM18 34l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="${m.rar==4?'#ffd23f':'#fff'}"/>`;
  if(m.rar==4)s+=`<path d="m60 44 5 6-5 6-5-6z" fill="#ff5c8a" stroke="#fff" stroke-width="1.5"/>`;
  if(tier>=1)s+=`<path d="m14 86 1.6 4.4 4.4 1.6-4.4 1.6L14 98l-1.6-4.4L8 92l4.4-1.6zM104 92l1.4 3.6 3.6 1.4-3.6 1.4-1.4 3.6-1.4-3.6L99 97l3.6-1.4zM96 8l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z" fill="${tier==2?'#ffc93c':'#ff9fe0'}"/>`;
@@ -923,7 +930,7 @@ let G=null,R=null,miss=0,usedHint=false,busy=false,REPLAY_PTR=null;
 const api={win:()=>win(),lose:(g)=>lose(g),get miss(){return miss},hinted:()=>{usedHint=true}};
 function openGame(k){if(limitHit()){rest();return}G=GKEY[k];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(pick(['Let\'s play!','I am ready!','You can do it!'])),400)}
 function mbar(st){const h=(st.hist||[]).slice(-5);return `<span class="pbar" style="display:inline-flex;vertical-align:middle">${Array.from({length:5},(_,i)=>`<i class="${h[i]==null?'':h[i]?'on':'off'}"></i>`).join('')}</span>`}
-function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">Adventure ${Math.min(12,ADV.q+1)} of 12</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
+function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">${ADV.kind==='visit'?'Visitor challenge':'Adventure'} ${Math.min(ADV.n||12,ADV.q+1)} of ${ADV.n||12}</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
 function makeRound(g,l,seed,replay,ptr){RNGF=rng(seed);REPLAY=replay;REPLAY_PTR=ptr==null?null:ptr;let r;try{r=g.make(l)}finally{RNGF=Math.random;REPLAY=false;if(REPLAY_PTR!=null){const st=gs('story');st.ptr=st._p;delete st._p}REPLAY_PTR=null}return r}
 function nextRound(){if(ADV&&advNext())return;const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
  if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place={l:1};const plc=!ADV&&st.place&&!st.place.done;
@@ -971,9 +978,9 @@ $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;
 function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
-function drawHome(){const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
+function drawHome(){drawVisit();const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
  $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i,tierOf(S.owned[i]|0))).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
- $('#homeHint').textContent=owned.length?`You have ${owned.length} of ${MON.length} critters. Play games to earn coins, then open packs!`:'Play games to earn coins, then open packs to collect critters!'}
+ $('#homeHint').textContent=owned.length?`You have ${owned.length} of ${BASE.length} critters. Play games to earn coins, then open packs!`:'Play games to earn coins, then open packs to collect critters!'}
 function drawMenu(){const card=g=>{const st=gs(g.key);return `<button class="gcard" data-g="${g.key}" style="background:${g.bg}"><span class="gi">${g.icon}</span><span class="gn">${g.name}</span><span class="gl">Level ${st.lvl} of ${g.max}</span>${mbar(st)}</button>`};
  $('#gMath').innerHTML=GAMES.filter(g=>g.kind=='math').map(card).join('');$('#gRead').innerHTML=GAMES.filter(g=>g.kind=='read').map(card).join('');
  $$('.gcard').forEach(b=>b.onclick=()=>{ac();SFX.tap();openGame(b.dataset.g)})}
@@ -983,15 +990,15 @@ const PACKS=[{n:'Starter',cards:3,cost:25,odds:[70,22,7,1,0],col:['#9aa5b1','#d6
  {n:'Mega',cards:4,cost:200,odds:[15,30,32,17,6],min:2,col:['#3b8eea','#bcdcff']},{n:'Legend',cards:5,cost:500,odds:[0,15,40,30,15],min:3,col:['#f6ad1e','#ffe6a8']}];
 function packArt(p){return `<svg viewBox="0 0 100 130"><path d="M14 10h72l-4 8 4 8v84l-4 8 4 8H14l4-8-4-8V26l4-8z" fill="${p.col[0]}"/><path d="M22 30h56v70H22z" fill="${p.col[1]}" opacity=".7"/>
  <path d="m50 42 6 14h15l-12 9 5 15-14-9-14 9 5-15-12-9h15z" fill="#fff"/><text x="50" y="96" text-anchor="middle" font-size="13" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${p.n.toUpperCase()}</text></svg>`}
-function drawShop(){const nb=5-(S.packs%5),nl=15-(S.pity|0);$('#pity').innerHTML=`Bonus pick in <b>${nb}</b> pack${nb>1?'s':''} · Legendary for sure within <b>${nl}</b> pack${nl>1?'s':''}`;$('#packs').innerHTML=PACKS.map((p,i)=>`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div><div style="font-weight:800">${p.cards} critters</div>
+function drawShop(){const nb=5-(S.packs%5),nl=15-(S.pity|0);$('#pity').innerHTML=`Bonus pick in <b>${nb}</b> pack${nb>1?'s':''} · Legendary for sure within <b>${nl}</b> pack${nl>1?'s':''}`;$('#packs').innerHTML=PACKS.map((p,i)=>p.season&&!seasonOn()?'':`<div class="pack">${packArt(p)}<div class="pn">${p.n} Pack</div>${p.season?'<div class="small">Snowy Season critters! Until Feb 28.</div>':''}<div style="font-weight:800">${p.cards} critters</div>
  <div class="odds">${p.odds.map((o,r)=>o?`<div><span><i style="background:${RAR[r].c}"></i>${RAR[r].n}</span><span>${o}%</span></div>`:'').join('')}${p.min?`<div class="small">At least one ${RAR[p.min].n} or better!</div>`:''}</div>
  <button class="buy" data-p="${i}" ${S.coins<p.cost?'disabled':''}>${COIN}${p.cost}</button>${S.coins<p.cost?`<div class="small">${p.cost-S.coins} more coins</div>`:''}</div>`).join('');
  $$('.buy').forEach(b=>b.onclick=()=>{ac();buy(+b.dataset.p)})}
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<5;i++){r-=odds[i];if(r<0)return i}return 0}
-function pickMon(rar){const pool=MON.filter(m=>m.rar===rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
+function pickMon(rar){const pool=BASE.filter(m=>m.rar===rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
 let lastPack=0;
-function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;S.pity=(S.pity|0)+1;const rars=Array.from({length:p.cards},()=>rollRar(p.odds));
- if(p.min&&Math.max(...rars)<p.min)rars[rars.length-1]=p.min;if(!rars.includes(4)&&S.pity>=15)rars[rars.length-1]=4;if(rars.includes(4))S.pity=0;const got=rars.map(r=>{const id=pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
+function buy(pi){const p=PACKS[pi];if(S.coins<p.cost){SFX.bad();return}lastPack=pi;S.coins-=p.cost;S.packs++;if(!p.season)S.pity=(S.pity|0)+1;const rars=Array.from({length:p.cards},()=>rollRar(p.odds));
+ if(p.min&&Math.max(...rars)<p.min)rars[rars.length-1]=p.min;if(!p.season){if(!rars.includes(4)&&S.pity>=15)rars[rars.length-1]=4;if(rars.includes(4))S.pity=0}const got=rars.map(r=>{const id=p.season?pickSeason(r):pickMon(r);const isNew=!S.owned[id];S.owned[id]=(S.owned[id]|0)+1;const n=S.owned[id];let refund=0;if(n>6){refund=5;S.coins+=5}return{id,isNew,refund,n}});
  let bon=null;if(S.packs%5===0){bon=[];let t=0;while(bon.length<3&&t++<50){const id=pickMon(Math.max(1,rollRar(p.odds)));if(!bon.includes(id))bon.push(id)}}
  save();drawCoins(true);SFX.tap();openPack(got,bon)}
 function dupeMsg(g){const n=g.n;if(n==3)return'Shiny unlocked! ✨';if(n==6)return'Golden unlocked! ★';if(n<3)return`Copy ${n} of 3 to Shiny`;if(n<6)return`Copy ${n} of 6 to Golden`;return`Golden already! +${g.refund} coins`}
@@ -1012,15 +1019,15 @@ $('#openAgain').onclick=()=>{$('#openOv').classList.remove('on');buy(lastPack)};
 
 /* =============== book =============== */
 let bf=-1;
-function drawBook(){const own=MON.filter(m=>S.owned[m.id]);const sh=own.filter(m=>S.owned[m.id]>=3).length,gd=own.filter(m=>S.owned[m.id]>=6).length;$('#bookTitle').textContent=`Critter Book ${own.length}/${MON.length}`+(sh?` · ✨${sh}`:'')+(gd?` · ★${gd}`:'');
- $('#chips').innerHTML=`<button class="chip${bf<0?' on':''}" data-f="-1">All</button>`+RAR.map((r,i)=>`<button class="chip${bf===i?' on':''}" data-f="${i}" style="${bf===i?'':`box-shadow:inset 0 0 0 3px ${r.c}`}">${r.n} ${own.filter(m=>m.rar===i).length}/${MON.filter(m=>m.rar===i).length}</button>`).join('');
- $('#chips').innerHTML+=`<button class="chip${bf==='g'?' on':''}" data-f="g">Guardians ${gCount()}/${GTOTAL()}</button>`;
- $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=b.dataset.f==='g'?'g':+b.dataset.f;drawBook()});
+function drawBook(){const own=BASE.filter(m=>S.owned[m.id]);const sh=own.filter(m=>S.owned[m.id]>=3).length,gd=own.filter(m=>S.owned[m.id]>=6).length;$('#bookTitle').textContent=`Critter Book ${own.length}/${BASE.length}`+(sh?` · ✨${sh}`:'')+(gd?` · ★${gd}`:'');
+ $('#chips').innerHTML=`<button class="chip${bf<0?' on':''}" data-f="-1">All</button>`+RAR.map((r,i)=>`<button class="chip${bf===i?' on':''}" data-f="${i}" style="${bf===i?'':`box-shadow:inset 0 0 0 3px ${r.c}`}">${r.n} ${own.filter(m=>m.rar===i).length}/${BASE.filter(m=>m.rar===i).length}</button>`).join('');
+ $('#chips').innerHTML+=`<button class="chip${bf==='g'?' on':''}" data-f="g">Guardians ${gCount()}/${GTOTAL()}</button><button class="chip${bf==='sp'?' on':''}" data-f="sp">Specials ${MON.filter(m=>m.sp&&S.owned[m.id]).length}/${MON.filter(m=>m.sp).length}</button>`;
+ $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=b.dataset.f==='g'||b.dataset.f==='sp'?b.dataset.f:+b.dataset.f;drawBook()});
  if(bf==='g'){$('#bgrid').innerHTML=GAMES.map(g=>`<h3 style="grid-column:1/-1;margin:6px 0 0">${esc(g.name)} guardians</h3>`+Array.from({length:g.max},(_,i)=>{const l=i+1,h=hasG(g.key,l);return `<button class="mc${h?'':' no'}" data-gk="${g.key}" data-gl="${l}" style="--r:${g.bg}">${gArt(g.key,l)}<div class="nm">${h?esc(gName(g.key,l)):'???'}</div><div class="rr">Level ${l}</div></button>`}).join('')).join('');
   $$('#bgrid [data-gk]').forEach(b=>b.onclick=()=>{const k=b.dataset.gk,l=+b.dataset.gl,g=GKEY[k];if(!hasG(k,l)){SFX.bad();toast(`Master level ${l} of ${g.name} to earn it!`);return}SFX.tap();
    $('#detArt').innerHTML=gArt(k,l);$('#detName').textContent=gName(k,l);$('#detInfo').innerHTML=`<div style="font-weight:800">Guardian of ${esc(g.name)}, level ${l}</div><p>You earned this guardian by mastering level ${l}. Guardians protect the things you have learned!</p>`;$('#detBuddy').style.display='none';say(gName(k,l));$('#detOv').classList.add('on')});return}
- $('#bgrid').innerHTML=MON.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
- $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast('Open packs to find it!');return}SFX.tap();
+ $('#bgrid').innerHTML=bf==='sp'?specHTML():BASE.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
+ $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast(m.sp==='v'?'This visitor comes on its own week!':m.sp==='s'?'Find it in Snowy Packs!':'Open packs to find it!');return}SFX.tap();
   const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
   $('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
 $('#detClose').onclick=()=>$('#detOv').classList.remove('on');
@@ -1221,9 +1228,9 @@ function limitHit(){return S.limit>0&&day().sec>=(S.limit+(day().extra|0))*60}
 function rest(){$('#restT').textContent=`You played ${Math.round(day().sec/60)} minutes today.`;const b=buddyId();$('#restArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#restOv').classList.add('on');say('Time for a rest! See you tomorrow.')}
 function startAdv(){if(limitHit()){rest();return}ADV={games:advGames(),q:0,talk:S.talk!==false?7+Math.floor(Math.random()*3):-1};G=GKEY[ADV.games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();ADV.on=1;nextRound();
  setTimeout(()=>buddySay('Adventure time! 12 questions.'),400);say("Adventure time! Let's go!")}
-function advNext(){if(ADV.q>=12){finishAdv();return true}
+function advNext(){if(ADV.q>=(ADV.n||12)){if(ADV.kind==='visit')finishVisit();else finishAdv();return true}
  if(ADV.q===ADV.talk){ADV.talk=-2;$('#talkT').textContent=pick(TALK);const b=buddyId();$('#talkArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#talkOv').classList.add('on');SFX.flip();say('Grown-up time! '+$('#talkT').textContent);return true}
- const k=ADV.games[Math.min(2,Math.floor(ADV.q/4))];if(G.key!==k){G=GKEY[k];$('#gTitle').textContent=G.name;toast(`Next: ${G.name}!`);buddySay(`Now ${G.name}!`)}return false}
+ const k=ADV.games[Math.min(ADV.games.length-1,Math.floor(ADV.q/(ADV.per||4)))];if(G.key!==k){G=GKEY[k];$('#gTitle').textContent=G.name;toast(`Next: ${G.name}!`);buddySay(`Now ${G.name}!`)}return false}
 $('#advBtn').onclick=()=>{ac();SFX.tap();startAdv()};
 $('#talkGo').onclick=()=>{SFX.tap();$('#talkOv').classList.remove('on');nextRound()};
 function finishAdv(){const first=!advDone();const D=day();D.adv++;ADV=null;let h='';
@@ -1247,6 +1254,55 @@ function weekHTML(){const days=[];for(let i=6;i>=0;i--){const t=new Date();t.set
  h+=ev.length?`<h3>Wins this week</h3><ul>${ev.map(e=>`<li>${esc(GKEY[e.g]?.name||e.g)}: ${esc(e.m)}</li>`).join('')}</ul>`:'<p class="small">No level changes this week yet.</p>';
  return h+`<p class="small">Days are counted on this iPad's clock. Minutes count time in games, scenes and stories.</p>`}
 
+/* =============== visitors and seasonal set =============== */
+const ACC={
+ wiz:'<path d="M36 42 60 2l24 40z" fill="#5b3fb5"/><ellipse cx="60" cy="42" rx="31" ry="6" fill="#4a2f9e"/><path d="m62 16 2 4 4 1-4 1-2 4-2-4-4-1 4-1zM52 30l1.5 3 3 1-3 1-1.5 3-1.5-3-3-1 3-1z" fill="#ffd23f"/>',
+ pirate:'<path d="M28 42q32-30 64 0z" fill="#1b1d3a"/><rect x="26" y="39" width="68" height="7" rx="3.5" fill="#1b1d3a"/><circle cx="60" cy="28" r="5" fill="#fff"/><path d="M56 34l8-4M56 30l8 4" stroke="#1b1d3a" stroke-width="1.6"/>',
+ chef:'<rect x="44" y="26" width="32" height="16" rx="2" fill="#fff" stroke="#d7dbe8" stroke-width="2"/><circle cx="47" cy="22" r="10" fill="#fff"/><circle cx="60" cy="16" r="12" fill="#fff"/><circle cx="73" cy="22" r="10" fill="#fff"/>',
+ phones:'<path d="M28 64a32 32 0 0 1 64 0" stroke="#1b1d3a" stroke-width="5" fill="none"/><rect x="20" y="56" width="13" height="20" rx="6" fill="#ff5c8a"/><rect x="87" y="56" width="13" height="20" rx="6" fill="#ff5c8a"/>',
+ shades:'<path d="M34 60h52" stroke="#1b1d3a" stroke-width="3"/><rect x="35" y="57" width="22" height="15" rx="7" fill="#1b1d3a"/><rect x="63" y="57" width="22" height="15" rx="7" fill="#1b1d3a"/><path d="M39 61l7-2M67 61l7-2" stroke="#fff8" stroke-width="2.5" stroke-linecap="round"/>',
+ flowers:'<circle cx="34" cy="40" r="6.5" fill="#ff7bac"/><circle cx="46" cy="34" r="6.5" fill="#ffd23f"/><circle cx="60" cy="32" r="6.5" fill="#ff7bac"/><circle cx="74" cy="34" r="6.5" fill="#ffd23f"/><circle cx="86" cy="40" r="6.5" fill="#ff7bac"/><g fill="#fff"><circle cx="34" cy="40" r="2"/><circle cx="46" cy="34" r="2"/><circle cx="60" cy="32" r="2"/><circle cx="74" cy="34" r="2"/><circle cx="86" cy="40" r="2"/></g>',
+ prof:'<circle cx="47" cy="64" r="11" fill="none" stroke="#1b1d3a" stroke-width="3"/><circle cx="73" cy="64" r="11" fill="none" stroke="#1b1d3a" stroke-width="3"/><path d="M58 64h4" stroke="#1b1d3a" stroke-width="3"/><path d="M49 96l11 5-11 5zM71 96l-11 5 11 5z" fill="#e5484d"/><circle cx="60" cy="101" r="3.5" fill="#b42318"/>',
+ scarf:'<path d="M30 88q30 13 60 0v9q-30 13-60 0z" fill="C"/><path d="M74 96l7 18H70z" fill="C"/><path d="M38 93h4M50 96h4M62 97h4M74 95h4" stroke="#fff" stroke-width="3"/>',
+ party:'<path d="M47 40 60 4l13 36z" fill="#4cc9f0"/><path d="M51 30h18M54 21h12M57 12h6" stroke="#ffd23f" stroke-width="3"/><circle cx="60" cy="5" r="5" fill="#ff7bac"/>',
+ antenna:'<path d="M44 40 36 14M76 40l8-26" stroke="#1b1d3a" stroke-width="3"/><circle cx="36" cy="12" r="6" fill="#ffd23f"/><circle cx="84" cy="12" r="6" fill="#ffd23f"/><path d="M40 40q20-8 40 0" stroke="#8b5cf6" stroke-width="5" fill="none"/>',
+ bandana:'<path d="M27 52q33-26 66 0l-4 7q-29-19-58 0z" fill="#2f9e44"/><path d="M91 53l13-7-4 13z" fill="#2f9e44"/><circle cx="44" cy="46" r="2.2" fill="#fff"/><circle cx="60" cy="42" r="2.2" fill="#fff"/><circle cx="76" cy="46" r="2.2" fill="#fff"/>',
+ cape:'<path d="m60 82 3.5 7 7.5 1-5.5 5 1.5 7.5-7-4-7 4 1.5-7.5-5.5-5 7.5-1z" fill="#ffd23f" stroke="#c48a00" stroke-width="1.5"/>',
+ beanie:'<path d="M33 46q27-36 54 0z" fill="C"/><rect x="31" y="41" width="58" height="9" rx="4.5" fill="#fff"/><circle cx="60" cy="12" r="7" fill="#fff"/>',
+ muffs:'<path d="M31 60a29 29 0 0 1 58 0" stroke="#8b5cf6" stroke-width="5" fill="none"/><circle cx="29" cy="64" r="10" fill="#ff9fc8"/><circle cx="91" cy="64" r="10" fill="#ff9fc8"/>',
+ flake:'<g stroke="#2b9fd9" stroke-width="3.2" stroke-linecap="round"><path d="M60 84v20M51 89l18 10M69 89 51 99"/></g>',
+ bell:'<path d="M38 92q22 9 44 0" stroke="#e5484d" stroke-width="4.5" fill="none"/><circle cx="60" cy="99" r="6.5" fill="#ffd23f" stroke="#c48a00" stroke-width="2"/><path d="M57 101h6" stroke="#c48a00" stroke-width="1.6"/>',
+ holly:'<path d="M70 42c6-8 16-8 18-4-6 6-12 6-18 4zM70 42c-2-10 2-18 8-18 0 8-4 14-8 18z" fill="#2f9e44"/><circle cx="67" cy="42" r="4.2" fill="#e5484d"/><circle cx="74" cy="44" r="4.2" fill="#e5484d"/>',
+ topstar:'<path d="m60 6 6 12 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2z" fill="#ffd23f" stroke="#c48a00" stroke-width="2"/>',
+ pine:'<ellipse cx="60" cy="28" rx="12" ry="16" fill="#8a5a33"/><path d="M50 22h20M48 30h24M50 38h20" stroke="#6b4423" stroke-width="2"/><path d="M60 12V4" stroke="#2f9e44" stroke-width="3"/>',
+ dust:'<g fill="#fff"><circle cx="18" cy="30" r="3"/><circle cx="102" cy="44" r="3"/><circle cx="22" cy="92" r="2.5"/><circle cx="100" cy="96" r="2.5"/><circle cx="96" cy="16" r="2"/></g>'};
+const ACCB={cape:'<path d="M30 66 12 112h96L90 66z" fill="#e5484d"/><path d="M30 66 12 112h20z" fill="#b42318"/>',aurora:'<path d="M6 84a54 54 0 0 1 108 0" stroke="#8ac926" stroke-width="7" fill="none" opacity=".75"/><path d="M15 84a45 45 0 0 1 90 0" stroke="#4cc9f0" stroke-width="7" fill="none" opacity=".75"/><path d="M24 84a36 36 0 0 1 72 0" stroke="#c77dff" stroke-width="7" fill="none" opacity=".75"/>'};
+const VISIT=[['Wizzle',6,'wiz','knows a magic trick for every number.'],['Captain Splash',2,'pirate','sails the seas looking for treasure maps.'],['Chef Crumble',9,'chef','bakes cookies shaped like numbers.'],['DJ Zap',3,'phones','makes music with beeps and boops.'],
+ ['Sunny Shades',1,'shades','loves the beach and warm sand.'],['Petalina',0,'flowers','plants a flower everywhere it walks.'],['Professor Pebble',4,'prof','has read every book in the library.'],['Scarfy',5,'scarf','knits cozy scarves for its friends.'],
+ ['Party Puff',8,'party','throws the best birthday parties.'],['Astro Zip',7,'antenna','talks to stars with its antennas.'],['Ranger Fern',0,'bandana','knows every trail in the forest.'],['Captain Comet',7,'cape','zooms across the sky to help friends.']];
+const SEAS=[['Snowpuff',5,0,'beanie','#4cc9f0'],['Mittsy',9,0,'muffs'],['Frostflake',5,0,'flake'],['Jinglet',3,0,'bell'],['Pinecone Pip',0,1,'pine'],['Cocobean',1,1,'scarf','#8a5a33'],['Holliwing',8,1,'holly'],['Twinkle',7,2,'topstar'],['Sledly',4,2,'beanie','#e5484d'],['Aurora Glow',6,4,'topstar']];
+const VB=120,SB=132,BASE=MON.slice(0,120);
+VISIT.forEach(([name,t,a,f],i)=>{const T=TYPES[t];MON.push({id:VB+i,name,t,rar:3,pal:i%3,top:a==='cape'||a==='bandana'||a==='prof'||a==='shades'?T.tops[0]:'',tail:T.tails[0]||'',body:[38,35],eye:[0,1,3,0,0,1,0,1,4,0,1,1][i],mouth:[0,2,3,0,0,3,1,0,2,0,0,2][i],pat:0,belly:1,acc:ACC[a].replace(/="C"/g,'="#e5484d"'),accB:ACCB[a]||'',fact:`${name} ${f}`,sp:'v'})});
+SEAS.forEach(([name,t,rar,a,c],i)=>{const T=TYPES[t];MON.push({id:SB+i,name,t,rar,pal:(i+1)%3,top:a==='flake'||a==='bell'||a==='muffs'?T.tops[0]:'',tail:T.tails[0]||'',body:[[38,35],[40,32],[36,34]][i%3],eye:i%5,mouth:(i*2)%5,pat:i%2,belly:1,acc:(ACC[a]||'').replace(/="C"/g,`="${c||'#2f9e44'}"`)+(i===0||i===9?ACC.dust:''),accB:i===9?ACCB.aurora:'',fact:`${name} only comes out in the Snowy Season.`,sp:'s'})});
+const EPOCH=new Date(2026,10,23).getTime();
+function weekIdx(t=Date.now()){const d=new Date(t);d.setHours(12,0,0,0);return Math.floor((d.getTime()-EPOCH)/(7*864e5))}
+const visitNow=()=>VB+((weekIdx()%12)+12)%12;
+function seasonOn(t=new Date()){const m=t.getMonth(),d=t.getDate();return m===11||m===0||m===1||(m===10&&d>=15)}
+function pickSeason(rar){let pool=MON.filter(m=>m.sp==='s'&&m.rar===rar);if(!pool.length)pool=MON.filter(m=>m.sp==='s'&&m.rar<=rar);const w=pool.map(m=>S.owned[m.id]?1:3);let r=Math.random()*w.reduce((a,b)=>a+b);for(let i=0;i<pool.length;i++){r-=w[i];if(r<0)return pool[i].id}return pool[0].id}
+PACKS.push({n:'Snowy',cards:3,cost:150,odds:[50,30,15,0,5],col:['#5fb3e6','#e3f4ff'],season:1});
+function drawVisit(){const b=$('#visit');if(!b)return;const id=visitNow(),m=MON[id];if(S.owned[id]){b.innerHTML=`${art(id)}<span><b>${esc(m.name)}</b> is your friend!<br><small>A new visitor comes on Monday.</small></span>`;b.classList.add('done')}else{b.innerHTML=`${art(id)}<span><b>A visitor is here!</b><br><small>Answer 5 questions to meet ${esc(m.name)}.</small></span>`;b.classList.remove('done')}}
+function startVisit(){const id=visitNow();if(S.owned[id]){SFX.tap();toast(`${MON[id].name} is already your friend!`);return}if(limitHit()){rest();return}
+ const played=GAMES.filter(g=>S.stats[g.key]).map(g=>g.key);const pool=played.length>=3?played:GAMES.map(g=>g.key);const games=Array.from({length:5},()=>pool[Math.floor(Math.random()*pool.length)]);
+ ADV={kind:'visit',vid:id,games,per:1,n:5,q:0,talk:-1};G=GKEY[games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(`Let's meet ${MON[id].name}!`),400)}
+function finishVisit(){const id=ADV.vid,m=MON[id];ADV=null;S.owned[id]=(S.owned[id]|0)+1;S.coins+=20;save();drawCoins(true);SFX.fanfare();confetti(70);
+ $('#visArt').innerHTML=art(id);$('#visName').textContent=`${m.name} is your friend!`;$('#visText').innerHTML=`${esc(m.fact)} <b>+20 coins!</b>`;$('#visOv').classList.add('on');say(`${m.name} is your new friend!`)}
+$('#visHome').onclick=()=>{SFX.tap();$('#visOv').classList.remove('on');show('home')};
+$('#visit').onclick=()=>{ac();startVisit()};
+function specHTML(){const cur=weekIdx();const V=MON.filter(m=>m.sp==='v'),Sx=MON.filter(m=>m.sp==='s');
+ const card=(m,lock)=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${n?RAR[m.rar].n:lock}</div></button>`};
+ const vd=i=>{const d=((i-(cur%12))%12+12)%12;if(d===0)return 'Here this week!';const t=new Date(EPOCH+(cur+d)*7*864e5);return 'Visits '+t.toLocaleDateString([],{month:'short',day:'numeric'})};
+ return `<h3 style="grid-column:1/-1;margin:6px 0 0">Weekly visitors ${V.filter(m=>S.owned[m.id]).length}/12</h3>`+V.map((m,i)=>card(m,vd(i))).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Snowy Season ${Sx.filter(m=>S.owned[m.id]).length}/10</h3>`+Sx.map(m=>card(m,'Snowy Packs')).join('')}
+
 /* =============== grown-ups =============== */
 const gear=$('#gear');let hold=0,ht=0;
 function holdStop(){clearInterval(ht);hold=0;gear.classList.remove('hold');gear.style.setProperty('--p','0%')}
@@ -1260,7 +1316,7 @@ function openParent(){resetArm=false;ptab='stats';drawParent();$('#parentOv').cl
 function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===ptab));const B=$('#pBody');
  if(ptab==='stats'){let tot=0,first=0;Object.values(S.stats).forEach(g=>Object.values(g).forEach(s=>{tot+=s.n;first+=s.first}));
   let h=`<h2>Max's progress</h2><p class="small">"First try" means he picked the right answer with no mistakes. Green is 90% or more (ready for harder), yellow is 70–89%, red is under 70% (could use practice). Use − and + to change a game's level. Levels now move by mastery: up after 4 of his last 5 answers at a level are right on the first try, and quietly down one level after 3 misses in a row or under 60% over his last 10. About 1 question in 5 reviews an easier level, and missed questions come back 1 and 3 days later.</p>
-  <p><b>${tot}</b> questions answered · <b>${pc(first,tot)??0}%</b> right on the first try · ${S.coins} coins · ${Object.keys(S.owned).length}/${MON.length} critters · ${S.packs} packs opened</p><div class="tscroll"><table><thead><tr><th>Game</th><th>Level now</th><th class="n">Questions</th><th class="n">First try</th><th class="n">Mistakes</th><th>By level</th></tr></thead><tbody>`;
+  <p><b>${tot}</b> questions answered · <b>${pc(first,tot)??0}%</b> right on the first try · ${S.coins} coins · ${Object.keys(S.owned).length}/${BASE.length} critters · ${S.packs} packs opened</p><div class="tscroll"><table><thead><tr><th>Game</th><th>Level now</th><th class="n">Questions</th><th class="n">First try</th><th class="n">Mistakes</th><th>By level</th></tr></thead><tbody>`;
   for(const kind of['math','read']){h+=`<tr><td colspan="6"><b>${kind=='math'?'Math':'Reading'}</b></td></tr>`;
    GAMES.filter(g=>g.kind===kind).forEach(g=>{const st=gs(g.key),ss=S.stats[g.key]||{};let n=0,f=0,w=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first;w+=s.wrong});const p=pc(f,n);
     const by=Object.keys(ss).sort((a,b)=>a-b).map(l=>{const s=ss[l],q=pc(s.first,s.n);return `<span class="pct" style="background:${pcol(q)}" title="Level ${l}">L${l}: ${q}%</span>`}).join(' ');
@@ -1276,7 +1332,7 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
   <button class="opt" id="oT">Grown-up time cards in the Adventure <b>${S.talk!==false?'On':'Off'}</b></button><button class="opt" id="oL">Daily play limit <b>${S.limit?S.limit+' minutes':'Off'}</b></button>${S.limit?`<button class="opt" id="oX">Give 15 more minutes today <b>›</b></button>`:''}<button class="opt" id="oC">Give Max 100 coins <b>›</b></button><button class="opt warn" id="oR">${resetArm?'Tap again to erase everything':'Reset all progress'} <b>›</b></button>
-  <p class="small">New games start with a short warm-up check (one question per level, up to level 4) to pick his starting level. In reading games he can tap any word to hear it. Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). The daily Adventure is 12 questions from 3 games, picked from what he finds hardest and questions due for review; the first one each day gives a free critter and 30 coins. Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
+  <p class="small">New games start with a short warm-up check (one question per level, up to level 4) to pick his starting level. In reading games he can tap any word to hear it. Coins: 3 for a right answer on the first try, 2 after one miss, 1 after more. 25 bonus coins when he masters a level, plus 10 for the new guardian critter that level gives (one guardian for every level of every game). The daily Adventure is 12 questions from 3 games, picked from what he finds hardest and questions due for review; the first one each day gives a free critter and 30 coins. Each week a new visitor critter comes; answering a 5-question challenge adds it to his book (+20 coins), and missed visitors come back 12 weeks later. Snowy Packs (150 coins) appear from mid-November to the end of February. Every 5th pack gives a bonus pick of 1 from 3 critters, and a Legendary is guaranteed within 15 packs. Repeat critters power up: 3 copies make a critter Shiny, 6 make it Golden, and copies after that give 5 coins. In Sign Puzzles, normal math order applies (× and ÷ first), but every puzzle also works left to right. On an iPad, the side silent switch mutes sounds.</p>`;
   $('#oS').onclick=()=>{S.sound=!S.sound;save();drawParent()};$('#oV').onclick=()=>{S.voice=!S.voice;save();drawParent()};
   $('#oT').onclick=()=>{S.talk=S.talk===false;save();drawParent()};$('#oL').onclick=()=>{const L=[0,15,30,45,60,90];S.limit=L[(L.indexOf(S.limit|0)+1)%L.length];save();drawParent()};if($('#oX'))$('#oX').onclick=()=>{day().extra=(day().extra|0)+15;save();toast('+15 minutes today')};
   $('#oC').onclick=()=>{S.coins+=100;save();drawCoins(true);toast('+100 coins')};
@@ -1287,7 +1343,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>

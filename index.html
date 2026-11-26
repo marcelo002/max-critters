@@ -6,11 +6,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Critters">
+<meta name="apple-mobile-web-app-title" content="Critter World">
 <meta name="theme-color" content="#1d2a6b">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<title>Max's Number Critters</title>
+<title>Max's Critter World</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -302,6 +302,13 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 #sv .tb{background:#eef0fb;color:var(--dark)}#sv .tb[disabled]{opacity:.35}
 .pnav{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .pdots{display:flex;gap:6px}.pdots i{width:12px;height:12px;border-radius:50%;background:#d7dbe8}.pdots i.on{background:var(--pink)}.pdots i.q{width:auto;height:auto;background:none;font-style:normal;color:#9aa5b1;font-weight:800;line-height:12px}
+.howg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:14px}
+.howc{display:flex;gap:14px;align-items:center;background:#fff;color:var(--dark);border-radius:26px;padding:14px 16px;box-shadow:0 6px 0 #b9c0e8}
+.howc .hn{flex:none;width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center}
+.howc .hp{flex:none;width:84px;height:84px;font-size:58px;display:flex;align-items:center;justify-content:center}.howc .hp svg{width:84px;height:84px}
+.howc p{margin:0;flex:1;font-size:clamp(22px,2.6vw,27px);line-height:1.3;font-weight:700}
+.howc .hs{flex:none;width:54px;height:54px;border-radius:50%;border:0;background:#eef0fb;font-size:26px}
+#howBtn{box-shadow:0 6px 0 #b9c0e8}
 </style>
 </head>
 <body>
@@ -311,7 +318,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div id="homeTop"><div class="coins" data-coins></div><button class="icon" id="gear" aria-label="Grown-ups: press and hold"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></button></div>
   <div id="parade"></div>
   <button id="visit" class="visit"></button>
-  <h1>Max's <b>Number</b> Critters</h1>
+  <h1>Max's <b>Critter</b> World</h1>
   <div class="hint" id="homeHint"></div>
   <div class="row">
     <button class="big" id="advBtn">⭐ Adventure</button>
@@ -320,6 +327,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
     <button class="big alt" data-go="book">Critter Book</button>
     <button class="big alt" data-go="play">Critter Fun</button>
   </div>
+  <button class="big alt" id="howBtn" data-go="howto" style="min-height:60px;font-size:24px">❓ How to Play</button>
 </section>
 
 <section class="screen" id="menu">
@@ -377,6 +385,10 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div id="sv"></div>
 </section>
 
+<section class="screen" id="howto">
+  <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>How to Play</h2><small>Tap 🔊 to hear it.</small></div><button class="tb" id="howAll">🔊 Read it all</button></div>
+  <div class="scroll"><div class="howg" id="howG"></div><div class="row" style="margin-top:14px"><button class="big" data-go="menu">▶ Let's play!</button></div></div>
+</section>
 <div class="ov" id="pickOv"><div class="box wide" style="align-items:center;text-align:center">
   <h2 id="pickT"></h2><div class="small" id="pickS"></div>
   <div class="pgrid" id="pickG"></div>
@@ -1034,7 +1046,15 @@ $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound(
 $('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
 
 /* =============== screens =============== */
-function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld()}
+/* how to play */
+const HOW=[['▶️','Tap Play. Pick a game.'],['✅','Get it right to win coins!'],['💡','Oops? That is OK! Try again. You will get help.'],
+ ['🎁','Use your coins to open packs. Find new critters!'],['📘','See your critters in the Critter Book.'],['✨','Get 3 of the same critter. It turns shiny!'],
+ ['⭐','Play the Adventure each day. You get a free critter!'],['🎨','Go to Critter Fun. Make pictures and stories.'],
+ ['🔒','Some stickers are locked. Answer questions in games to open them!'],['🔊','Tap the speaker. The game reads to you.']];
+function drawHow(){const ids=ownedIds();$('#howG').innerHTML=HOW.map((h,i)=>`<div class="howc"><div class="hn">${i+1}</div><div class="hp">${i===4&&ids.length?art(ids[0],tierOf(S.owned[ids[0]])):h[0]}</div><p>${h[1]}</p><button class="hs" data-hs="${i}" aria-label="Read to me">🔊</button></div>`).join('');
+ $$('#howG [data-hs]').forEach(b=>b.onclick=()=>{ac();say(HOW[+b.dataset.hs][1],true)})}
+$('#howAll').onclick=()=>{ac();say(HOW.map(h=>h[1]).join(' '),true)};
+function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld();if(id==='howto')drawHow()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
 function drawHome(){drawVisit();const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);

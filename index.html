@@ -309,6 +309,42 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .howc p{margin:0;flex:1;font-size:clamp(22px,2.6vw,27px);line-height:1.3;font-weight:700}
 .howc .hs{flex:none;width:54px;height:54px;border-radius:50%;border:0;background:#eef0fb;font-size:26px}
 #howBtn{height:60px;padding:0 20px;border-radius:999px;background:#fff;color:var(--dark);font-weight:800;font-size:22px;box-shadow:0 5px 0 #b9c0e8}
+.choices.pics .ch{min-height:118px;padding:8px}.choices.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pp{display:flex;align-items:center;justify-content:center;pointer-events:none}
+.pe{font-size:clamp(54px,8vw,76px);line-height:1.05}
+.pcol{display:block;width:84px;height:84px;border-radius:50%;border:4px solid #0002}
+.pnum{font-size:clamp(54px,8vw,76px);font-weight:800;color:var(--dark);line-height:1}
+.psz{display:flex;align-items:center;justify-content:center;width:90px;height:90px}.psz i{display:block;border-radius:50%;background:#ff7bac}
+.pcb{display:flex;align-items:center;justify-content:center;width:108px;height:108px;border-radius:50%;border:4px solid #0002}.pcb .pe{font-size:60px}
+.pgrp{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;max-width:210px}.pgrp .pe{font-size:clamp(34px,5vw,48px)}
+.ptq{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--dark);text-align:center}
+.ptspk{width:92px;height:92px;border-radius:50%;background:var(--pink);color:#fff;font-size:44px;box-shadow:0 6px 0 #0003;border:0;flex:none}
+.ptw{font-size:clamp(28px,4.6vw,44px);font-weight:800;min-height:1.1em;color:var(--dark)}
+.pten{font-size:clamp(36px,6.4vw,60px);font-weight:800;color:var(--dark);line-height:1.1;text-wrap:balance}
+.pthint{font-size:22px;font-weight:800;color:#c2410c;min-height:1.2em}.pthint .pe{font-size:56px}
+.ptpic .pe{font-size:88px}.ptpic.big .pe{font-size:130px}.ptpic .pcol{width:110px;height:110px}.ptpic .pnum{font-size:96px}
+.spk{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#eef0fb;font-size:22px;vertical-align:middle;pointer-events:auto}
+.pcrit{width:110px;flex:none}.pcrit svg{width:110px;height:110px;display:block}
+.mgrid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,1fr));gap:12px;width:100%;max-width:720px;margin:0 auto}
+.mcd{position:relative;aspect-ratio:1/1;border-radius:20px;background:var(--pink);border:0;box-shadow:0 6px 0 #0003;color:var(--dark);font-size:clamp(18px,2.4vw,26px);display:flex;align-items:center;justify-content:center;padding:4px}
+.mcd .fr{display:none}.mcd .bk{font-size:48px;color:#fff;font-weight:800}
+.mcd.up{background:#fff}.mcd.up .fr{display:flex;align-items:center;justify-content:center;width:100%;height:100%}.mcd.up .bk{display:none}
+.mcd.ok{background:#c8f7c5}.mcd .pe{font-size:clamp(40px,6vw,62px)}.mcd .pcol{width:64px;height:64px}
+.bsky{position:relative;height:min(44vh,400px);overflow:hidden;border-radius:24px;background:linear-gradient(#bfe6ff,#f3fbff);width:100%;max-width:900px;margin:0 auto;flex:none}
+.bln{position:absolute;bottom:-180px;width:118px;height:140px;margin-left:-59px;border-radius:50% 50% 47% 47%;background:var(--c);border:0;animation:blnUp linear infinite;box-shadow:inset -12px -12px 0 #0002;display:flex;align-items:center;justify-content:center}
+.bln:after{content:"";position:absolute;left:50%;top:100%;width:2px;height:40px;background:#0004}
+.bln .pp{width:86px;height:86px;background:#fff;border-radius:50%}.bln .pe{font-size:52px}.bln .pcol{width:60px;height:60px}.bln .pnum{font-size:48px}
+.bln.pop{animation-play-state:paused;transform:scale(1.5);opacity:0;transition:transform .3s,opacity .3s}.bln.no{animation-play-state:paused;opacity:.35}
+@keyframes blnUp{from{bottom:-180px}to{bottom:105%}}
+.ptunit{background:#fff;color:var(--dark);border-radius:22px;padding:14px 18px;margin-bottom:14px;font-size:22px}.ptunit span{opacity:.7}
+.ubar{height:14px;border-radius:7px;background:#eef0fb;margin:8px 0;overflow:hidden}.ubar i{display:block;height:100%;background:#2f9e44}
+.gcard.lockd{opacity:.5;filter:grayscale(.6)}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.wt{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;color:var(--dark);border-radius:18px;padding:10px 6px;border:0;box-shadow:0 5px 0 #b9c0e8;transition:transform .15s}
+.wt .pe{font-size:46px}.wt .pcol{width:52px;height:52px}.wt .pnum{font-size:46px}.wt .psz{width:54px;height:54px}
+.wt b{font-size:20px}.wt .st{color:#d9a400;font-size:18px}.wt.new{background:#e3e6f5;box-shadow:0 5px 0 #c3c8e6}.wt.new .pe,.wt.new .pcol{opacity:.6}.wt.ok{background:#fff8d6}.wt.rd{transform:scale(1.07)}
+.tip{display:flex;gap:10px;align-items:center;margin:6px 0}.tip .tb{flex:none;background:#eef0fb;color:var(--dark)}
+.spg .ptm{color:#2f9e44;font-weight:800;text-decoration:underline dotted}
 </style>
 </head>
 <body>
@@ -326,6 +362,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
     <button class="big alt" data-go="shop">Packs</button>
     <button class="big alt" data-go="book">Critter Book</button>
     <button class="big alt" data-go="play">Critter Fun</button>
+    <button class="big alt" data-go="pt">🇧🇷 Português</button>
   </div>
 </section>
 
@@ -388,6 +425,15 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>How to Play</h2><small>Tap 🔊 to hear it.</small></div><button class="tb" id="howAll">🔊 Read it all</button></div>
   <div class="scroll"><div class="howg" id="howG"></div><div class="row" style="margin-top:14px"><button class="big" data-go="menu">▶ Let's play!</button></div></div>
 </section>
+<section class="screen" id="pt">
+  <div class="top"><button class="icon" data-go="home" aria-label="Home"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3 2 12h3v8h5v-5h4v5h5v-8h3z"/></svg></button><div class="ttl"><h2>🇧🇷 Português</h2><small id="ptSub"></small></div><div class="coins" data-coins></div></div>
+  <div class="scroll"><div id="ptHead"></div><div class="ggrid" id="ptGames"></div><div class="row" style="margin-top:16px"><button class="big alt" id="ptBookBtn">📖 Meu Livro de Palavras</button><button class="big alt" id="ptTipBtn" style="font-size:22px">For grown-ups</button></div></div>
+</section>
+<section class="screen" id="ptbook">
+  <div class="top"><button class="icon" data-go="pt" aria-label="Back"><svg viewBox="0 0 24 24" fill="#fff"><path d="M15 4 7 12l8 8 2-2-6-6 6-6z"/></svg></button><div class="ttl"><h2>Meu Livro de Palavras</h2><small id="pbSub"></small></div><div class="coins" data-coins></div></div>
+  <div class="scroll"><div class="small" style="margin-bottom:8px">Tap a word to hear it. ★ = a right first try on one day. ⭐ = learned!</div><div id="pbG"></div></div>
+</section>
+<div class="ov" id="ptTipOv"><div class="box wide" style="max-height:88vh;overflow:auto"><h2>Português at home</h2><div id="ptTipB"></div><div class="row"><button class="big" id="ptTipX">Close</button></div></div></div>
 <div class="ov" id="pickOv"><div class="box wide" style="align-items:center;text-align:center">
   <h2 id="pickT"></h2><div class="small" id="pickS"></div>
   <div class="pgrid" id="pickG"></div>
@@ -457,7 +503,7 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 </div></div>
 
 <div class="ov" id="parentOv"><div class="box wide">
-  <div class="tabs" id="ptabs"><button data-t="stats" class="on">Progress</button><button data-t="week">This week</button><button data-t="log">Recent mistakes</button><button data-t="set">Settings</button></div>
+  <div class="tabs" id="ptabs"><button data-t="stats" class="on">Progress</button><button data-t="week">This week</button><button data-t="log">Recent mistakes</button><button data-t="pt">Português</button><button data-t="set">Settings</button></div>
   <div id="pBody"></div>
   <button class="big alt" id="parentClose" style="align-self:center">Done</button>
 </div></div>
@@ -1003,7 +1049,7 @@ function mbar(st){const h=(st.hist||[]).slice(-5);return `<span class="pbar" sty
 function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">${ADV.kind==='visit'?'Visitor challenge':ADV.kind==='quest'?'Team quest':'Adventure'} ${Math.min(ADV.n||12,ADV.q+1)} of ${ADV.n||12}</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
 function makeRound(g,l,seed,replay,ptr){RNGF=rng(seed);REPLAY=replay;REPLAY_PTR=ptr==null?null:ptr;let r;try{r=g.make(l)}finally{RNGF=Math.random;REPLAY=false;if(REPLAY_PTR!=null){const st=gs('story');st.ptr=st._p;delete st._p}REPLAY_PTR=null}return r}
 function nextRound(){if(ADV&&advNext())return;const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
- if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place={l:1};const plc=!ADV&&st.place&&!st.place.done;
+ if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place=G.kind==='pt'?{l:1,done:1}:{l:1};const plc=!ADV&&st.place&&!st.place.done;
  const di=plc?-1:S.due.findIndex(d=>d.g===G.key&&d.at<=now);
  if(di>=0){const d=S.due.splice(di,1)[0];lvl=Math.min(d.l,G.max);seed=d.seed;ptr=d.ptr;review='again'}
  else if(plc){lvl=st.place.l;review='place'}
@@ -1023,7 +1069,7 @@ const PRAISE=['Great job!','You got it!','Awesome!','Super smart!','Nice work!',
 function mastery(st,first){if(R.review)return 0;st.hist=st.hist||[];st.hist.push(first?1:0);if(st.hist.length>10)st.hist.shift();const h=st.hist,l5=h.slice(-5),l3=h.slice(-3);
  if(l5.length>=5&&l5.filter(x=>x).length>=4)return 1;if((l3.length>=3&&l3.every(x=>!x))||(h.length>=10&&h.filter(x=>x).length<6))return -1;return 0}
 function evt(t){S.events=S.events||[];S.events.unshift({t:Date.now(),g:G.key,m:t});if(S.events.length>40)S.events.length=40}
-function win(){busy=true;const st=gs(G.key);stat(true);if(ADV){ADV.q++;if(miss===0)ADV.first=(ADV.first|0)+1}const c=miss===0?3:miss===1?2:1;S.coins+=c;S.total++;st.solved++;addLP(1);SFX.good();confetti(20);const mv=mastery(st,miss===0);
+function win(){busy=true;const st=gs(G.key);stat(true);if(R.onWin)R.onWin(miss);if(ADV){ADV.q++;if(miss===0)ADV.first=(ADV.first|0)+1}const c=R.coins||(miss===0?3:miss===1?2:1);S.coins+=c;S.total++;st.solved++;addLP(1);SFX.good();confetti(20);const mv=R.nomast?0:mastery(st,miss===0);
  const p=praise();const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
  if(R.after)R.after();let up=false,big=false;
  if(R.review==='place'&&st.place){const P=st.place;if(miss===0&&P.l<Math.min(G.max,4))P.l++;else{const start=miss===0?P.l:Math.max(1,P.l-1);P.done=1;st.lvl=start;st.hist=[];for(let q=1;q<start;q++)addGuard(G.key,q);evt(`Warm-up check: started at level ${start}`);setTimeout(()=>toast(start>1?`Warm-up done! Level ${start}`:'Warm-up done!'),700)}}
@@ -1031,8 +1077,8 @@ function win(){busy=true;const st=gs(G.key);stat(true);if(ADV){ADV.q++;if(miss==
  if(mv<0&&st.lvl>1){st.lvl--;st.hist=[];evt(`Eased down to level ${st.lvl} (was struggling)`)}else if(mv<0){st.hist=[]}
  save();drawHead();
  setTimeout(()=>{if(big){drawCoins(true);levelUp(up,st.lvl,gl,bonus)}else nextRound()},R.after?2100:1500)}
-function lose(g){miss++;SFX.bad();const m=$('#msg');if(m){m.textContent=miss>=2?'Here is a little help!':'Not quite. Try again!';m.style.color='#c2410c'}
- if(miss===1){S.due=S.due||[];const now=Date.now();[1,3].forEach(dd=>S.due.push({g:G.key,l:R.lvl,seed:R.seed,ptr:R.ptr,at:now+dd*864e5}));if(S.due.length>60)S.due.splice(0,S.due.length-60)}
+function lose(g){miss++;SFX.bad();if(R.onMiss&&miss===1)R.onMiss();const m=$('#msg');if(m){m.textContent=miss>=2?'Here is a little help!':'Not quite. Try again!';m.style.color='#c2410c'}
+ if(miss===1&&G.kind!=='pt'){S.due=S.due||[];const now=Date.now();[1,3].forEach(dd=>S.due.push({g:G.key,l:R.lvl,seed:R.seed,ptr:R.ptr,at:now+dd*864e5}));if(S.due.length>60)S.due.splice(0,S.due.length-60)}
  if(miss===1)buddySay(pick(['Try again!','Almost! Look again.','You can do it!']));
  if(miss===2){buddySay('Let\'s look together!');say('Let\'s look together!')}
  if((miss===2||(miss===1&&R.choices&&R.choices.length===2))&&R.why&&m){try{const h=R.why();if(h){let w=document.querySelector('.why');if(!w){w=document.createElement('div');w.className='why';m.after(w)}const bi=buddyId();if(bi!=null){w.classList.add('bd');w.innerHTML=`<div class="bf">${art(bi,tierOf(S.owned[bi]))}</div><div>${h}</div>`}else w.innerHTML=h}}catch(e){}}
@@ -1042,19 +1088,20 @@ function levelUp(up,l,gl,bonus){SFX.fanfare();confetti(gl?80:50);const owned=Obj
  if(gl){$('#lvlArt').innerHTML=gArt(G.key,gl);$('#lvlTitle').textContent='New Guardian!';$('#lvlText').innerHTML=`You mastered level ${gl} of ${esc(G.name)} and earned <b>${esc(gName(G.key,gl))}</b>!${up?` Now you're on level ${l}.`:''} Bonus: <b>+${bonus} coins</b>!<div class="small">Find your guardians in the Critter Book.</div>`;say(`You earned ${gName(G.key,gl)}, a new guardian!`)}
  else{$('#lvlArt').innerHTML=art(pk,tierOf(S.owned[pk]|0));$('#lvlTitle').textContent=up?`Level ${l}!`:'Mastered!';$('#lvlText').innerHTML=`${up?`You mastered it! Now you're on level ${l} of ${esc(G.name)}.`:`You mastered the top level of ${esc(G.name)} again!`} Bonus: <b>+${bonus} coins</b>!`;say(up?`Level up! Level ${l}!`:'Bonus coins!')}$('#lvlOv').classList.add('on')}
 $('#lvlGo').onclick=()=>{SFX.tap();$('#lvlOv').classList.remove('on');nextRound()};
-$('#readBtn').onclick=()=>{ac();const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
+$('#readBtn').onclick=()=>{ac();if(R&&R.sayPT){R.sayPT();return}const t=typeof R.say==='function'?R.say():R.say;say(t||'',true)};
 
 /* =============== screens =============== */
 /* how to play */
 const HOW=[['▶️','Tap Play. Pick a game.'],['✅','Get it right to win coins!'],['💡','Oops? That is OK! Try again. You will get help.'],
  ['🎁','Use your coins to open packs. Find new critters!'],['📘','See your critters in the Critter Book.'],['✨','Get 3 of the same critter. It turns shiny!'],
- ['⭐','Play the Adventure each day. You get a free critter!'],['🎨','Go to Critter Fun. Make pictures and stories.'],
+ ['⭐','Play the Adventure each day. You get a free critter!'],['🎨','Go to Critter Fun. Make pictures and stories.'],['🇧🇷','Tap Português. Learn words in Portuguese!'],
  ['🔒','Some stickers are locked. Answer questions in games to open them!'],['🔊','Tap the speaker. The game reads to you.']];
 function drawHow(){const ids=ownedIds();$('#howG').innerHTML=HOW.map((h,i)=>`<div class="howc"><div class="hn">${i+1}</div><div class="hp">${i===4&&ids.length?art(ids[0],tierOf(S.owned[ids[0]])):h[0]}</div><p>${h[1]}</p><button class="hs" data-hs="${i}" aria-label="Read to me">🔊</button></div>`).join('');
  $$('#howG [data-hs]').forEach(b=>b.onclick=()=>{ac();say(HOW[+b.dataset.hs][1],true)})}
 $('#howAll').onclick=()=>{ac();say(HOW.map(h=>h[1]).join(' '),true)};
-function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld();if(id==='howto')drawHow()}
+function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld();if(id==='howto')drawHow();if(id==='pt')drawPT();if(id==='ptbook')drawPTBook()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
+$('#game .top [data-go="menu"]').onclick=()=>{ac();SFX.tap();show(G&&G.kind==='pt'?'pt':'menu')};
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
 function drawHome(){drawVisit();const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
  $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i,tierOf(S.owned[i]|0))).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
@@ -1105,7 +1152,7 @@ function drawBook(){const own=BASE.filter(m=>S.owned[m.id]);const sh=own.filter(
   $$('#bgrid [data-gk]').forEach(b=>b.onclick=()=>{const k=b.dataset.gk,l=+b.dataset.gl,g=GKEY[k];if(!hasG(k,l)){SFX.bad();toast(`Master level ${l} of ${g.name} to earn it!`);return}SFX.tap();
    $('#detArt').innerHTML=gArt(k,l);$('#detName').textContent=gName(k,l);$('#detInfo').innerHTML=`<div style="font-weight:800">Guardian of ${esc(g.name)}, level ${l}</div><p>You earned this guardian by mastering level ${l}. Guardians protect the things you have learned!</p>`;$('#detBuddy').style.display='none';say(gName(k,l));$('#detOv').classList.add('on')});return}
  $('#bgrid').innerHTML=bf==='sp'?specHTML():BASE.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
- $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast(m.sp==='v'?'This visitor comes on its own week!':m.sp==='s'?'Find it in Snowy Packs!':'Open packs to find it!');return}SFX.tap();
+ $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast(m.sp==='v'?'This visitor comes on its own week!':m.sp==='s'?'Find it in Snowy Packs!':m.sp==='a'?'Finish a Português unit to meet it!':'Open packs to find it!');return}SFX.tap();
   const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
   $('#detInfo').innerHTML+=`<div style="margin-top:6px">${heartRow(m.id)}</div>`;$('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
 $('#detClose').onclick=()=>$('#detOv').classList.remove('on');
@@ -1348,16 +1395,16 @@ let svFrom='play',SV=null;
 function svPages(){const{st,T}=SV;const per=st.len===1?2:1,pg=[];const grp=L=>{for(let i=0;i<L.length;i+=per)pg.push({lines:L.slice(i,i+per)})};grp(T.pre);pg.push({choice:1});
  if(st.ch!=null){grp([...T.opts[st.ch].lines,...T.post]);pg.push({quiz:1})}return pg}
 function viewStory(i,from){svFrom=from||'play';const st=S.stories[i];if(!st)return;SV={st,T:makeStory(st),page:0};show('storyv');$('#svT').textContent=SV.T.title;drawSV()}
-function drawSV(){const{st,T}=SV,P=svPages();SV.page=Math.max(0,Math.min(SV.page,P.length-1));const p=P[SV.page],line=(p.lines||[]).join(' ');
+function drawSV(){const{st,T}=SV,P=svPages(),MX=S.ptMix?en2pt():null;SV.page=Math.max(0,Math.min(SV.page,P.length-1));const p=P[SV.page],line=(p.lines||[]).join(' ');
  const pic=sceneSVG(storyScene(st,SV.page,line||(p.choice?T.V.A:'')));let body='';
- if(p.lines)body=`<div class="sbody">${p.lines.map(l=>`<p class="spg">${l.split(/\s+/).map(w=>`<span class="tw">${esc(w)}</span>`).join(' ')}</p>`).join('')}</div><div class="row"><button class="tb" id="svRead">🔊 Read to me</button><button class="tb" id="svTog">👀 Read together</button></div>`;
+ if(p.lines)body=`<div class="sbody">${p.lines.map(l=>`<p class="spg">${l.split(/\s+/).map(w=>twSpan(w,MX)).join(' ')}</p>`).join('')}</div><div class="row"><button class="tb" id="svRead">🔊 Read to me</button><button class="tb" id="svTog">👀 Read together</button><button class="tb" id="svPt">🇧🇷 ${S.ptMix?'Português: on':'Português words'}</button></div>`;
  else if(p.choice)body=`<div class="sbody"><p class="spg" style="text-align:center"><b>${esc(T.ask)}</b></p><div class="choices">${T.opts.map((o,k)=>`<button class="ch word${st.ch===k?' yes':''}" data-c="${k}">${esc(o.t)}</button>`).join('')}</div><div class="small" style="text-align:center">${st.ch==null?'You choose what happens next!':'Tap the other one to see a different story.'}</div></div>`;
  else body=`<div class="sbody"><div id="svMsg" style="font-size:26px;font-weight:800;text-align:center">${esc(T.q.q)}</div><div class="choices">${T.q.o.map(o=>`<button class="ch word" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="row"><button class="tb" id="svNew">Make another story</button></div></div>`;
  $('#sv').innerHTML=`<div class="panel book"><div class="pic">${pic}</div>${body}<div class="pnav"><button class="tb" id="svPrev" ${SV.page?'':'disabled'}>◀ Back</button><span class="pdots">${P.map((_,k)=>`<i class="${k===SV.page?'on':''}"></i>`).join('')}${st.ch==null?'<i class="q">?</i>':''}</span><button class="tb" id="svNext" ${SV.page<P.length-1?'':'disabled'}>Next ▶</button></div></div>`;
  const go=d=>{SV.page+=d;SFX.flip();speechSynthesis&&speechSynthesis.cancel();drawSV()};$('#svPrev').onclick=()=>go(-1);$('#svNext').onclick=()=>go(1);
  const bk=$('#sv .book');let x0=null;bk.addEventListener('pointerdown',e=>{x0=e.clientX});bk.addEventListener('pointerup',e=>{if(x0==null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>70){if(dx<0&&SV.page<P.length-1)go(1);else if(dx>0&&SV.page>0)go(-1)}});
- $$('#sv .tw').forEach(t=>t.onclick=()=>{const w=t.textContent.replace(/[^A-Za-z0-9']/g,'');if(w){say(w,true);t.classList.add('rd');setTimeout(()=>t.classList.remove('rd'),800)}});
- if(p.lines){$('#svRead').onclick=()=>{ac();say(line,true)};$('#svTog').onclick=()=>{ac();readTogether()}}
+ $$('#sv .tw').forEach(t=>t.onclick=()=>{if(t.dataset.pt){sayPT(t.dataset.pt);t.classList.add('rd');setTimeout(()=>t.classList.remove('rd'),800);return}const w=t.textContent.replace(/[^A-Za-z0-9']/g,'');if(w){say(w,true);t.classList.add('rd');setTimeout(()=>t.classList.remove('rd'),800)}});
+ if(p.lines){$('#svPt').onclick=()=>{ac();SFX.tap();S.ptMix=!S.ptMix;save();drawSV();if(S.ptMix)toast('Green words are Portuguese. Tap one to hear it!')};$('#svRead').onclick=()=>{ac();say(line,true)};$('#svTog').onclick=()=>{ac();readTogether()}}
  if(p.choice)$$('#sv [data-c]').forEach(b=>b.onclick=()=>{ac();SFX.good();st.ch=+b.dataset.c;save();SV.page++;drawSV()});
  if(p.quiz){$('#svNew').onclick=()=>{SFX.tap();startMk()};$$('#sv [data-o]').forEach(b=>b.onclick=()=>{ac();if(b.disabled)return;const m=$('#svMsg');if(b.dataset.o===T.q.ok){b.classList.add('yes');$$('#sv [data-o]').forEach(x=>x.disabled=true);SFX.good();confetti(24);
    if(!st.done){st.done=1;S.coins+=3;addLP(1);save();setTimeout(()=>{SFX.coin();drawCoins(true)},300);m.textContent='Yes! You read it well. +3 coins'}else m.textContent='Yes! You got it!';m.style.color='#2f9e44';say('Yes! You got it!')}
@@ -1366,10 +1413,10 @@ let rtT=0;function readTogether(){clearInterval(rtT);const ws=$$('#sv .spg .tw')
  rtT=setInterval(()=>{ws.forEach(w=>w.classList.remove('hl'));if(i>=ws.length||!$('#storyv').classList.contains('on')){clearInterval(rtT);return}ws[i].classList.add('hl');i++},420)}
 $('#svBack').onclick=()=>{SFX.tap();clearInterval(rtT);if(svFrom==='gallery')gallery('stories');else show('play')};
 /* speech bubbles, moves, drawing, challenges, scene-to-story */
-const SAYS=['Hello!','Let\'s play!','Yum!','Wow!','I love you!','Help!','Hooray!','Look!','Oops!','Goodnight!','I am happy!','Follow me!'];
+const SAYS=['Hello!','Let\'s play!','Yum!','Wow!','I love you!','Help!','Hooray!','Look!','Oops!','Goodnight!','I am happy!','Follow me!','Oi!','Tchau!','Que legal!','Eba!','Socorro!','Obrigado!','Eu te amo!'];const PTSAYS=['Oi!','Tchau!','Que legal!','Eba!','Socorro!','Obrigado!','Eu te amo!'];
 $('#tTx').onclick=()=>{const it=selIt();if(!it)return;SFX.tap();$('#sayIn').value=it.t||'';$('#sayChips').innerHTML=SAYS.map(s=>`<button class="tb" data-s="${esc(s)}">${esc(s)}</button>`).join('');
  $$('#sayChips [data-s]').forEach(b=>b.onclick=()=>{SFX.tap();$('#sayIn').value=b.dataset.s});$('#sayOv').classList.add('on')};
-$('#sayDone').onclick=()=>{const it=selIt();const v=$('#sayIn').value.replace(/[<>]/g,'').trim().slice(0,24);$('#sayOv').classList.remove('on');if(!it)return;if(v)it.t=v;else delete it.t;scDirty=true;SFX.good();drawStage();if(v)say(v)};
+$('#sayDone').onclick=()=>{const it=selIt();const v=$('#sayIn').value.replace(/[<>]/g,'').trim().slice(0,24);$('#sayOv').classList.remove('on');if(!it)return;if(v)it.t=v;else delete it.t;scDirty=true;SFX.good();drawStage();if(v){if(PTSAYS.includes(v))sayPT(v);else say(v)}};
 $('#sayDel').onclick=()=>{const it=selIt();$('#sayOv').classList.remove('on');if(it){delete it.t;scDirty=true;drawStage()}};
 const MOVES=[['','Normal'],['spin','Spin'],['fly','Fly'],['wiggle','Wiggle'],['jump','Big jump'],['still','Stay still']];
 $('#tMv').onclick=()=>{const it=selIt();if(!it)return;const k=MOVES.findIndex(m=>m[0]===(it.m||''));const nx=MOVES[(k+1)%MOVES.length];if(nx[0])it.m=nx[0];else delete it.m;scDirty=true;drawStage();toast(`Move: ${nx[1]}. Press Play!`);SFX.tap()};
@@ -1428,7 +1475,7 @@ const TALK=['Tell a grown-up how you solved the last question.','Find 3 round th
 let ADV=null;
 function advGames(){const now=Date.now();const sc=GAMES.map(g=>{const ss=S.stats[g.key]||{};let n=0,f=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first});const due=(S.due||[]).filter(d=>d.g===g.key&&d.at<=now).length;
   return{k:g.key,kind:g.kind,w:(n>=3?1-f/n:.25)+Math.min(due,3)*.2+Math.random()*.3}}).sort((a,b)=>b.w-a.w);
- const out=[sc[0]];out.push(sc.find(x=>x.kind!==sc[0].kind));out.push(sc.find(x=>!out.includes(x)));return shuffle(out.map(x=>x.k))}
+ const out=[sc[0]];out.push(sc.find(x=>x.kind!==sc[0].kind));out.push(sc.find(x=>!out.includes(x)));const o=out.map(x=>x.k),pg=ptOpen().filter(k=>k!=='ps'&&k!=='pm');if(pg.length&&Math.random()<.5)o[2]=pg[Math.floor(Math.random()*pg.length)];return shuffle(o)}
 const advDone=()=>day().adv>0;
 function limitHit(){return S.limit>0&&day().sec>=(S.limit+(day().extra|0))*60}
 function rest(){$('#restT').textContent=`You played ${Math.round(day().sec/60)} minutes today.`;const b=buddyId();$('#restArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#restOv').classList.add('on');say('Time for a rest! See you tomorrow.')}
@@ -1490,6 +1537,205 @@ const SEAS=[['Snowpuff',5,0,'beanie','#4cc9f0'],['Mittsy',9,0,'muffs'],['Frostfl
 const VB=120,SB=132,BASE=MON.slice(0,120);
 VISIT.forEach(([name,t,a,f],i)=>{const T=TYPES[t];MON.push({id:VB+i,name,t,rar:3,pal:i%3,top:a==='cape'||a==='bandana'||a==='prof'||a==='shades'?T.tops[0]:'',tail:T.tails[0]||'',body:[38,35],eye:[0,1,3,0,0,1,0,1,4,0,1,1][i],mouth:[0,2,3,0,0,3,1,0,2,0,0,2][i],pat:0,belly:1,acc:ACC[a].replace(/="C"/g,'="#e5484d"'),accB:ACCB[a]||'',fact:`${name} ${f}`,sp:'v'})});
 SEAS.forEach(([name,t,rar,a,c],i)=>{const T=TYPES[t];MON.push({id:SB+i,name,t,rar,pal:(i+1)%3,top:a==='flake'||a==='bell'||a==='muffs'?T.tops[0]:'',tail:T.tails[0]||'',body:[[38,35],[40,32],[36,34]][i%3],eye:i%5,mouth:(i*2)%5,pat:i%2,belly:1,acc:(ACC[a]||'').replace(/="C"/g,`="${c||'#2f9e44'}"`)+(i===0||i===9?ACC.dust:''),accB:i===9?ACCB.aurora:'',fact:`${name} only comes out in the Snowy Season.`,sp:'s'})});
+/* =============== Português: words, tips, amigos =============== */
+const PTU=[
+ ['Olá!','Greetings','oi|hi|👋;tchau|bye|👋🚌;bom dia|good morning|🌅;boa tarde|good afternoon|🌇;boa noite|good night|🌃;por favor|please|🥺;obrigado|thank you|🙏;sim|yes|👍;não|no|👎;desculpa|sorry|😔;eu te amo|I love you|🥰;parabéns|congratulations|🎉;tudo bem?|how are you?|🙂'],
+ ['Cores','Colors','vermelho|red|#e5484d|vermelha;azul|blue|#2b8fd0;amarelo|yellow|#ffd23f|amarela;verde|green|#2f9e44;rosa|pink|#ff7bac;roxo|purple|#8b5cf6|roxa;laranja|orange|#ff9f1c;preto|black|#1b1d24|preta;branco|white|#ffffff|branca;marrom|brown|#8a5a33;cinza|gray|#9aa5b1'],
+ ['Números','Numbers','zero|zero|n;um|one|n|uma;dois|two|n|duas;três|three|n;quatro|four|n;cinco|five|n;seis|six|n;sete|seven|n;oito|eight|n;nove|nine|n;dez|ten|n;onze|eleven|n;doze|twelve|n;treze|thirteen|n;catorze|fourteen|n;quinze|fifteen|n;dezesseis|sixteen|n;dezessete|seventeen|n;dezoito|eighteen|n;dezenove|nineteen|n;vinte|twenty|n'],
+ ['Animais','Animals','o cachorro|dog|🐶|cachorros;o gato|cat|🐱|gatos;o peixe|fish|🐟|peixes;o pássaro|bird|🐦|pássaros;a vaca|cow|🐮|vacas;o cavalo|horse|🐴|cavalos;o porco|pig|🐷|porcos;o leão|lion|🦁|leões;o macaco|monkey|🐵|macacos;o elefante|elephant|🐘|elefantes;o sapo|frog|🐸|sapos;a tartaruga|turtle|🐢|tartarugas;o pato|duck|🦆|patos;o coelho|rabbit|🐰|coelhos;a cobra|snake|🐍|cobras;o urso|bear|🐻|ursos;a galinha|chicken|🐔|galinhas;a borboleta|butterfly|🦋|borboletas'],
+ ['Comida','Food','a maçã|apple|🍎;a banana|banana|🍌;a uva|grape|🍇;a melancia|watermelon|🍉;o morango|strawberry|🍓;a cenoura|carrot|🥕;o pão|bread|🍞;o queijo|cheese|🧀;o ovo|egg|🥚;o arroz|rice|🍚;o feijão|beans|🫘;a pizza|pizza|🍕;o bolo|cake|🎂;o biscoito|cookie|🍪;o sorvete|ice cream|🍦;o leite|milk|🥛|d;o suco|juice|🧃|d;a água|water|💧|d'],
+ ['Família','Family','a mãe|mom|👩;o pai|dad|👨;o irmão|brother|👦;a irmã|sister|👧;o vovô|grandpa|👴;a vovó|grandma|👵;o bebê|baby|👶;a família|family|👨‍👩‍👦;o amigo|friend|🤝;eu|me|🙋;você|you|👉'],
+ ['O corpo','Body','a mão|hand|✋;o pé|foot|🦶;o olho|eye|👁️;a boca|mouth|👄;o nariz|nose|👃;a orelha|ear|👂;o dente|tooth|🦷;o cabelo|hair|💇;a perna|leg|🦵;o braço|arm|💪;a língua|tongue|👅'],
+ ['Em casa','Home','a casa|house|🏠;a cama|bed|🛏️;a cadeira|chair|🪑;a porta|door|🚪;a janela|window|🪟;o banho|bath|🛁;o sofá|couch|🛋️;a televisão|TV|📺;o telefone|phone|📱;a chave|key|🔑;a luz|light|💡;o relógio|clock|⏰;a escova de dentes|toothbrush|🪥'],
+ ['Roupas e brinquedos','Clothes and toys','a camisa|shirt|👕;a calça|pants|👖;o sapato|shoe|👟;o chapéu|hat|🎩;o vestido|dress|👗;a meia|sock|🧦;o casaco|coat|🧥;a bola|ball|⚽;o carrinho|toy car|🚗;o livro|book|📖;a boneca|doll|🪆;o ursinho|teddy bear|🧸;o balão|balloon|🎈;o trem|train|🚂;o lápis|pencil|✏️;o robô|robot|🤖'],
+ ['Natureza e tempo','Nature and weather','o sol|sun|☀️;a lua|moon|🌙;a estrela|star|⭐;a chuva|rain|🌧️;a nuvem|cloud|☁️;a neve|snow|❄️;a árvore|tree|🌳;a flor|flower|🌸;a praia|beach|🏖️;o mar|sea|🌊;a montanha|mountain|⛰️;o arco-íris|rainbow|🌈;o vento|wind|💨;quente|hot|🥵;frio|cold|🥶'],
+ ['Ações','Actions','correr|run|🏃|corra;pular|jump|🤸|pule;comer|eat|🍽️|coma;beber|drink|🥤|beba;dormir|sleep|😴|durma;nadar|swim|🏊|nade;dançar|dance|💃|dance;cantar|sing|🎤|cante;ler|read|📚|leia;escrever|write|✍️|escreva;desenhar|draw|🖍️|desenhe;andar|walk|🚶|ande;brincar|play|🪀|brinque;chorar|cry|😭|chore;rir|laugh|😂|ria'],
+ ['Sentimentos e tamanhos','Feelings and sizes','feliz|happy|😀;triste|sad|😢;bravo|angry|😠;cansado|tired|😩;com medo|scared|😨;surpreso|surprised|😮;grande|big|sz:b;pequeno|small|sz:s;rápido|fast|🚀;devagar|slow|🐌']
+].map(([n,en,s],u)=>({n,en,u,w:s.split(';').map((x,i)=>{const[pt,e,p,x4]=x.split('|');return{id:u+'.'+i,u,i,pt,en:e,p,x:x4||''}})}));
+const PW=PTU.flatMap(U=>U.w),PWI=Object.fromEntries(PW.map(w=>[w.id,w]));
+PTU[2].w.forEach((w,i)=>w.num=i);
+const NUMW=PTU[2].w,ANIM=PTU[3].w,COLW=PTU[1].w,FOODW=PTU[4].w,HOUSEW=PTU[7].w,ACTW=PTU[10].w;
+const ptArt=w=>/^(o|a) /.test(w.pt)?w.pt[0]:'';const ptNoun=w=>ptArt(w)?w.pt.slice(2):w.pt;
+const colFor=(c,g)=>g==='a'&&c.x?c.x:c.pt;
+const PTIPS=[
+ [['Bom dia, Max!','Good morning, Max! Say it at breakfast.'],['Obrigado!','Thank you! When he hands you something, and get him to say it back.'],['Boa noite!','Good night! At bedtime, every night.']],
+ [['De que cor é?','What color is it? Point at toys and clothes.'],['Eu gosto de azul.','I like blue. Then ask: e você?'],['Pegue o carro vermelho.','Grab the red car.']],
+ [['Um, dois, três…','Count the stairs out loud together.'],['Quantos?','How many? Ask about grapes, cars, socks.'],['Dois biscoitos, por favor.','Two cookies, please. Let him ask for snacks this way.']],
+ [['Olha o pássaro!','Look at the bird! On walks or in books.'],['O que o gato fala? Miau!','What does the cat say? Meow!'],['Qual é o seu animal favorito?','What is your favorite animal?']],
+ [['Hora de comer!','Time to eat!'],['Você quer leite ou suco?','Do you want milk or juice?'],['Está gostoso?','Is it yummy?']],
+ [['Cadê a mamãe?','Where is mom? A fun hide and seek game.'],['Eu te amo.','I love you.'],['Vamos ligar para a vovó?','Shall we call grandma?']],
+ [['Lave as mãos.','Wash your hands.'],['Cadê o seu nariz?','Where is your nose? Play with all the body words.'],['Escove os dentes.','Brush your teeth.']],
+ [['Hora do banho!','Bath time!'],['Feche a porta, por favor.','Close the door, please.'],['Vamos para a cama.','Let us go to bed.']],
+ [['Coloque o sapato.','Put on your shoe.'],['Vamos brincar de bola?','Shall we play ball?'],['Cadê o seu casaco?','Where is your coat?']],
+ [['Está chovendo!','It is raining!'],['Olha a lua!','Look at the moon!'],['Está quente ou frio?','Is it hot or cold?']],
+ [['Vamos correr!','Let us run!'],['Você sabe pular?','Can you jump?'],['Vamos dançar!','Let us dance!']],
+ [['Você está feliz?','Are you happy?'],['Que grande!','How big!'],['Como você está?','How are you?']]];
+const AMIGO=[['Oizinho',8,'party','#ffd23f','says "Oi!" to everyone it meets.'],['Corzinha',0,'flowers','#ff7bac','paints the flowers every color.'],['Contito',4,'prof','','counts "um, dois, três" all day long.'],
+ ['Bichinho',1,'bandana','#2f9e44','is friends with every animal in the jungle.'],['Docinho',9,'chef','','bakes the yummiest bolo de cenoura.'],['Abracinho',5,'scarf','#ffd23f','gives big hugs to the whole família.'],
+ ['Pezinho',3,'phones','#2f9e44','dances with its pés and mãos.'],['Casinha',2,'beanie','#2b8fd0','keeps its casa clean and cozy.'],['Bolinha',6,'cape','#2f9e44','plays with its bola every day.'],
+ ['Solzinho',1,'shades','','loves the sol and the praia.'],['Pulinho',7,'antenna','','can pular higher than anyone.'],['Felizinho',8,'topstar','','is always feliz, even on rainy days.']];
+const AB=MON.length;
+AMIGO.forEach(([name,t,a,c,f],i)=>{const T=TYPES[t];MON.push({id:AB+i,name,t,rar:i===11?4:3,pal:(i+2)%3,top:['cape','bandana','prof','shades'].includes(a)?T.tops[0]:'',tail:T.tails[0]||'',body:[[38,35],[40,32],[36,34]][i%3],eye:(i*3)%5,mouth:(i+1)%5,pat:i%2,belly:1,acc:(ACC[a]||'').replace(/="C"/g,`="${c||'#2f9e44'}"`),accB:ACCB[a]||'',fact:`${name} ${f}`,sp:'a'})});
+/* =============== Português: learning state, speech, games =============== */
+function ptS(){S.pt=S.pt||{};const P=S.pt;P.w=P.w||{};P.u=P.u||1;P.ub=P.ub||[];P.t=P.t||{};P.q=P.q||{};P.na=P.na||[];return P}
+const pwS=w=>{const P=ptS();return P.w[w.id]||(P.w[w.id]={r:0,d:[],m:0})};
+const pwLearned=w=>{const s=ptS().w[w.id];return !!s&&s.d.length>=3};
+const pwKnown=w=>{const s=ptS().w[w.id];return !!s&&(s.r>=2||s.d.length>=2)};
+const pwMet=w=>{const s=ptS().w[w.id];return !!s&&(s.r>0||s.s)};
+function ptVoice(){try{const v=speechSynthesis.getVoices();return v.find(x=>/pt[-_]BR/i.test(x.lang))||v.find(x=>/^pt/i.test(x.lang))||null}catch(e){return null}}
+function sayPT(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';const v=ptVoice();if(v)u.voice=v;u.rate=.82;u.pitch=1.05;speechSynthesis.speak(u)}catch(e){}}
+function pic(w){const p=w.p;if(p[0]==='#')return `<span class="pcol" style="background:${p}"></span>`;if(p==='n')return `<span class="pnum">${w.num}</span>`;
+ if(p==='sz:b')return `<span class="psz"><i style="width:92%;height:92%"></i></span>`;if(p==='sz:s')return `<span class="psz"><i style="width:28%;height:28%"></i></span>`;return `<span class="pe">${p}</span>`}
+function lev(a,b){const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);for(let j=1;j<=n;j++)d[0][j]=j;
+ for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+const ptOpenWords=()=>PW.filter(w=>w.u<ptS().u);
+let ptLast=[];
+function pickWord(f){const P=ptS(),now=Date.now();let pool=ptOpenWords().filter(w=>!f||f(w));if(!pool.length)pool=PW.filter(w=>!f||f(w));
+ const ws=pool.map(w=>{const s=P.w[w.id];let x=s?(s.d.length>=3?1:3):4;if(s&&s.due&&s.due<=now)x=8;if(w.u===P.u-1&&!(s&&s.d.length>=3))x+=2;if(ptLast.includes(w.id))x=.05;return x});
+ let r=rand()*ws.reduce((a,b)=>a+b,0);for(let i=0;i<pool.length;i++){r-=ws[i];if(r<=0){ptRec(pool[i]);return pool[i]}}ptRec(pool[0]);return pool[0]}
+function ptRec(w){ptLast.push(w.id);if(ptLast.length>4)ptLast.shift()}
+function distract(t,n,o={}){const open=ptOpenWords();let c=(o.pool||open).filter(w=>w.id!==t.id&&w.p!==t.p&&w.en!==t.en&&w.pt!==t.pt&&(!o.f||o.f(w)));
+ if(c.length<n)c=PW.filter(w=>w.id!==t.id&&w.p!==t.p&&w.en!==t.en&&w.pt!==t.pt&&(!o.f||o.f(w)));
+ const tn=ptNoun(t);const sc=w=>{let s=rand();if(o.same&&w.u===t.u)s+=2;if(o.look){const d=lev(ptNoun(w),tn);s+=Math.max(0,4-d);if(ptNoun(w)[0]===tn[0])s+=1;if(ptNoun(w).slice(-2)===tn.slice(-2))s+=1}return s};
+ c=c.map(w=>[sc(w),w]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);const out=[];for(const w of c){if(out.length>=n)break;if(out.some(x=>x.p===w.p||x.en===w.en||x.pt===w.pt))continue;out.push(w)}return out}
+function ptCheckUnits(){const P=ptS();let opened=0;while(P.u<PTU.length){const U=PTU[P.u-1];if(U.w.filter(pwKnown).length>=Math.ceil(U.w.length/2)){P.u++;opened=P.u}else break}
+ if(opened)setTimeout(()=>{toast(`New words! Unit ${opened}: ${PTU[opened-1].n}`);SFX.fanfare()},900);
+ PTU.forEach((U,u)=>{if(P.ub.includes(u)||!U.w.every(pwLearned))return;P.ub.push(u);S.coins+=25;addLP(5);const id=AB+u;S.owned[id]=(S.owned[id]|0)+1;P.na.push(id);setTimeout(()=>{toast(`Unit ${u+1} done! +25 coins and a new Amigo!`);confetti(60)},1200)})}
+function ptMark(w,first){const s=pwS(w),k=dkey();if(first){s.r++;if(!s.d.includes(k)&&s.d.length<3)s.d.push(k);if(s.due&&s.due<=Date.now())delete s.due}else{s.s=1}ptCheckUnits()}
+function ptMissW(w){const s=pwS(w);s.m++;s.s=1;s.due=Date.now()+864e5}
+function ptSeen(w){pwS(w).s=1}
+function ptTick(r){const P=ptS(),k=dkey();P.q[k]=(P.q[k]|0)+1;P.t[k]=(P.t[k]|0)+Math.min(90,Math.round((Date.now()-(r.t0||Date.now()))/1000));const old=dkey(new Date(Date.now()-20*864e5));Object.keys(P.q).forEach(x=>{if(x<old){delete P.q[x];delete P.t[x]}})}
+const PBC=['#ff7bac','#4cc9f0','#ffd23f','#8ac926','#c77dff','#ff9f1c'];
+function ptQ(extra=''){return `<div class="ptq"><button class="ptspk" id="ptSpk" aria-label="Hear it">🔊</button><div class="ptw" id="ptWord"></div><div class="pthint" id="ptHint"></div>${extra}</div>`}
+function spkWire(el,txt,auto){const b=(el||document).querySelector('#ptSpk');if(b)b.onclick=()=>{ac();sayPT(txt)};if(auto)setTimeout(()=>sayPT(txt),350)}
+function picChoices(opts,ok,draw){return opts.map(o=>({h:`<span class="pp">${draw?draw(o):pic(o)}</span>`,ok:o===ok,w:0}))}
+function picGrid(n){const c=$('#gBody .choices');if(c){c.classList.add('pics');if(n%3===0)c.classList.add('c3')}}
+/* 1 listen and tap */
+function plRound(l){const n=[3,4,6,6][l-1],t=pickWord(),ds=distract(t,n-1,{same:l<=2,look:l===4}),opts=shuffle([t,...ds]);
+ return{q:ptQ()+`<div class="small" style="text-align:center">Tap the picture you hear.</div>`,choices:picChoices(opts,t),say:'',sayPT:()=>sayPT(t.pt),txt:`${t.pt} (${t.en})`,tag:PTU[t.u].n,
+  init:()=>{picGrid(opts.length);spkWire(null,t.pt,1)},onMiss:()=>{$('#ptHint').textContent=`It means: ${t.en}`},onWin:m=>{m?ptMissW(t):0;ptMark(t,!m)},after:()=>{$('#ptWord').textContent=t.pt;sayPT(t.pt)}}}
+/* 6 english to portuguese */
+function peRound(l){const n=[3,4,4,5][l-1],t=pickWord(),ds=distract(t,n-1,{same:l<3,look:l>=3}),opts=shuffle([t,...ds]);
+ return{q:`<div class="ptq">${l===1?`<div class="ptpic">${pic(t)}</div>`:''}<div class="pten">${esc(t.en)}</div><div class="small">Em português? Pick the Portuguese word.</div><div class="pthint" id="ptHint"></div></div>`,
+  choices:opts.map(w=>({h:`${l<4?`<span class="spk" data-s="${esc(w.pt)}" aria-label="Hear it">🔊</span> `:''}${esc(w.pt)}`,ok:w===t,w:1})),say:t.en,txt:`${t.en} → ${t.pt}`,tag:PTU[t.u].n,
+  init:()=>{$$('#gBody .spk').forEach(s=>s.addEventListener('click',e=>{e.stopPropagation();ac();sayPT(s.dataset.s)}))},
+  onMiss:()=>{if(l>=2)$('#ptHint').innerHTML=pic(t)},onWin:m=>{m?ptMissW(t):0;ptMark(t,!m)},after:()=>sayPT(t.pt)}}
+/* 7 portuguese to english */
+function pnRound(l){const n=[3,4,4,5][l-1],t=pickWord(),ds=distract(t,n-1,{same:l>=3}),opts=shuffle([t,...ds]),snd=l<=2;
+ return{q:`<div class="ptq"><div class="pten">${esc(t.pt)}</div><button class="ptspk" id="ptSpk" aria-label="Hear it" style="${snd?'':'display:none'}">🔊</button><div class="small">What does it mean in English?</div><div class="ptpic" id="ptPic" style="visibility:hidden">${pic(t)}</div></div>`,
+  choices:opts.map(w=>({h:esc(w.en),ok:w===t,w:1})),say:'',sayPT:()=>sayPT(t.pt),txt:`${t.pt} → ${t.en}`,tag:PTU[t.u].n,
+  init:()=>spkWire(null,t.pt,snd),onMiss:()=>{$('#ptSpk').style.display='';sayPT(t.pt)},onWin:m=>{m?ptMissW(t):0;ptMark(t,!m)},after:()=>{$('#ptPic').style.visibility='visible';sayPT(t.pt)}}}
+/* 2 memory match */
+function pmRound(l){const np=[3,4,6][l-1],ws=[];let g=0;while(ws.length<np&&g++<200){const w=pickWord();if(!ws.some(x=>x.id===w.id||x.p===w.p))ws.push(w)}
+ const cards=shuffle(ws.flatMap(w=>[{w,k:'p'},{w,k:'t'}]));
+ return{txt:'Memory: '+ws.map(w=>w.pt).join(', '),tag:'Memory',say:'Find the pairs. Tap a card to flip it.',
+  mount:(el,api)=>{el.innerHTML=`<div class="panel"><div id="msg"></div><div class="small" style="text-align:center">Find the pairs! Word cards talk when you flip them.</div><div class="mgrid" style="--c:${cards.length>8?4:cards.length>6?4:3}">${cards.map((c,i)=>`<button class="mcd" data-i="${i}"><span class="fr">${c.k==='p'?`<span class="pp">${pic(c.w)}</span>`:`<b>${esc(c.w.pt)}</b>`}</span><span class="bk">?</span></button>`).join('')}</div></div>`;
+   let up=[],lock=false,done=0;const bs=[...el.querySelectorAll('.mcd')];
+   bs.forEach(b=>b.onclick=()=>{if(lock||busy||b.classList.contains('up'))return;ac();const c=cards[+b.dataset.i];b.classList.add('up');SFX.flip();if(c.k==='t')sayPT(c.w.pt);up.push(b);
+    if(up.length===2){const[a,z]=up.map(x=>cards[+x.dataset.i]);if(a.w===z.w){up.forEach(x=>x.classList.add('ok'));up=[];done++;ptSeen(a.w);setTimeout(()=>{SFX.good();sayPT(a.w.pt)},250);if(done===np)setTimeout(()=>api.win(),700)}
+     else{lock=true;setTimeout(()=>{up.forEach(x=>x.classList.remove('up'));up=[];lock=false},1100)}}});
+   R.cheat=()=>api.win()}}}
+/* 3 say it */
+function psRound(){const t=pickWord();
+ return{txt:'Say it: '+t.pt,tag:PTU[t.u].n,coins:1,nomast:1,sayPT:()=>sayPT(t.pt),
+  mount:(el,api)=>{el.innerHTML=`<div class="panel"><div id="msg"></div><div class="ptq"><div class="ptpic big">${pic(t)}</div><div class="ptw" style="font-size:clamp(40px,7vw,64px)">${esc(t.pt)}</div><div class="small">${esc(t.en)} · Listen, then say it out loud!</div></div>
+   <div class="row"><button class="big alt" id="psHear">🔊 Ouvir</button><button class="big" id="psDone" disabled>⭐ Eu falei!</button></div></div>`;
+   const go=()=>{sayPT(t.pt);const d=$('#psDone');d.disabled=true;setTimeout(()=>{if(d)d.disabled=false},1600)};$('#psHear').onclick=()=>{ac();go()};setTimeout(go,350);
+   $('#psDone').onclick=()=>{if(busy)return;ac();ptSeen(t);api.win()};R.cheat=()=>api.win()}}}
+/* 4 pop the balloons */
+function pbRound(l){const n=[3,4,5][l-1],dur=[11,9,7][l-1],t=pickWord(),opts=shuffle([t,...distract(t,n-1,{same:true})]);
+ return{txt:`${t.pt} (${t.en})`,tag:PTU[t.u].n,sayPT:()=>sayPT(t.pt),onMiss:()=>{$('#ptHint').textContent=`It means: ${t.en}`},onWin:m=>{m?ptMissW(t):0;ptMark(t,!m)},after:()=>{$('#ptWord').textContent=t.pt;sayPT(t.pt)},
+  mount:(el,api)=>{el.innerHTML=`<div class="panel"><div id="msg"></div><div class="ptq row" style="gap:14px"><button class="ptspk" id="ptSpk" aria-label="Hear it">🔊</button><div><div class="ptw" id="ptWord"></div><div class="pthint" id="ptHint"></div><div class="small">Pop the balloon you hear!</div></div></div><div class="bsky">${opts.map((w,i)=>`<button class="bln" data-i="${i}" style="left:${((i+.5)*100/n).toFixed(1)}%;animation-duration:${dur}s;animation-delay:-${(i*dur/n+Math.random()*1.5).toFixed(1)}s;--c:${PBC[i%PBC.length]}"><span class="pp">${pic(w)}</span></button>`).join('')}</div></div>`;
+   spkWire(el,t.pt,1);el.querySelectorAll('.bln').forEach(b=>b.onclick=()=>{if(busy||b.disabled)return;ac();const w=opts[+b.dataset.i];if(w===t){b.classList.add('pop');api.win()}else{b.classList.add('no');b.disabled=true;api.lose(w.pt)}});
+   R.cheat=()=>el.querySelector(`.bln[data-i="${opts.indexOf(t)}"]`).click()}}}
+/* 5 critter says */
+const enPl=a=>a.en==='fish'?'fish':a.en==='butterfly'?'butterflies':a.en+'s';
+const numFor=(n,g)=>g==='a'&&NUMW[n].x?NUMW[n].x:NUMW[n].pt;
+const cAnim=(a,c)=>`<span class="pcb" style="background:${c.p}"><span class="pe">${a.p}</span></span>`;
+const cGrp=(a,n)=>`<span class="pgrp">${Array(n).fill(`<span class="pe">${a.p}</span>`).join('')}</span>`;
+function ptCombos(t,mk){const out=[t];let g=0;while(out.length<4&&g++<60){const c=mk();if(!out.some(o=>o.k===c.k))out.push(c)}return shuffle(out)}
+function pcRound(l){let L=l;if(L===4&&ptS().u<=10)L=2+Math.floor(rand()*2);const bn=(()=>{const b=buddyId();return b!=null&&MON[b]?MON[b].name:'Critter'})();
+ const A=pickWord(w=>w.u===3);let sent,en,ch,mark=[A],draw;
+ if(L===1){const os=shuffle([A,...distract(A,3,{pool:ANIM})]);sent=`Toque ${ptArt(A)==='a'?'na':'no'} ${ptNoun(A)}.`;en=`Touch the ${A.en}.`;ch=picChoices(os,A)}
+ else if(L===2){const C=pick(COLW);const t={a:A,c:C,k:A.id+C.id};const os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),c=rand()<.5?C:pick(COLW);return{a,c,k:a.id+c.id}});
+  sent=`Toque ${ptArt(A)==='a'?'na':'no'} ${ptNoun(A)} ${colFor(C,ptArt(A))}.`;en=`Touch the ${C.en} ${A.en}.`;mark.push(C);ch=os.map(o=>({h:`<span class="pp">${cAnim(o.a,o.c)}</span>`,ok:o===t,w:0}))}
+ else if(L===3){const n=rnd(2,5),t={a:A,n,k:A.id+n};const os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),m=rand()<.5?n:rnd(2,5);return{a,n:m,k:a.id+m}});const g=ptArt(A);
+  sent=`Toque ${g==='a'?'nas':'nos'} ${numFor(n,g)} ${A.x}.`;en=`Touch the ${NUMW[n].en} ${enPl(A)}.`;mark.push(NUMW[n]);ch=os.map(o=>({h:`<span class="pp">${cGrp(o.a,o.n)}</span>`,ok:o===t,w:0}))}
+ else{const X=pickWord(w=>w.u===10),os=shuffle([X,...distract(X,3,{pool:ACTW})]);mark=[X];sent=`${bn} diz: ${X.x}!`;en=`${bn} says: ${X.en}!`;ch=picChoices(os,X)}
+ const b=buddyId();
+ return{q:`<div class="ptq row" style="gap:10px;align-items:center">${b!=null?`<div class="pcrit">${art(b,tierOf(S.owned[b]|0))}</div>`:''}<div>${ptQ()}</div></div><div class="small" style="text-align:center">Listen and do what ${esc(bn)} says.</div>`,choices:ch,say:'',sayPT:()=>sayPT(sent),txt:sent,tag:['Animals','Colors','Counting','Actions'][L-1],
+  init:()=>{picGrid(ch.length);spkWire(null,sent,1)},onMiss:()=>{$('#ptHint').textContent=en},onWin:m=>mark.forEach(w=>{m?ptMissW(w):0;ptMark(w,!m)}),after:()=>{$('#ptWord').textContent=sent;sayPT(sent)}}}
+/* 8 count with me */
+function numOpts(n,max){const s=new Set([n]);let g=0;while(s.size<4&&g++<50){const k=Math.max(0,Math.min(max,n+rnd(-3,3)));s.add(k)}while(s.size<4)s.add(rnd(0,max));return shuffle([...s])}
+function pkRound(l){let n,sent,en,ch,mark,show=true,txt;
+ if(l===1){n=rnd(0,10);sent=NUMW[n].pt;en=NUMW[n].en;mark=[NUMW[n]];ch=numOpts(n,10).map(k=>({h:`<span class="pp"><span class="pnum">${k}</span></span>`,ok:k===n,w:0}))}
+ else if(l===2){n=rnd(1,10);const T=NUMW[n],os=shuffle([T,...distract(T,2,{pool:NUMW.slice(1,11),f:w=>Math.abs(w.num-n)<=3})]);mark=[T];sent='Quantos?';en='How many?';show=false;
+  ch=os.map(w=>({h:`<span class="spk" data-s="${w.pt}">🔊</span> ${w.pt}`,ok:w===T,w:1}));txt=`${n} dots`}
+ else{const sub=l===4&&rand()<.5,mx=l===3?10:20;let a,b;if(sub){a=rnd(3,mx);b=rnd(1,a-1);n=a-b}else{a=rnd(1,mx-1);b=rnd(1,mx-a);n=a+b}
+  sent=`${NUMW[a].pt} ${sub?'menos':'mais'} ${NUMW[b].pt}`;en=`${NUMW[a].en} ${sub?'minus':'plus'} ${NUMW[b].en}`;mark=[NUMW[a],NUMW[b]];txt=`${a} ${sub?'−':'+'} ${b} = ${n}`;
+  ch=numOpts(n,mx).map(k=>({h:`<span class="pp"><span class="pnum">${k}</span></span>`,ok:k===n,w:0}))}
+ return{q:l===2?`<div class="ptq"><div class="bigq">${dots(n,'o')}</div><div class="ptw">Quantos?</div><div class="small">Count, then pick the Portuguese number word.</div><div class="pthint" id="ptHint"></div></div>`:ptQ(`<div class="small">${l===1?'Tap the number you hear.':'Listen to the math problem. Tap the answer.'}</div>`),
+  choices:ch,say:'',sayPT:()=>sayPT(sent),txt:txt||sent,tag:['Hear numbers','Count','Plus','Plus and minus'][l-1],
+  init:()=>{if(l===2){$$('#gBody .spk').forEach(s=>s.addEventListener('click',e=>{e.stopPropagation();ac();sayPT(s.dataset.s)}));setTimeout(()=>sayPT('Quantos?'),350)}else{picGrid(4);spkWire(null,sent,1)}},
+  onMiss:()=>{$('#ptHint').textContent=l===2?`There are ${n}.`:`It means: ${en}`},onWin:m=>mark.forEach(w=>{m?ptMissW(w):0;ptMark(w,!m)}),
+  after:()=>{if(l===2){sayPT(NUMW[n].pt);return}$('#ptWord').textContent=l===1?`${n} = ${NUMW[n].pt}`:`${sent} = ${NUMW[n].pt}`;sayPT(l===1?sent:`${sent} é ${NUMW[n].pt}`)}}}
+/* 9 picture sentences */
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+function pfRound(l){let L=l;if(L===4&&ptS().u<=7)L=1+Math.floor(rand()*3);const A=pickWord(w=>w.u===3),g=ptArt(A);let sent,en,ch,mark=[A],t,os;
+ if(L===1){const F=pickWord(w=>w.u===4);t={a:A,f:F,k:A.id+F.id};os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),f=rand()<.5?F:pick(FOODW);return{a,f,k:a.id+f.id}});
+  sent=`${cap(A.pt)} ${F.x==='d'?'bebe':'come'} ${F.pt}.`;en=`The ${A.en} ${F.x==='d'?'drinks':'eats'} the ${F.en}.`;mark.push(F);ch=os.map(o=>({h:`<span class="pp"><span class="pgrp"><span class="pe">${o.a.p}</span><span class="pe">${o.f.p}</span></span></span>`,ok:o===t,w:0}))}
+ else if(L===2){const C=pick(COLW);t={a:A,c:C,k:A.id+C.id};os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),c=rand()<.5?C:pick(COLW);return{a,c,k:a.id+c.id}});
+  sent=`${cap(A.pt)} é ${colFor(C,g)}.`;en=`The ${A.en} is ${C.en}.`;mark.push(C);ch=os.map(o=>({h:`<span class="pp">${cAnim(o.a,o.c)}</span>`,ok:o===t,w:0}))}
+ else if(L===3){const n=rnd(2,5);t={a:A,n,k:A.id+n};os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),m=rand()<.5?n:rnd(2,5);return{a,n:m,k:a.id+m}});
+  sent=`Eu vejo ${numFor(n,g)} ${A.x}.`;en=`I see ${NUMW[n].en} ${enPl(A)}.`;mark.push(NUMW[n]);ch=os.map(o=>({h:`<span class="pp">${cGrp(o.a,o.n)}</span>`,ok:o===t,w:0}))}
+ else{const PL=HOUSEW.filter(w=>['cama','cadeira','sofá','casa','janela','banho','porta'].includes(ptNoun(w))),P=pick(PL);t={a:A,f:P,k:A.id+P.id};os=ptCombos(t,()=>{const a=rand()<.5?A:pick(ANIM),f=rand()<.5?P:pick(PL);return{a,f,k:a.id+f.id}});
+  sent=`${cap(A.pt)} está ${ptArt(P)==='a'?'na':'no'} ${ptNoun(P)}.`;en=`The ${A.en} is ${({cama:'on',cadeira:'on','sofá':'on',janela:'at',porta:'at'})[ptNoun(P)]||'in'} the ${P.en}.`;mark.push(P);ch=os.map(o=>({h:`<span class="pp"><span class="pgrp"><span class="pe">${o.a.p}</span><span class="pe">${o.f.p}</span></span></span>`,ok:o===t,w:0}))}
+ const auto=l<=2;
+ return{q:`<div class="ptq"><div class="pten">${esc(sent)}</div><button class="ptspk" id="ptSpk" aria-label="Hear it">🔊</button><div class="pthint" id="ptHint"></div><div class="small">Read it, then pick the picture.</div></div>`,choices:ch,say:'',sayPT:()=>sayPT(sent),txt:sent,tag:['Eats','Colors','Counting','Where'][L-1],
+  init:()=>{picGrid(ch.length);spkWire(null,sent,auto)},onMiss:()=>{$('#ptHint').textContent=en;sayPT(sent)},onWin:m=>mark.forEach(w=>{m?ptMissW(w):0;ptMark(w,!m)}),after:()=>sayPT(sent)}}
+const PTG=[
+ {key:'pl',name:'Ouça e Toque',en:'Listen and Tap',kind:'pt',icon:'👂',bg:'#2f9e44',max:4,need:1,make:plRound},
+ {key:'pm',name:'Jogo da Memória',en:'Memory Match',kind:'pt',icon:'🃏',bg:'#2b8fd0',max:3,need:1,make:pmRound},
+ {key:'ps',name:'Fale Comigo',en:'Say It',kind:'pt',icon:'🗣️',bg:'#e8743b',max:1,need:1,make:psRound},
+ {key:'pe',name:'Em Português?',en:'English to Portuguese',kind:'pt',icon:'🇧🇷',bg:'#d9a400',max:4,need:2,make:peRound},
+ {key:'pn',name:'Em Inglês?',en:'Portuguese to English',kind:'pt',icon:'🇺🇸',bg:'#4057c8',max:4,need:2,make:pnRound},
+ {key:'pb',name:'Estoura Balões',en:'Pop the Balloons',kind:'pt',icon:'🎈',bg:'#d94f70',max:3,need:2,make:pbRound},
+ {key:'pk',name:'Conte Comigo',en:'Count With Me',kind:'pt',icon:'🔢',bg:'#1d9bb0',max:4,need:4,make:pkRound},
+ {key:'pc',name:'O Critter Diz',en:'Critter Says',kind:'pt',icon:'🗯️',bg:'#7a55c9',max:4,need:5,make:pcRound},
+ {key:'pf',name:'Frases',en:'Picture Sentences',kind:'pt',icon:'📝',bg:'#c2410c',max:4,need:7,make:pfRound}];
+PTG.forEach(g=>{const mk=g.make;g.make=l=>{const r=mk(l);r.t0=Date.now();const ow=r.onWin;r.onWin=m=>{ptTick(r);if(ow)ow(m)};return r};GKEY[g.key]=g});
+const ptOpen=()=>PTG.filter(g=>ptS().u>=g.need).map(g=>g.key);
+/* screens */
+function drawPT(){const P=ptS(),U=PTU[P.u-1],lw=U.w.filter(pwLearned).length,kw=U.w.filter(pwKnown).length,tot=PW.filter(pwLearned).length;
+ $('#ptSub').textContent=`${tot} words learned · Unit ${P.u} of ${PTU.length}`;
+ const vc=ptVoice();
+ $('#ptHead').innerHTML=`<div class="ptunit"><b>Unit ${P.u}: ${esc(U.n)}</b> <span>(${esc(U.en)})</span><div class="ubar"><i style="width:${Math.round(100*lw/U.w.length)}%"></i></div><div class="small">⭐ ${lw} of ${U.w.length} words learned.${P.u<PTU.length?` Know ${Math.max(0,Math.ceil(U.w.length/2)-kw)} more to open the next unit!`:''} A word is learned when you get it right on 3 different days.</div>${vc?'':'<div class="small" style="color:#c2410c;font-weight:800">Grown-ups: no Portuguese voice was found on this iPad. Tap "For grown-ups" to fix it.</div>'}</div>`;
+ $('#ptGames').innerHTML=PTG.map(g=>{const st=gs(g.key),lk=P.u<g.need;return `<button class="gcard${lk?' lockd':''}" data-pg="${g.key}" style="background:${g.bg}"><span class="gi">${g.icon}</span><span class="gn">${g.name}</span><span class="gl">${esc(g.en)}<br>${lk?`🔒 Opens after unit ${g.need-1}`:`Level ${st.lvl} of ${g.max}`}</span></button>`}).join('');
+ $$('#ptGames [data-pg]').forEach(b=>b.onclick=()=>{ac();const g=GKEY[b.dataset.pg];if(ptS().u<g.need){SFX.bad();toast(`Learn more words to open it! It opens after unit ${g.need-1}.`);return}SFX.tap();const st=gs(g.key);if(!st.place)st.place={l:1,done:1};openGame(g.key);setTimeout(()=>buddySay('Vamos jogar!'),450)});
+ if(P.na.length){const id=P.na.shift();save();const m=MON[id];$('#detArt').innerHTML=art(id,0);$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="font-weight:800">New Amigo!</div><p>${esc(m.fact)}</p><p>You finished a whole unit of Portuguese words. Muito bem!</p>`;$('#detBuddy').style.display='none';SFX.fanfare();confetti(60);sayPT('Oi! Muito bem!');$('#detOv').classList.add('on')}}
+function drawPTBook(){const P=ptS();$('#pbSub').textContent=`${PW.filter(pwLearned).length} of ${PW.length} words learned`;
+ $('#pbG').innerHTML=PTU.map((U,u)=>{const open=u<P.u;return `<h3>${u+1}. ${esc(U.n)} <span class="small">${esc(U.en)}</span> ${P.ub.includes(u)?'🏅':''}</h3>`+(open?`<div class="wgrid">${U.w.map(w=>{const s=P.w[w.id],d=s?s.d.length:0;return `<button class="wt${d>=3?' ok':pwMet(w)?'':' new'}" data-w="${w.id}">${pic(w)}<b>${esc(w.pt)}</b><span class="small">${esc(w.en)}</span><span class="st">${d>=3?'⭐':'☆'.repeat(3-d)+'★'.repeat(d)}</span></button>`}).join('')}</div>`:`<div class="small" style="padding:6px 0 10px">🔒 Opens after unit ${u}</div>`)}).join('');
+ $$('#pbG [data-w]').forEach(b=>b.onclick=()=>{ac();const w=PWI[b.dataset.w];sayPT(w.pt);b.classList.add('rd');setTimeout(()=>b.classList.remove('rd'),700)})}
+function ptTipHTML(){const P=ptS(),v=ptVoice();
+ return `<p class="small">${v?`Portuguese voice found: <b>${esc(v.name)}</b>.`:`<b style="color:#c2410c">No Portuguese voice found.</b> On the iPad, open Settings, then Accessibility, then Spoken Content, then Voices, and add Portuguese (Brazil). Then reload the game.`}</p>
+ <p class="small">Try these phrases with Max this week. They match the words he is learning now.</p>`+
+ PTIPS.slice(0,P.u).map((T,u)=>({T,u})).reverse().map(({T,u})=>`<h3>Unit ${u+1}: ${esc(PTU[u].n)} <span class="small">${esc(PTU[u].en)}</span></h3>`+T.map(([p,e])=>`<div class="tip"><button class="tb" data-tp="${esc(p)}">🔊</button><div><b>${esc(p)}</b><div class="small">${esc(e)}</div></div></div>`).join('')).join('')}
+function ptParentHTML(){const P=ptS(),wk=Object.keys(P.q).filter(k=>k>=dkey(new Date(Date.now()-6*864e5)));const q=wk.reduce((a,k)=>a+(P.q[k]|0),0),sec=wk.reduce((a,k)=>a+(P.t[k]|0),0);
+ const miss=PW.filter(w=>P.w[w.id]&&P.w[w.id].m).sort((a,b)=>P.w[b.id].m-P.w[a.id].m).slice(0,10);
+ return `<h2>Português</h2><p><b>${PW.filter(pwLearned).length}</b> of ${PW.length} words learned · unit ${P.u} of ${PTU.length} open · this week: <b>${q}</b> questions in about <b>${Math.max(q?1:0,Math.round(sec/60))}</b> minutes</p>
+ <p class="small">A word is "known" after 2 right first tries and "learned" after a right first try on 3 different days. The next unit opens when he knows half the words in the current one. Missed words come back the next day. Finishing every word in a unit gives 25 coins and an Amigo critter.</p>
+ <div class="tscroll"><table><thead><tr><th>Unit</th><th class="n">Words</th><th class="n">Met</th><th class="n">Known</th><th class="n">Learned</th></tr></thead><tbody>${PTU.map((U,u)=>`<tr><td>${u+1}. ${esc(U.n)} (${esc(U.en)})${u>=P.u?' 🔒':''}${P.ub.includes(u)?' 🏅':''}</td><td class="n">${U.w.length}</td><td class="n">${U.w.filter(pwMet).length}</td><td class="n">${U.w.filter(pwKnown).length}</td><td class="n">${U.w.filter(pwLearned).length}</td></tr>`).join('')}</tbody></table></div>
+ ${miss.length?`<h3>Words he misses most</h3><div class="tscroll"><table><thead><tr><th>Word</th><th>Meaning</th><th class="n">Misses</th></tr></thead><tbody>${miss.map(w=>`<tr><td>${esc(w.pt)}</td><td>${esc(w.en)}</td><td class="n">${P.w[w.id].m}</td></tr>`).join('')}</tbody></table></div>`:''}
+ <h3>Tips for home</h3>${ptTipHTML()}`}
+function wireTips(root){root.querySelectorAll('[data-tp]').forEach(b=>b.onclick=()=>{ac();sayPT(b.dataset.tp)})}
+$('#ptBookBtn').onclick=()=>{ac();SFX.tap();show('ptbook')};
+$('#ptTipBtn').onclick=()=>{ac();SFX.tap();$('#ptTipB').innerHTML=ptTipHTML();wireTips($('#ptTipB'));$('#ptTipOv').classList.add('on')};
+$('#ptTipX').onclick=()=>{SFX.tap();$('#ptTipOv').classList.remove('on')};
+try{speechSynthesis.onvoiceschanged=()=>{if($('#pt').classList.contains('on'))drawPT()}}catch(e){}
+/* story mix */
+const PTMIXU=[1,3,4,5,6,7,8,9,11];
+function en2pt(){const m={};PW.forEach(w=>{if(w.u<ptS().u&&PTMIXU.includes(w.u)&&/^[a-z]+$/.test(w.en)&&!['me','you'].includes(w.en))m[w.en]=ptNoun(w)});return m}
+function twSpan(w,M){if(M){const x=w.match(/^([^A-Za-z]*)([A-Za-z]+)([^A-Za-z]*)$/);if(x){const p=M[x[2].toLowerCase()];if(p){const pp=x[2][0]===x[2][0].toUpperCase()?cap(p):p;return `<span class="tw ptm" data-pt="${esc(p)}">${esc(x[1]+pp+x[3])}</span>`}}}return `<span class="tw">${esc(w)}</span>`}
 const EPOCH=new Date(2026,10,23).getTime();
 function weekIdx(t=Date.now()){const d=new Date(t);d.setHours(12,0,0,0);return Math.floor((d.getTime()-EPOCH)/(7*864e5))}
 const visitNow=()=>VB+((weekIdx()%12)+12)%12;
@@ -1507,7 +1753,7 @@ $('#visit').onclick=()=>{ac();startVisit()};
 function specHTML(){const cur=weekIdx();const V=MON.filter(m=>m.sp==='v'),Sx=MON.filter(m=>m.sp==='s');
  const card=(m,lock)=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${n?RAR[m.rar].n:lock}</div></button>`};
  const vd=i=>{const d=((i-(cur%12))%12+12)%12;if(d===0)return 'Here this week!';const t=new Date(EPOCH+(cur+d)*7*864e5);return 'Visits '+t.toLocaleDateString([],{month:'short',day:'numeric'})};
- return `<h3 style="grid-column:1/-1;margin:6px 0 0">Weekly visitors ${V.filter(m=>S.owned[m.id]).length}/12</h3>`+V.map((m,i)=>card(m,vd(i))).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Snowy Season ${Sx.filter(m=>S.owned[m.id]).length}/10</h3>`+Sx.map(m=>card(m,'Snowy Packs')).join('')}
+ return `<h3 style="grid-column:1/-1;margin:6px 0 0">Weekly visitors ${V.filter(m=>S.owned[m.id]).length}/12</h3>`+V.map((m,i)=>card(m,vd(i))).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Snowy Season ${Sx.filter(m=>S.owned[m.id]).length}/10</h3>`+Sx.map(m=>card(m,'Snowy Packs')).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Amigos ${MON.filter(m=>m.sp==='a'&&S.owned[m.id]).length}/12</h3>`+MON.filter(m=>m.sp==='a').map((m,i)=>card(m,'Português unit '+(i+1))).join('')}
 
 /* =============== critter world: habitat, care, team quests =============== */
 const ZONE=[['Leafy Meadow','#bfeec0','#6cc96a','<circle cx="480" cy="70" r="40" fill="#ffe066"/><path d="M60 300V180" stroke="#8a5a33" stroke-width="18"/><circle cx="60" cy="160" r="56" fill="#3fa653"/>'],
@@ -1571,8 +1817,8 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  if(ptab==='stats'){let tot=0,first=0;Object.values(S.stats).forEach(g=>Object.values(g).forEach(s=>{tot+=s.n;first+=s.first}));
   let h=`<h2>Max's progress</h2><p class="small">"First try" means he picked the right answer with no mistakes. Green is 90% or more (ready for harder), yellow is 70–89%, red is under 70% (could use practice). Use − and + to change a game's level. Levels now move by mastery: up after 4 of his last 5 answers at a level are right on the first try, and quietly down one level after 3 misses in a row or under 60% over his last 10. About 1 question in 5 reviews an easier level, and missed questions come back 1 and 3 days later.</p>
   <p><b>${tot}</b> questions answered · <b>${pc(first,tot)??0}%</b> right on the first try · ${S.coins} coins · ${Object.keys(S.owned).length}/${BASE.length} critters · ${S.packs} packs opened</p><div class="tscroll"><table><thead><tr><th>Game</th><th>Level now</th><th class="n">Questions</th><th class="n">First try</th><th class="n">Mistakes</th><th>By level</th></tr></thead><tbody>`;
-  for(const kind of['math','read']){h+=`<tr><td colspan="6"><b>${kind=='math'?'Math':'Reading'}</b></td></tr>`;
-   GAMES.filter(g=>g.kind===kind).forEach(g=>{const st=gs(g.key),ss=S.stats[g.key]||{};let n=0,f=0,w=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first;w+=s.wrong});const p=pc(f,n);
+  for(const kind of['math','read','pt']){h+=`<tr><td colspan="6"><b>${kind=='math'?'Math':kind=='pt'?'Português':'Reading'}</b></td></tr>`;
+   [...GAMES,...PTG].filter(g=>g.kind===kind).forEach(g=>{const st=gs(g.key),ss=S.stats[g.key]||{};let n=0,f=0,w=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first;w+=s.wrong});const p=pc(f,n);
     const by=Object.keys(ss).sort((a,b)=>a-b).map(l=>{const s=ss[l],q=pc(s.first,s.n);return `<span class="pct" style="background:${pcol(q)}" title="Level ${l}">L${l}: ${q}%</span>`}).join(' ');
     h+=`<tr><td>${g.name}</td><td><span class="lv"><button data-lv="${g.key}" data-d="-1" aria-label="Lower level">−</button>${st.lvl}/${g.max}<button data-lv="${g.key}" data-d="1" aria-label="Raise level">+</button></span></td><td class="n">${n}</td><td class="n"><span class="pct" style="background:${pcol(p)}">${p==null?'–':p+'%'}</span></td><td class="n">${w}</td><td>${by||'<span class="small">not played yet</span>'}</td></tr>`})}
   h+=`</tbody></table></div>`;
@@ -1582,6 +1828,7 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
   const rows=Object.values(agg).filter(x=>x.n>=3).sort((a,b)=>a.f/a.n-b.f/b.n);
   if(rows.length)h+=`<h3>By skill (3 or more tries)</h3><div class="tscroll"><table><thead><tr><th>Game</th><th>Skill</th><th class="n">Tries</th><th class="n">First try</th></tr></thead><tbody>${rows.map(x=>{const p=pc(x.f,x.n);return `<tr><td>${x.g}</td><td>${esc(x.t)}</td><td class="n">${x.n}</td><td class="n"><span class="pct" style="background:${pcol(p)}">${p}%</span></td></tr>`}).join('')}</tbody></table></div>`;
   B.innerHTML=h;B.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{const g=GKEY[b.dataset.lv],st=gs(g.key);st.lvl=Math.max(1,Math.min(g.max,st.lvl+ +b.dataset.d));st.prog=0;st.hist=[];save();drawParent()})}
+ else if(ptab==='pt'){B.innerHTML=ptParentHTML();wireTips(B)}
  else if(ptab==='week'){B.innerHTML=weekHTML()}
  else if(ptab==='log'){B.innerHTML=`<h2>Recent mistakes</h2><p class="small">The last ${S.log.length} wrong tries, newest first.</p>`+(S.log.length?`<div class="tscroll"><table><thead><tr><th>When</th><th>Game</th><th>Level</th><th>Question</th><th>He tried</th></tr></thead><tbody>${S.log.map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td>${e.l}</td><td style="white-space:normal">${esc(e.q)}</td><td>${esc(e.a)}</td></tr>`).join('')}</tbody></table></div>`:'<p>No mistakes yet!</p>')}
  else{B.innerHTML=`<h2>Settings</h2><button class="opt" id="oS">Sounds <b>${S.sound?'On':'Off'}</b></button><button class="opt" id="oV">Say "Great job!" out loud <b>${S.voice?'On':'Off'}</b></button>
@@ -1597,7 +1844,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={addLP,unlN,UNL,PROB,svPages,get SV(){return SV},sceneStory,CHAL,get chI(){return chI},newChal,drawWorld,openCare,startQuest,finishQuest,care,visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={PTG,PW,PTU,ptS,pickWord,drawPT,sayPT,ptMark,pwLearned,AB,addLP,unlN,UNL,PROB,svPages,get SV(){return SV},sceneStory,CHAL,get chI(){return chI},newChal,drawWorld,openCare,startQuest,finishQuest,care,visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>

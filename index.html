@@ -345,6 +345,27 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 .wt b{font-size:20px}.wt .st{color:#d9a400;font-size:18px}.wt.new{background:#e3e6f5;box-shadow:0 5px 0 #c3c8e6}.wt.new .pe,.wt.new .pcol{opacity:.6}.wt.ok{background:#fff8d6}.wt.rd{transform:scale(1.07)}
 .tip{display:flex;gap:10px;align-items:center;margin:6px 0}.tip .tb{flex:none;background:#eef0fb;color:var(--dark)}
 .spg .ptm{color:#2f9e44;font-weight:800;text-decoration:underline dotted}
+.hpanel{gap:8px}
+.hwrap{width:100%;flex:none}
+.hst{width:100%;max-width:calc((100vh - 300px)*4/3);height:auto;border-radius:20px;display:block;margin:0 auto;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.hcl{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px;flex:none;width:100%;-webkit-overflow-scrolling:touch}
+.hcd{flex:none;display:flex;align-items:center;gap:8px;min-width:190px;max-width:330px;min-height:76px;background:#fff;border:4px solid #e3e6f5;border-radius:18px;padding:6px 10px;color:var(--dark);font-size:19px;font-weight:700;text-align:left}
+.hcd.on{border-color:var(--pink);box-shadow:0 0 0 4px #ff7bac55}.hcd.ok{background:#c8f7c5;border-color:#8fd88a}.hcd.lk{opacity:.55}
+.hca svg{width:60px;height:60px;display:block}.hca.sil svg{filter:brightness(0);opacity:.8}
+.hct{flex:1;line-height:1.2}.hct small{display:block;font-size:14px;color:#c2410c;font-weight:800}
+.hsp{flex:none;font-size:22px}
+.hk,.hpr{cursor:pointer}
+.hk .in,.hpr .in{transform-box:fill-box;transform-origin:50% 100%}
+.hk.hop .in{animation:hHop .7s ease-out}.hk.wave .in,.hpr.wig .in{animation:hWave .45s}
+@keyframes hHop{0%{transform:translateY(0)}40%{transform:translateY(-30%)}100%{transform:translateY(0)}}
+@keyframes hWave{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.hspk{animation:hSpk 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center;pointer-events:none}
+@keyframes hSpk{0%,100%{opacity:.35;transform:scale(.9)}50%{opacity:1;transform:scale(1.1)}}
+.hph svg{width:100%;max-width:calc((100vh - 340px)*4/3);display:block;margin:0 auto;border-radius:20px}
+.hjump{animation:hJump .8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes hJump{from{transform:translateY(0)}to{transform:translateY(-12%)}}
+.htre{display:inline-block;width:56px;height:56px;background:#fff;border-radius:14px;padding:4px}.htre svg{width:100%;height:100%}.htre.no svg{filter:grayscale(1) brightness(.6);opacity:.4}
+.hbadge{background:#fff;color:var(--dark);border-radius:18px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;box-shadow:inset 0 0 0 4px var(--r,#e3e6f5)}.hbi{font-size:54px;line-height:1}
 </style>
 </head>
 <body>
@@ -434,6 +455,10 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="scroll"><div class="small" style="margin-bottom:8px">Tap a word to hear it. ★ = a right first try on one day. ⭐ = learned!</div><div id="pbG"></div></div>
 </section>
 <div class="ov" id="ptTipOv"><div class="box wide" style="max-height:88vh;overflow:auto"><h2>Português at home</h2><div id="ptTipB"></div><div class="row"><button class="big" id="ptTipX">Close</button></div></div></div>
+<section class="screen" id="hunt">
+  <div class="top"><button class="icon" data-go="play" aria-label="Back"><svg viewBox="0 0 24 24" fill="#fff"><path d="M15 4 7 12l8 8 2-2-6-6 6-6z"/></svg></button><div class="ttl"><h2>🔍 Critter Hunt</h2><small>Your critters are hiding. Can you find them?</small></div><div class="coins" data-coins></div></div>
+  <div class="scroll"><div class="ggrid" id="huntG"></div><div class="ptunit" id="huntT" style="margin-top:14px"></div></div>
+</section>
 <div class="ov" id="pickOv"><div class="box wide" style="align-items:center;text-align:center">
   <h2 id="pickT"></h2><div class="small" id="pickS"></div>
   <div class="pgrid" id="pickG"></div>
@@ -1043,13 +1068,13 @@ function matchRound(l){const mode=(gs('match').solved|0)%2?'opp':'rhy';const src
 
 /* =============== play loop =============== */
 let G=null,R=null,miss=0,usedHint=false,busy=false,REPLAY_PTR=null;
-const api={win:()=>win(),lose:(g)=>lose(g),get miss(){return miss},hinted:()=>{usedHint=true}};
+const api={win:()=>win(),setMiss:n=>{miss=n},lose:(g)=>lose(g),get miss(){return miss},hinted:()=>{usedHint=true}};
 function openGame(k){if(limitHit()){rest();return}G=GKEY[k];show('game');$('#gTitle').textContent=G.name;drawBuddy();nextRound();setTimeout(()=>buddySay(pick(['Let\'s play!','I am ready!','You can do it!'])),400)}
 function mbar(st){const h=(st.hist||[]).slice(-5);return `<span class="pbar" style="display:inline-flex;vertical-align:middle">${Array.from({length:5},(_,i)=>`<i class="${h[i]==null?'':h[i]?'on':'off'}"></i>`).join('')}</span>`}
 function drawHead(){const st=gs(G.key);$('#gLevel').innerHTML=`${ADV?`<b style="color:var(--add)">${ADV.kind==='visit'?'Visitor challenge':ADV.kind==='quest'?'Team quest':'Adventure'} ${Math.min(ADV.n||12,ADV.q+1)} of ${ADV.n||12}</b> · `:''}Level ${st.lvl} of ${G.max}${R&&R.review?` · <span style="color:var(--add)">${R.review=='place'?'Warm-up check':R.review=='again'?'Try again':'Review'} (level ${R.lvl})</span>`:''} &nbsp;${mbar(st)}`}
 function makeRound(g,l,seed,replay,ptr){RNGF=rng(seed);REPLAY=replay;REPLAY_PTR=ptr==null?null:ptr;let r;try{r=g.make(l)}finally{RNGF=Math.random;REPLAY=false;if(REPLAY_PTR!=null){const st=gs('story');st.ptr=st._p;delete st._p}REPLAY_PTR=null}return r}
 function nextRound(){if(ADV&&advNext())return;const st=gs(G.key);const now=Date.now();let lvl=st.lvl,seed=(Math.random()*2147483647)|0,review='',ptr=null;S.due=S.due||[];
- if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place=G.kind==='pt'?{l:1,done:1}:{l:1};const plc=!ADV&&st.place&&!st.place.done;
+ if(!ADV&&st.place==null&&!st.solved&&!S.stats[G.key])st.place=G.kind==='pt'||G.kind==='hunt'?{l:1,done:1}:{l:1};const plc=!ADV&&st.place&&!st.place.done;
  const di=plc?-1:S.due.findIndex(d=>d.g===G.key&&d.at<=now);
  if(di>=0){const d=S.due.splice(di,1)[0];lvl=Math.min(d.l,G.max);seed=d.seed;ptr=d.ptr;review='again'}
  else if(plc){lvl=st.place.l;review='place'}
@@ -1069,14 +1094,14 @@ const PRAISE=['Great job!','You got it!','Awesome!','Super smart!','Nice work!',
 function mastery(st,first){if(R.review)return 0;st.hist=st.hist||[];st.hist.push(first?1:0);if(st.hist.length>10)st.hist.shift();const h=st.hist,l5=h.slice(-5),l3=h.slice(-3);
  if(l5.length>=5&&l5.filter(x=>x).length>=4)return 1;if((l3.length>=3&&l3.every(x=>!x))||(h.length>=10&&h.filter(x=>x).length<6))return -1;return 0}
 function evt(t){S.events=S.events||[];S.events.unshift({t:Date.now(),g:G.key,m:t});if(S.events.length>40)S.events.length=40}
-function win(){busy=true;const st=gs(G.key);stat(true);if(R.onWin)R.onWin(miss);if(ADV){ADV.q++;if(miss===0)ADV.first=(ADV.first|0)+1}const c=R.coins||(miss===0?3:miss===1?2:1);S.coins+=c;S.total++;st.solved++;addLP(1);SFX.good();confetti(20);const mv=R.nomast?0:mastery(st,miss===0);
+function win(){busy=true;const st=gs(G.key);stat(true);if(R.onWin)R.onWin(miss);if(ADV){ADV.q+=R.qv||1;if(miss===0)ADV.first=(ADV.first|0)+1}const c=R.coins||(miss===0?3:miss===1?2:1);S.coins+=c;S.total++;st.solved++;addLP(1);SFX.good();confetti(20);const mv=R.nomast?0:mastery(st,miss===0);
  const p=praise();const m=$('#msg');if(m){m.textContent=`${p} +${c} coins`;m.style.color='#2f9e44'}say(p);buddySay(p);setTimeout(()=>{SFX.coin();drawCoins(true)},300);
  if(R.after)R.after();let up=false,big=false;
  if(R.review==='place'&&st.place){const P=st.place;if(miss===0&&P.l<Math.min(G.max,4))P.l++;else{const start=miss===0?P.l:Math.max(1,P.l-1);P.done=1;st.lvl=start;st.hist=[];for(let q=1;q<start;q++)addGuard(G.key,q);evt(`Warm-up check: started at level ${start}`);setTimeout(()=>toast(start>1?`Warm-up done! Level ${start}`:'Warm-up done!'),700)}}
  let gl=0,bonus=0;if(mv>0){big=true;st.hist=[];const ml=st.lvl;if(addGuard(G.key,ml))gl=ml;if(st.lvl<G.max){st.lvl++;up=true;evt(`Mastered level ${ml}, moved up to ${st.lvl}`)}else evt(gl?`Mastered the top level`:`Mastered the top level again`);bonus=(up||gl?25:10)+(gl?10:0);S.coins+=bonus;addLP(5)}
  if(mv<0&&st.lvl>1){st.lvl--;st.hist=[];evt(`Eased down to level ${st.lvl} (was struggling)`)}else if(mv<0){st.hist=[]}
  save();drawHead();
- setTimeout(()=>{if(big){drawCoins(true);levelUp(up,st.lvl,gl,bonus)}else nextRound()},R.after?2100:1500)}
+ const nx=()=>{if(big){drawCoins(true);levelUp(up,st.lvl,gl,bonus)}else nextRound()};if(R.hold)R.next=nx;else setTimeout(nx,R.after?2100:1500)}
 function lose(g){miss++;SFX.bad();if(R.onMiss&&miss===1)R.onMiss();const m=$('#msg');if(m){m.textContent=miss>=2?'Here is a little help!':'Not quite. Try again!';m.style.color='#c2410c'}
  if(miss===1&&G.kind!=='pt'){S.due=S.due||[];const now=Date.now();[1,3].forEach(dd=>S.due.push({g:G.key,l:R.lvl,seed:R.seed,ptr:R.ptr,at:now+dd*864e5}));if(S.due.length>60)S.due.splice(0,S.due.length-60)}
  if(miss===1)buddySay(pick(['Try again!','Almost! Look again.','You can do it!']));
@@ -1094,14 +1119,14 @@ $('#readBtn').onclick=()=>{ac();if(R&&R.sayPT){R.sayPT();return}const t=typeof R
 /* how to play */
 const HOW=[['▶️','Tap Play. Pick a game.'],['✅','Get it right to win coins!'],['💡','Oops? That is OK! Try again. You will get help.'],
  ['🎁','Use your coins to open packs. Find new critters!'],['📘','See your critters in the Critter Book.'],['✨','Get 3 of the same critter. It turns shiny!'],
- ['⭐','Play the Adventure each day. You get a free critter!'],['🎨','Go to Critter Fun. Make pictures and stories.'],['🇧🇷','Tap Português. Learn words in Portuguese!'],
+ ['⭐','Play the Adventure each day. You get a free critter!'],['🎨','Go to Critter Fun. Make pictures and stories.'],['🇧🇷','Tap Português. Learn words in Portuguese!'],['🔍','Play Critter Hunt. Find your hiding critters!'],
  ['🔒','Some stickers are locked. Answer questions in games to open them!'],['🔊','Tap the speaker. The game reads to you.']];
 function drawHow(){const ids=ownedIds();$('#howG').innerHTML=HOW.map((h,i)=>`<div class="howc"><div class="hn">${i+1}</div><div class="hp">${i===4&&ids.length?art(ids[0],tierOf(S.owned[ids[0]])):h[0]}</div><p>${h[1]}</p><button class="hs" data-hs="${i}" aria-label="Read to me">🔊</button></div>`).join('');
  $$('#howG [data-hs]').forEach(b=>b.onclick=()=>{ac();say(HOW[+b.dataset.hs][1],true)})}
 $('#howAll').onclick=()=>{ac();say(HOW.map(h=>h[1]).join(' '),true)};
-function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld();if(id==='howto')drawHow();if(id==='pt')drawPT();if(id==='ptbook')drawPTBook()}
+function show(id){if(id!=='game')ADV=null;$$('.screen').forEach(s=>s.classList.toggle('on',s.id===id));drawCoins();if(id==='home')drawHome();if(id==='menu')drawMenu();if(id==='shop')drawShop();if(id==='book')drawBook();if(id==='play')drawHub();if(id==='world')drawWorld();if(id==='howto')drawHow();if(id==='pt')drawPT();if(id==='ptbook')drawPTBook();if(id==='hunt')drawHuntMenu()}
 $$('[data-go]').forEach(b=>b.onclick=()=>{ac();SFX.tap();show(b.dataset.go)});
-$('#game .top [data-go="menu"]').onclick=()=>{ac();SFX.tap();show(G&&G.kind==='pt'?'pt':'menu')};
+$('#game .top [data-go="menu"]').onclick=()=>{ac();SFX.tap();show(G&&G.kind==='pt'?'pt':G&&G.kind==='hunt'?'hunt':'menu')};
 function refresh(){const on=$('.screen.on');if(on&&on.id!=='game')show(on.id);drawCoins()}
 function drawHome(){drawVisit();const ab=$('#advBtn');if(ab){ab.innerHTML=advDone()?'⭐ Adventure ✓':'⭐ Adventure';ab.title=advDone()?'Done today! You can play again.':'12 questions and a free critter';}const owned=Object.keys(S.owned).map(Number).sort((a,b)=>(MON[b].rar*3+tierOf(S.owned[b]))-(MON[a].rar*3+tierOf(S.owned[a])));const p=owned.slice(0,3);
  $('#parade').innerHTML=(p.length?p:[0,13,26]).map(i=>art(i,tierOf(S.owned[i]|0))).join('');if(!p.length)$('#parade').style.opacity=.5;else $('#parade').style.opacity=1;
@@ -1146,12 +1171,12 @@ $('#openAgain').onclick=()=>{$('#openOv').classList.remove('on');buy(lastPack)};
 let bf=-1;
 function drawBook(){const own=BASE.filter(m=>S.owned[m.id]);const sh=own.filter(m=>S.owned[m.id]>=3).length,gd=own.filter(m=>S.owned[m.id]>=6).length;$('#bookTitle').textContent=`Critter Book ${own.length}/${BASE.length}`+(sh?` · ✨${sh}`:'')+(gd?` · ★${gd}`:'');
  $('#chips').innerHTML=`<button class="chip${bf<0?' on':''}" data-f="-1">All</button>`+RAR.map((r,i)=>`<button class="chip${bf===i?' on':''}" data-f="${i}" style="${bf===i?'':`box-shadow:inset 0 0 0 3px ${r.c}`}">${r.n} ${own.filter(m=>m.rar===i).length}/${BASE.filter(m=>m.rar===i).length}</button>`).join('');
- $('#chips').innerHTML+=`<button class="chip${bf==='g'?' on':''}" data-f="g">Guardians ${gCount()}/${GTOTAL()}</button><button class="chip${bf==='sp'?' on':''}" data-f="sp">Specials ${MON.filter(m=>m.sp&&S.owned[m.id]).length}/${MON.filter(m=>m.sp).length}</button>`;
- $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=b.dataset.f==='g'||b.dataset.f==='sp'?b.dataset.f:+b.dataset.f;drawBook()});
+ $('#chips').innerHTML+=`<button class="chip${bf==='g'?' on':''}" data-f="g">Guardians ${gCount()}/${GTOTAL()}</button><button class="chip${bf==='sp'?' on':''}" data-f="sp">Specials ${MON.filter(m=>m.sp&&S.owned[m.id]).length}/${MON.filter(m=>m.sp).length}</button><button class="chip${bf==='h'?' on':''}" data-f="h">Hunts</button>`;
+ $$('.chip').forEach(b=>b.onclick=()=>{SFX.tap();bf=['g','sp','h'].includes(b.dataset.f)?b.dataset.f:+b.dataset.f;drawBook()});
  if(bf==='g'){$('#bgrid').innerHTML=GAMES.map(g=>`<h3 style="grid-column:1/-1;margin:6px 0 0">${esc(g.name)} guardians</h3>`+Array.from({length:g.max},(_,i)=>{const l=i+1,h=hasG(g.key,l);return `<button class="mc${h?'':' no'}" data-gk="${g.key}" data-gl="${l}" style="--r:${g.bg}">${gArt(g.key,l)}<div class="nm">${h?esc(gName(g.key,l)):'???'}</div><div class="rr">Level ${l}</div></button>`}).join('')).join('');
   $$('#bgrid [data-gk]').forEach(b=>b.onclick=()=>{const k=b.dataset.gk,l=+b.dataset.gl,g=GKEY[k];if(!hasG(k,l)){SFX.bad();toast(`Master level ${l} of ${g.name} to earn it!`);return}SFX.tap();
    $('#detArt').innerHTML=gArt(k,l);$('#detName').textContent=gName(k,l);$('#detInfo').innerHTML=`<div style="font-weight:800">Guardian of ${esc(g.name)}, level ${l}</div><p>You earned this guardian by mastering level ${l}. Guardians protect the things you have learned!</p>`;$('#detBuddy').style.display='none';say(gName(k,l));$('#detOv').classList.add('on')});return}
- $('#bgrid').innerHTML=bf==='sp'?specHTML():BASE.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
+ $('#bgrid').innerHTML=bf==='h'?huntBookHTML():bf==='sp'?specHTML():BASE.filter(m=>bf<0||m.rar===bf).map(m=>{const n=S.owned[m.id]|0;return `<button class="mc${n?'':' no'}" data-m="${m.id}" style="--r:${RAR[m.rar].c}">${n>1?`<span class="x">×${n}</span>`:''}${art(m.id,tierOf(n))}<div class="nm">${n?esc(m.name):'???'}</div><div class="rr">${RAR[m.rar].n}</div>${n>=3?`<div class="tier">${TIER[tierOf(n)]}</div>`:''}</button>`}).join('');
  $$('.mc').forEach(b=>b.onclick=()=>{const m=MON[+b.dataset.m];if(!S.owned[m.id]){SFX.bad();toast(m.sp==='v'?'This visitor comes on its own week!':m.sp==='s'?'Find it in Snowy Packs!':m.sp==='a'?'Finish a Português unit to meet it!':'Open packs to find it!');return}SFX.tap();
   const n=S.owned[m.id];$('#detArt').innerHTML=art(m.id,tierOf(n));$('#detName').textContent=m.name;$('#detInfo').innerHTML=`<div style="color:${RAR[m.rar].c};font-weight:800;filter:brightness(.8)">${RAR[m.rar].n} · ${TYPES[m.t].n} type</div><p>${esc(m.fact)}</p><div class="small">You have ${n} ${n>1?'copies':'copy'}${n>=3?` · ${TIER[tierOf(n)]}`:''}. ${n<3?`${3-n} more to make it Shiny.`:n<6?`${6-n} more to make it Golden.`:'It is fully powered up!'}</div>`;
   $('#detInfo').innerHTML+=`<div style="margin-top:6px">${heartRow(m.id)}</div>`;$('#detBuddy').style.display='';$('#detBuddy').dataset.id=m.id;$('#detBuddy').textContent=S.buddy===m.id?'My buddy ♥':'Make my buddy';say(m.name+'. '+m.fact);$('#detOv').classList.add('on')})}
@@ -1240,19 +1265,136 @@ const UNL=[['b',6],['p',20],['p',25],['p',41],['b',7],['p',22],['p',26],['p',43]
 const LPU=10;
 const unlN=()=>Math.min(UNL.length,Math.floor((S.lp|0)/LPU));
 function unlIdx(k,i){return UNL.findIndex(u=>u[0]===k&&u[1]===i)}
-function isUnl(k,i){const j=unlIdx(k,i);return j<0||j<unlN()}
+function isUnl(k,i){if(k==='p'&&isTre(i))return huntS().tp.includes(i);const j=unlIdx(k,i);return j<0||j<unlN()}
 function needFor(k,i){const j=unlIdx(k,i);return Math.max(1,(j+1)*LPU-(S.lp|0))}
 function addLP(n){S.lp=(S.lp|0)+n;const u=unlN();if(u>(S.unl|0)){const got=UNL.slice(S.unl|0,u).map(([k,i])=>k==='b'?SCN[i].n:PROPS[i][0]);S.unl=u;setTimeout(()=>{SFX.fanfare();toast(`New sticker${got.length>1?'s':''}: ${got.join(', ')}!`);if(typeof buddySay==='function'&&$('#game').classList.contains('on'))buddySay('You unlocked a new sticker!')},1400)}}
 /* =============== play with critters: hub, scenes, buddy, stories =============== */
 const ownedIds=()=>Object.keys(S.owned).map(Number).filter(i=>MON[i]).sort((a,b)=>a-b);
+/* =============== Critter Hunt =============== */
+const TRB=PROPS.length;
+PROPS.push(['Magnifying glass','<circle cx="50" cy="50" r="30" fill="#bfe6ff" stroke="#16204f" stroke-width="8"/><path d="M72 72 104 104" stroke="#8a5a33" stroke-width="14" stroke-linecap="round"/><path d="M36 40a18 18 0 0 1 14-10" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>'],
+ ['Treasure map','<path d="M14 24 44 14l32 10 30-10v82l-30 10-32-10-30 10z" fill="#f3d9a4" stroke="#b07a1d" stroke-width="4"/><path d="M28 80q20-30 36-14t30-34" stroke="#e5484d" stroke-width="4" fill="none" stroke-dasharray="6 6"/><path d="M84 26l12 12M96 26 84 38" stroke="#e5484d" stroke-width="5" stroke-linecap="round"/>'],
+ ['Pirate flag','<path d="M26 12v100" stroke="#8a5a33" stroke-width="7" stroke-linecap="round"/><path d="M30 16h66l-10 24 10 24H30z" fill="#1b1d24"/><circle cx="60" cy="36" r="10" fill="#fff"/><path d="M50 52l20 8M70 52l-20 8" stroke="#fff" stroke-width="4" stroke-linecap="round"/>'],
+ ['Compass','<circle cx="60" cy="60" r="46" fill="#ffd23f" stroke="#b07a1d" stroke-width="6"/><circle cx="60" cy="60" r="36" fill="#fff"/><path d="M60 28 68 60 60 92 52 60z" fill="#e5484d"/><path d="M60 60 68 60 60 92 52 60z" fill="#16204f"/><circle cx="60" cy="60" r="5" fill="#b07a1d"/>'],
+ ['Binoculars','<rect x="18" y="40" width="34" height="58" rx="14" fill="#16204f"/><rect x="68" y="40" width="34" height="58" rx="14" fill="#16204f"/><rect x="46" y="50" width="28" height="18" fill="#3d4a7a"/><circle cx="35" cy="84" r="11" fill="#4cc9f0"/><circle cx="85" cy="84" r="11" fill="#4cc9f0"/><rect x="24" y="24" width="22" height="20" rx="5" fill="#3d4a7a"/><rect x="74" y="24" width="22" height="20" rx="5" fill="#3d4a7a"/>'],
+ ['Trophy','<path d="M36 16h48v30a24 24 0 0 1-48 0z" fill="#ffd23f" stroke="#c48a00" stroke-width="4"/><path d="M36 26H20q0 22 18 26M84 26h16q0 22-18 26" stroke="#c48a00" stroke-width="5" fill="none"/><rect x="54" y="68" width="12" height="18" fill="#c48a00"/><rect x="36" y="86" width="48" height="16" rx="4" fill="#8a5a33"/>']);
+const isTre=i=>i>=TRB&&i<TRB+6;
+function huntS(){S.hunt=S.hunt||{};const H=S.hunt;H.n=H.n||{};H.tp=H.tp||[];H.total=H.total|0;return H}
+const HCOV={0:['a','árvore'],1:['o','pinheiro'],3:['a','pedra'],4:['o','cogumelo'],5:['a','casa'],6:['a','barraca'],12:['o','presente'],14:['o','barco'],35:['o','boneco de neve'],46:['a','cerca'],20:['o','carro'],21:['o','ônibus'],34:['o','guarda-chuva']};
+const HSPOT=[[270,470],[530,460],[780,470],[130,615],[390,625],[640,615],[880,625],[150,315],[400,305],[650,315],[870,305]];
+const PBOX={};
+function propBox(i){if(PBOX[i])return PBOX[i];let b={x:10,y:10,width:100,height:100};try{const d=document.createElementNS('http://www.w3.org/2000/svg','svg');d.setAttribute('style','position:absolute;left:-9999px;width:120px;height:120px');d.innerHTML=`<g>${PROPS[i][1]}</g>`;document.body.appendChild(d);const r=d.firstChild.getBBox();if(r.width>0)b={x:r.x,y:r.y,width:r.width,height:r.height};d.remove()}catch(e){}return PBOX[i]=b}
+function colName(hex){const r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn,s=d===0?0:d/(1-Math.abs(2*l-1));
+ let h=0;if(d){h=mx===r?((g-b)/d)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60;if(h<0)h+=360}
+ let k;if(s<.18||d<.08)k=l>.85?'white':l<.2?'black':'gray';else if(h<15||h>=345)k=l>.72?'pink':'red';else if(h<42)k=l<.42?'brown':'orange';else if(h<68)k='yellow';else if(h<170)k='green';else if(h<255)k='blue';else if(h<295)k='purple';else k='pink';
+ const C=PTU[1].w.find(w=>w.en===k);return{en:k,pt:C?C.pt:k}}
+const TPN=t=>TYPES[t].n;
+function huntPick(owned,n,avoid,f){const pool=owned.filter(i=>!avoid.includes(i)&&(!f||f(i)));const out=[];const ws=i=>1+(hearts(i)<3?1:0)+(S.buddy===i?1:0);
+ while(out.length<n&&pool.length){let tot=pool.reduce((a,i)=>a+ws(i),0),r=Math.random()*tot,k=0;for(;k<pool.length;k++){r-=ws(pool[k]);if(r<=0)break}out.push(pool.splice(Math.min(k,pool.length-1),1)[0])}return out}
+function huntBuild(kind,l){const own=ownedIds(),adv=!!ADV;const L=adv?1:l;let n=adv?3:[3,4,5+Math.floor(Math.random()*2),6+Math.floor(Math.random()*3)][L-1];let nd=adv?0:[0,1,2+Math.floor(Math.random()*2),2+Math.floor(Math.random()*2)][L-1];
+ n=Math.max(1,Math.min(n,own.length));const tg=huntPick(own,n,[]);const tt=tg.map(i=>MON[i].t);const dc=huntPick(own,nd,tg,kind==='hh'?i=>!tt.includes(MON[i].t):null);
+ const bgs=SCN.map((_,i)=>i).filter(i=>isUnl('b',i));const bg=bgs[Math.floor(Math.random()*bgs.length)]|0;
+ let covs=Object.keys(HCOV).map(Number).filter(i=>isUnl('p',i));covs=shuffle(covs);
+ const ids=shuffle([...tg,...dc]);let spots=L===1?shuffle(HSPOT.slice(0,7)):shuffle(HSPOT.slice());spots=spots.slice(0,ids.length).sort((a,b)=>a[1]-b[1]);
+ const ps=[230,205,180,160][L-1],csL=[150,130,110,90][L-1],vis=[.6,.48,.4,.32][L-1];
+ const nums=kind==='hn'?huntNums(L,ids.length):kind==='hp'&&L===4?shuffle([...Array(21).keys()]).slice(0,ids.length):null;
+ const hid=ids.map((id,k)=>{const[x,y]=spots[k],pi=covs[k%covs.length],b=propBox(pi),sc=ps/120;const X0=x-ps/2+b.x*sc,Y0=y-ps/2+b.y*sc,W=b.width*sc,H=b.height*sc;
+  const rel=L>=2&&Math.random()<.25?'next':'behind';let cs=Math.max(60,Math.min(csL,W*.9,H/(1-vis)*.95));let cx,cy,side=Math.random()<.5?-1:1;
+  if(rel==='behind'){cx=X0+W/2+(Math.random()-.5)*Math.max(0,W-cs)*.6;cy=Y0-cs*vis+cs/2}else{cs=Math.max(60,Math.min(cs,H));const v2=vis*.8;cx=side>0?X0+W-cs*v2+cs/2:X0+cs*v2-cs/2;cy=Y0+H-cs/2}
+  return{id,x,y,ps,pi,cx,cy,cs,rel,f:Math.random()<.5?1:0,side:cx<500?'left':'right',col:colName(TYPES[MON[id].t].pal[MON[id].pal][0]),num:nums?nums[k]:null,tgt:tg.includes(id)}});
+ const H=huntS();const chest=!adv&&(H.total+1)%5===0;
+ const used=new Set(hid.map(h=>h.x+','+h.y));const free=HSPOT.filter(s=>!used.has(s[0]+','+s[1]));const deco=[];
+ const decoP=[2,2,7,8,15,18,10].filter(i=>isUnl('p',i));const coinAt=Math.floor(Math.random()*hid.length);
+ if(chest&&free.length)deco.push({pi:40,x:free[0][0],y:free[0][1]+30,s:120,chest:1});
+ free.slice(chest?1:0,chest?3:2).forEach(s=>{if(decoP.length)deco.push({pi:decoP[Math.floor(Math.random()*decoP.length)],x:s[0],y:s[1]+30,s:100})});
+ const cl=tg.map(id=>huntClue(kind,L,hid.find(h=>h.id===id),hid));return{bg,hid,deco,cl,L,coinAt,trail:L===4,kind}}
+function huntNums(L,n){const s=new Set();let g=0;const pool=L===1?[2,3,4,5,6,7,8,9,10]:L===2?[...Array(19).keys()].map(i=>i+2):L===3?[4,6,8,9,10,12,14,15,16,18,20,21,24,25]:[2,3,4,5,6,7,8,9,10,12,14,15,16,18,20,24];while(s.size<n&&g++<200)s.add(pool[Math.floor(Math.random()*pool.length)]);return [...s]}
+function mathExpr(L,v){const r=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+ if(L===1){const a=r(1,v-1);return{t:`${a} + ${v-a}`,s:`${a} plus ${v-a}`,tag:'+'}}
+ if(L===2){if(Math.random()<.5&&v>2){const a=r(1,v-1);return{t:`${a} + ${v-a}`,s:`${a} plus ${v-a}`,tag:'+'}}const b=r(1,9);return{t:`${v+b} − ${b}`,s:`${v+b} minus ${b}`,tag:'−'}}
+ const fs=[];for(let a=2;a<=10;a++)if(v%a===0&&v/a>=1&&v/a<=12&&!(v/a===1))fs.push(a);
+ if(L===4&&v<=10&&(Math.random()<.5||!fs.length)){const b=r(2,5);return{t:`${v*b} ÷ ${b}`,s:`${v*b} divided by ${b}`,tag:'÷'}}
+ if(fs.length){const a=fs[Math.floor(Math.random()*fs.length)];return{t:`${a} × ${v/a}`,s:`${a} times ${v/a}`,tag:'×'}}
+ const a=r(1,v-1);return{t:`${a} + ${v-a}`,s:`${a} plus ${v-a}`,tag:'+'}}
+function huntClue(kind,L,t,all){const m=MON[t.id],pn=PROPS[t.pi][0].toLowerCase(),rel=t.rel==='behind'?'behind':'next to',P=HCOV[t.pi]||['o',pn],dp=(P[0]==='a'?'da ':'do ')+P[1],rp=t.rel==='behind'?'atrás':'ao lado';
+ const one=f=>all.filter(f).length===1;
+ if(kind==='hh')return{sil:1,txt:'Find this critter!',say:'Find this critter!',tag:'Shadow',t};
+ if(kind==='hn'){const e=mathExpr(L,t.num);return{txt:`Find the critter holding <b>${e.t}</b>`,say:`Find the critter holding ${e.s}.`,tag:e.tag,t}}
+ const F=[];
+ if(kind==='hc'){
+  const fType={txt:`Find the <b>${TPN(m.t)}</b> critter.`,tag:'Type',test:h=>MON[h.id].t===m.t},fWhere={txt:`Find the critter <b>${rel}</b> the <b>${pn}</b>.`,tag:'Where',test:h=>h.rel===t.rel&&h.pi===t.pi},
+   fName={txt:`Find <b>${esc(m.name)}</b>.`,tag:'Name',test:h=>h.id===t.id},fTW={txt:`Find the <b>${TPN(m.t)}</b> critter <b>${rel}</b> the <b>${pn}</b>.`,tag:'Two-part',test:h=>MON[h.id].t===m.t&&h.rel===t.rel&&h.pi===t.pi},
+   fTS={txt:`Find the <b>${TPN(m.t)}</b> critter on the <b>${t.side}</b>.`,tag:'Left and right',test:h=>MON[h.id].t===m.t&&h.side===t.side},fCW={txt:`Find the <b>${t.col.en}</b> critter <b>${rel}</b> the <b>${pn}</b>.`,tag:'Two-part',test:h=>h.col.en===t.col.en&&h.rel===t.rel&&h.pi===t.pi},
+   fCol={txt:`Find the <b>${t.col.en}</b> critter.`,tag:'Color',test:h=>h.col.en===t.col.en};
+  F.push(...(L===1?shuffle([fType,fWhere,fCol]):L===2?shuffle([fWhere,fName,fType,fCol]):shuffle([fTW,fTS,fCW,fWhere])),fWhere,fType,fName)}
+ else{const en={c:`Find the ${t.col.en} critter.`,w:`Find the critter ${rel} the ${pn}.`,cw:`Find the ${t.col.en} critter ${rel} the ${pn}.`,n:`Find the critter with the number ${t.num}.`};
+  const fC={txt:`Encontre o critter <b>${t.col.pt}</b>.`,en:en.c,tag:'PT color',test:h=>h.col.en===t.col.en},fW={txt:`Encontre o critter <b>${rp} ${dp}</b>.`,en:en.w,tag:'PT where',test:h=>h.rel===t.rel&&h.pi===t.pi},
+   fCW={txt:`Encontre o critter <b>${t.col.pt}</b> <b>${rp} ${dp}</b>.`,en:en.cw,tag:'PT two-part',test:h=>h.col.en===t.col.en&&h.rel===t.rel&&h.pi===t.pi},
+   fN=t.num!=null?{txt:`Encontre o critter com o número <b>${NUMW[t.num].pt}</b>.`,en:en.n,tag:'PT number',test:h=>h.num===t.num}:null,fName={txt:`Encontre <b>${esc(m.name)}</b>.`,en:`Find ${m.name}.`,tag:'PT name',test:h=>h.id===t.id};
+  F.push(...(L===1?[fC,fW]:L===2?shuffle([fW,fC]):L===3?[fCW,fW,fC]:[fN,fCW,fW]).filter(Boolean),fName)}
+ const c=F.find(f=>one(f.test))||F[F.length-1];return{txt:c.txt,say:c.txt.replace(/<[^>]+>/g,''),en:c.en,tag:c.tag,pt:kind==='hp',t}}
+function critG(h,i){return `<g class="hk" data-h="${i}" transform="translate(${(h.cx-h.cs/2).toFixed(1)} ${(h.cy-h.cs/2).toFixed(1)}) scale(${(h.cs/120).toFixed(4)})"><g class="in">${h.f?'<g transform="translate(120 0) scale(-1 1)">':'<g>'}${inner(art(h.id,tierOf(S.owned[h.id]|0)))}</g>${h.num!=null?`<g transform="translate(60 -8)"><rect x="-30" y="-24" width="60" height="40" rx="10" fill="#fff" stroke="#16204f" stroke-width="4"/><text y="7" text-anchor="middle" font-size="28" font-weight="800" fill="#16204f" font-family="Baloo 2,system-ui">${h.num}</text></g>`:''}</g></g>`}
+function propG(pi,x,y,s,attr){return `<g class="hpr" ${attr||''} transform="translate(${(x-s/2).toFixed(1)} ${(y-s/2).toFixed(1)}) scale(${(s/120).toFixed(4)})"><g class="in">${PROPS[pi][1]}</g></g>`}
+function huntRound(kind){return l=>{const B=huntBuild(kind,l);const R0={kind,txt:`${kind} hunt: ${B.cl.length} critters`,tag:'Hunt',hold:1,qv:ADV?4:1};
+ R0.sayPT=()=>{const c=B.cl[R0.ai|0];if(!c)return;if(c.pt)sayPT(c.say);else say(c.say,true)};
+ R0.mount=(el,api)=>huntMount(el,api,B,R0);return R0}}
+function huntMount(el,api,B,R0){const H=huntS(),me=R0;let ai=0,coins=0,anyHelp=false;const st=B.cl.map(()=>({w:0,h:false,ok:false}));let tmr=0;
+ el.innerHTML=`<div class="panel hpanel"><div id="msg"></div><div class="hwrap"><svg class="hst" viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg">${(SCN[B.bg]||SCN[0]).s}<g id="hL">${B.hid.map((h,i)=>critG(h,i)+propG(h.pi,h.x,h.y,h.ps,`data-p="${i}"`)).join('')}${B.deco.map((d,i)=>propG(d.pi,d.x,d.y,d.s,`data-d="${i}"`)).join('')}</g><g id="hTop"></g><g id="hSp"></g></svg></div><div class="hcl" id="hcl"></div></div>`;
+ const svg=el.querySelector('.hst'),hL=svg.querySelector('#hL'),top=svg.querySelector('#hTop');
+ const alive=()=>R===me&&document.body.contains(svg);
+ const spk=c=>{if(c.pt)sayPT(c.say);else say(c.say,true)};
+ const drawCl=()=>{$('#hcl').innerHTML=B.cl.map((c,i)=>{const lk=B.trail&&i>ai&&!st[i].ok,s=st[i];return `<button class="hcd${i===ai&&!s.ok?' on':''}${s.ok?' ok':''}${lk?' lk':''}" data-c="${i}">${s.ok?`<span class="hca">${art(c.t.id,tierOf(S.owned[c.t.id]|0))}</span>`:c.sil?`<span class="hca sil">${art(c.t.id,0)}</span>`:''}<span class="hct">${lk?'🔒 Find the others first':s.ok?`✓ ${esc(MON[c.t.id].name)}`:c.txt}${!s.ok&&!lk&&c.en&&s.w>0?`<small>${esc(c.en)}</small>`:''}</span>${!s.ok&&!lk?'<span class="hsp">🔊</span>':''}</button>`}).join('');
+  $$('#hcl [data-c]').forEach(b=>b.onclick=()=>{ac();const i=+b.dataset.c;if(st[i].ok||(B.trail&&i>ai))return;ai=i;R0.ai=i;SFX.tap();drawCl();spk(B.cl[i]);arm()})};
+ const sparkle=i=>{const h=B.hid.find(x=>x.id===B.cl[i].t.id);svg.querySelector('#hSp').innerHTML=`<circle class="hspk" cx="${h.cx.toFixed(0)}" cy="${(h.cy-h.cs*.2).toFixed(0)}" r="${(h.cs*.55).toFixed(0)}" fill="none" stroke="#ffd23f" stroke-width="10"/>`};
+ const arm=()=>{clearTimeout(tmr);tmr=setTimeout(()=>{if(!alive()||st[ai].ok)return;st[ai].h=true;anyHelp=true;sparkle(ai);buddySay('Look where it sparkles!')},30000)};
+ const nextAi=()=>{const k=B.cl.findIndex((c,i)=>!st[i].ok);return k};
+ const tagStat=(c,first)=>{const k=G.key,l=R0.lvl||B.L;S.stats[k]=S.stats[k]||{};const s=S.stats[k][l]=S.stats[k][l]||{n:0,first:0,wrong:0,hint:0,tags:{}};const t=s.tags[c.tag]=s.tags[c.tag]||[0,0];t[0]++;if(first)t[1]++};
+ const finish=()=>{clearTimeout(tmr);const first=H.day!==dkey();const bonus=first?20:10;coins+=bonus;H.day=dkey();H.total++;H.n[B.kind]=(H.n[B.kind]|0)+1;const nb=H.n[B.kind];
+  if([5,15,30].includes(nb))setTimeout(()=>{toast(`New badge: ${HUNTG.find(g=>g.key===B.kind).name} ${['bronze','silver','gold'][[5,15,30].indexOf(nb)]}!`);SFX.fanfare()},900);
+  R0.coins=coins;api.setMiss(anyHelp?1:0);
+  const found=B.hid.filter(h=>h.tgt);
+  el.querySelector('.panel').innerHTML=`<div id="msg"></div><div class="hph"><svg viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg">${(SCN[B.bg]||SCN[0]).s}${found.map((h,i)=>{const s=Math.min(260,900/found.length),x=500+(i-(found.length-1)/2)*s*.95;return `<g transform="translate(${(x-s/2).toFixed(0)} ${(560-s/2).toFixed(0)}) scale(${(s/120).toFixed(3)})"><g class="hjump" style="animation-delay:${i*.15}s">${inner(art(h.id,tierOf(S.owned[h.id]|0)))}</g></g>`}).join('')}</svg></div>
+   <div class="ptunit" style="text-align:center;margin:0"><b>You found everyone!</b> +${coins} coins${first?' (first hunt today: double bonus!)':''}</div>
+   <div class="row"><button class="big alt" id="hSave">📷 Save photo</button><button class="big" id="hNext">${ADV?'Next ▶':'Next hunt ▶'}</button>${ADV?'':'<button class="big alt" id="hDone">Done</button>'}</div>`;
+  $('#hSave').onclick=()=>{ac();S.scenes=S.scenes||[];if(S.scenes.length>=24){toast('My Scenes is full!');return}S.scenes.push({bg:B.bg,items:found.map((h,i)=>{const s=Math.min(260,900/found.length);return{k:'c',i:h.id,x:Math.round(500+(i-(found.length-1)/2)*s*.95),y:560,s:Math.round(s),f:0}}),draw:[]});save();SFX.good();toast('Saved to My Scenes!');$('#hSave').disabled=true};
+  $('#hNext').onclick=()=>{ac();SFX.tap();if(R0.next)R0.next()};if($('#hDone'))$('#hDone').onclick=()=>{ac();SFX.tap();show('hunt')};
+  api.win()};
+ const found=(i,h,g)=>{clearTimeout(tmr);const c=B.cl[i],s=st[i];s.ok=true;const first=s.w===0&&!s.h;if(!first)anyHelp=true;coins+=first?2:1;if(first&&B.kind!=='hh')addLP(1);tagStat(c,first);
+  try{const cr=care(h.id),k=dkey();if(cr.hd!==k&&cr.h<HMAX){cr.h++;cr.hd=k}}catch(e){}
+  top.appendChild(g);g.classList.add('hop');svg.querySelector('#hSp').innerHTML='';SFX.good();confetti(12);say(`Hi! I'm ${MON[h.id].name}!`,true);
+  const k=nextAi();if(k<0){save();drawCl();setTimeout(()=>{if(alive())finish()},1300);return}ai=k;R0.ai=k;drawCl();setTimeout(()=>{if(alive())spk(B.cl[ai])},1300);arm()};
+ svg.addEventListener('click',e=>{if(!alive())return;ac();const g=e.target.closest('.hk,.hpr');if(!g)return;
+  if(g.classList.contains('hk')){const hi=+g.dataset.h,h=B.hid[hi];const ci=B.cl.findIndex((c,i)=>c.t.id===h.id&&!st[i].ok);
+   if(ci===ai){found(ai,h,g);return}if(B.cl.some((c,i)=>c.t.id===h.id&&st[i].ok)){g.classList.remove('hop');void g.getBBox();g.classList.add('hop');SFX.tap();return}
+   const s=st[ai];s.w++;SFX.bad();g.classList.remove('wave');void g.getBBox();g.classList.add('wave');const m=$('#msg');if(m){m.textContent='Not me! Look again.';m.style.color='#c2410c'}buddySay('Not that one. Look again!');
+   if(s.w===1)drawCl();if(s.w>=2&&!s.h){s.h=true;anyHelp=true;sparkle(ai)}return}
+  g.classList.remove('wig');void g.getBBox();g.classList.add('wig');SFX.tap();
+  if(g.dataset.p!=null&&+g.dataset.p===B.coinAt&&!B.coinTaken){B.coinTaken=1;S.coins+=1;drawCoins(true);SFX.coin();toast('A hidden coin! +1')}
+  if(g.dataset.d!=null&&B.deco[+g.dataset.d].chest&&!B.chestOpen){B.chestOpen=1;const nx=[0,1,2,3,4,5].map(k=>TRB+k).find(k=>!H.tp.includes(k));SFX.fanfare();confetti(50);
+   if(nx!=null){H.tp.push(nx);toast(`Treasure! New sticker: ${PROPS[nx][0]}`);say(`Treasure! You found a ${PROPS[nx][0]} sticker!`,true)}else{S.coins+=15;drawCoins(true);toast('Treasure! +15 coins')}save()}});
+ R0.cheat=()=>{let g=0;const step=()=>{if(!alive()||g++>20)return;const i=ai;if(st[i]&&!st[i].ok){const h=B.hid.find(x=>x.id===B.cl[i].t.id);found(i,h,svg.querySelector(`.hk[data-h="${B.hid.indexOf(h)}"]`));if(nextAi()>=0)step()}};step()};
+ R0.ai=0;drawCl();setTimeout(()=>{if(alive()){spk(B.cl[0]);buddySay('Some friends are hiding! Can you find them?')}},500);arm()}
+const HUNTG=[
+ {key:'hh',name:'Hide and Seek',en:'Find the shadow',kind:'hunt',icon:'👀',bg:'#2f9e44',max:4},
+ {key:'hc',name:'Clue Hunt',en:'Read the clues',kind:'hunt',icon:'🔍',bg:'#2b8fd0',max:4},
+ {key:'hn',name:'Number Hunt',en:'Solve to find',kind:'hunt',icon:'🔢',bg:'#e8743b',max:4},
+ {key:'hp',name:'Caça em Português',en:'Portuguese clues',kind:'hunt',icon:'🇧🇷',bg:'#7a55c9',max:4}];
+HUNTG.forEach(g=>{g.make=huntRound(g.key);GKEY[g.key]=g});
+const huntLock=k=>k==='hn'&&huntS().total<2?'Opens after 2 hunts':k==='hp'&&ptS().u<2?'Opens when Português colors open':'';
+function badgeOf(n){return n>=30?'🥇':n>=15?'🥈':n>=5?'🥉':''}
+function drawHuntMenu(){const H=huntS();
+ $('#huntG').innerHTML=HUNTG.map(g=>{const lk=huntLock(g.key),n=H.n[g.key]|0,nx=[5,15,30].find(x=>x>n);return `<button class="gcard${lk?' lockd':''}" data-hg="${g.key}" style="background:${g.bg}"><span class="gi">${g.icon}</span><span class="gn">${g.name}</span><span class="gl">${esc(g.en)}<br>${lk?`🔒 ${lk}`:`Level ${gs(g.key).lvl} of 4 · ${badgeOf(n)||''} ${n} hunt${n===1?'':'s'}${nx?` · ${nx-n} to ${['bronze','silver','gold'][[5,15,30].indexOf(nx)]}`:''}`}</span></button>`}).join('');
+ $('#huntT').innerHTML=`<b>Treasure stickers</b> <span class="small">Every 5th hunt hides a treasure chest!</span><div class="row" style="gap:8px;justify-content:flex-start;margin-top:6px">${[0,1,2,3,4,5].map(k=>{const i=TRB+k,h=H.tp.includes(i);return `<span class="htre${h?'':' no'}" title="${PROPS[i][0]}"><svg viewBox="0 0 120 120">${PROPS[i][1]}</svg></span>`}).join('')}</div>`;
+ $$('#huntG [data-hg]').forEach(b=>b.onclick=()=>{ac();const k=b.dataset.hg,lk=huntLock(k);if(lk){SFX.bad();toast(lk+'!');return}if(!ownedIds().length){toast('Open a pack to get critters first!');return}SFX.tap();const st=gs(k);if(!st.place)st.place={l:1,done:1};openGame(k)})}
+function huntBookHTML(){const H=huntS();return `<h3 style="grid-column:1/-1;margin:6px 0 0">Hunt badges · ${H.total} hunts</h3>`+HUNTG.map(g=>{const n=H.n[g.key]|0;return `<div class="hbadge" style="--r:${g.bg}"><div class="hbi">${badgeOf(n)||'⚪'}</div><b>${g.name}</b><span class="small">${n} hunts · bronze 5, silver 15, gold 30</span></div>`}).join('')+`<h3 style="grid-column:1/-1;margin:6px 0 0">Treasure stickers ${H.tp.length}/6</h3>`+[0,1,2,3,4,5].map(k=>{const i=TRB+k,h=H.tp.includes(i);return `<div class="hbadge"><span class="htre${h?'':' no'}"><svg viewBox="0 0 120 120">${PROPS[i][1]}</svg></span><b>${h?PROPS[i][0]:'???'}</b></div>`}).join('')}
 function drawHub(){const n=ownedIds().length,b=buddyId();const t=(c,ic,ti,sub,go)=>`<button class="hcard" data-h="${go}" style="background:${c}"><div class="hi">${ic}</div><b>${ti}</b><span>${sub}</span></button>`;
  const ps=i=>`<svg viewBox="0 0 120 120">${PROPS[i][1]}</svg>`;
  $('#hub').innerHTML=t('#3fbf6a',ps(0),'Sticker Scenes',`${UNL.length-unlN()?`${unlN()} of ${UNL.length} bonus stickers unlocked`:'All stickers unlocked!'}`,'new')+t('#2f9fd0',`<svg viewBox="0 0 1000 750">${SCN[1].s}</svg>`,'My Scenes',`${(S.scenes||[]).length} saved`,'scenes')
   +t('#d94f70',ps(16),'Story Maker','18 stories where you choose what happens','mk')+t('#7a55c9',ps(12),'My Stories',`${(S.stories||[]).length} saved`,'stories')
-  +t('#2f9e44',`<svg viewBox="0 0 600 400">${ZONE[0][3]}<ellipse cx="300" cy="420" rx="420" ry="150" fill="#6cc96a"/></svg>`,'Critter World','Visit your critters, feed them and play','world')+t('#b07a1d',ps(17),'Team Quest','Pick a team of 3 for a 6-question quest','quest')
+  +t('#2f9e44',`<svg viewBox="0 0 600 400">${ZONE[0][3]}<ellipse cx="300" cy="420" rx="420" ry="150" fill="#6cc96a"/></svg>`,'Critter World','Visit your critters, feed them and play','world')+t('#b07a1d',ps(17),'Team Quest','Pick a team of 3 for a 6-question quest','quest')+t('#1d9bb0',ps(TRB),'Critter Hunt','Find your hiding critters!','hunt')
   +t('#e8743b',b!=null?art(b,tierOf(S.owned[b])):ps(7),'My Buddy',b!=null?`${esc(MON[b].name)} helps you in games`:'Open packs to get one!','buddy');
  $$('#hub .hcard').forEach(c=>c.onclick=()=>{ac();SFX.tap();const h=c.dataset.h;
-  if(h==='world'){show('world');return}if(h==='quest'){if(!n){toast('Open a pack to get critters first!');return}startQuest();return}
+  if(h==='hunt'){if(!n){toast('Open a pack to get critters first!');return}show('hunt');return}if(h==='world'){show('world');return}if(h==='quest'){if(!n){toast('Open a pack to get critters first!');return}startQuest();return}
   if(h==='new')newScene();else if(h==='scenes')gallery('scenes');else if(h==='stories')gallery('stories');
   else if(h==='mk'){if(!n){toast('Open a pack to get critters first!');return}startMk()}
   else if(h==='buddy'){if(!n){toast('Open a pack to get critters first!');return}pickCritters({title:'Pick your buddy',sub:'Your buddy cheers you on and helps when a question is tricky.',max:1,sel:b!=null?[b]:[],done:ids=>{S.buddy=ids[0];save();drawHub();toast(`${MON[ids[0]].name} is your buddy!`);say(`Hi Max! I am ${MON[ids[0]].name}. Let's play!`)}})}})}
@@ -1273,7 +1415,7 @@ function drawTray(){$$('#tray [data-tt]').forEach(b=>b.classList.toggle('on',b.d
  else if(tt==='p'){const ord=PROPS.map((_,i)=>i).sort((a,b)=>(isUnl('p',b)-isUnl('p',a))||(unlIdx('p',a)-unlIdx('p',b)));T.innerHTML=ord.map(i=>`<button class="ti${lk('p',i)}" data-k="p" data-i="${i}" aria-label="${PROPS[i][0]}"><svg viewBox="0 0 120 120">${PROPS[i][1]}</svg></button>`).join('')}
  else if(tt==='b')T.innerHTML=SCN.map((b,i)=>`<button class="ti bg${SC.bg===i?' on':''}${lk('b',i)}" data-k="b" data-i="${i}" aria-label="${b.n}"><svg viewBox="0 0 1000 750">${b.s}</svg></button>`).join('');
  else{drawDTray(T);return}
- T.querySelectorAll('.ti').forEach(b=>b.onclick=()=>{ac();const k=b.dataset.k,i=+b.dataset.i;if(!isUnl(k,i)){SFX.bad();toast(`Answer ${needFor(k,i)} more questions in games to unlock!`);return}SFX.tap();
+ T.querySelectorAll('.ti').forEach(b=>b.onclick=()=>{ac();const k=b.dataset.k,i=+b.dataset.i;if(!isUnl(k,i)){SFX.bad();toast(k==='p'&&isTre(i)?'Find it in a Critter Hunt treasure chest!':`Answer ${needFor(k,i)} more questions in games to unlock!`);return}SFX.tap();
   if(k==='b'){SC.bg=i;scDirty=true;drawStage();drawTray();return}
   if(SC.items.length>=40){toast('That is a lot of stickers!');return}
   SC.items.push({k,i,x:380+Math.random()*240,y:k==='c'?480+Math.random()*80:380+Math.random()*120,s:k==='c'?200:160,f:0});selN=SC.items.length-1;scDirty=true;drawStage()})}
@@ -1475,14 +1617,14 @@ const TALK=['Tell a grown-up how you solved the last question.','Find 3 round th
 let ADV=null;
 function advGames(){const now=Date.now();const sc=GAMES.map(g=>{const ss=S.stats[g.key]||{};let n=0,f=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first});const due=(S.due||[]).filter(d=>d.g===g.key&&d.at<=now).length;
   return{k:g.key,kind:g.kind,w:(n>=3?1-f/n:.25)+Math.min(due,3)*.2+Math.random()*.3}}).sort((a,b)=>b.w-a.w);
- const out=[sc[0]];out.push(sc.find(x=>x.kind!==sc[0].kind));out.push(sc.find(x=>!out.includes(x)));const o=out.map(x=>x.k),pg=ptOpen().filter(k=>k!=='ps'&&k!=='pm');if(pg.length&&Math.random()<.5)o[2]=pg[Math.floor(Math.random()*pg.length)];return shuffle(o)}
+ const out=[sc[0]];out.push(sc.find(x=>x.kind!==sc[0].kind));out.push(sc.find(x=>!out.includes(x)));const o=out.map(x=>x.k),pg=ptOpen().filter(k=>k!=='ps'&&k!=='pm');if(pg.length&&Math.random()<.5)o[2]=pg[Math.floor(Math.random()*pg.length)];if(ownedIds().length>=3&&Math.random()<1/3)o[1]='hc';return shuffle(o)}
 const advDone=()=>day().adv>0;
 function limitHit(){return S.limit>0&&day().sec>=(S.limit+(day().extra|0))*60}
 function rest(){$('#restT').textContent=`You played ${Math.round(day().sec/60)} minutes today.`;const b=buddyId();$('#restArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#restOv').classList.add('on');say('Time for a rest! See you tomorrow.')}
 function startAdv(){if(limitHit()){rest();return}ADV={games:advGames(),q:0,talk:S.talk!==false?7+Math.floor(Math.random()*3):-1};G=GKEY[ADV.games[0]];show('game');$('#gTitle').textContent=G.name;drawBuddy();ADV.on=1;nextRound();
  setTimeout(()=>buddySay('Adventure time! 12 questions.'),400);say("Adventure time! Let's go!")}
 function advNext(){if(ADV.q>=(ADV.n||12)){if(ADV.kind==='visit')finishVisit();else if(ADV.kind==='quest')finishQuest();else finishAdv();return true}
- if(ADV.q===ADV.talk){ADV.talk=-2;$('#talkT').textContent=pick(TALK);const b=buddyId();$('#talkArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#talkOv').classList.add('on');SFX.flip();say('Grown-up time! '+$('#talkT').textContent);return true}
+ if(ADV.talk>=0&&ADV.q>=ADV.talk){ADV.talk=-2;$('#talkT').textContent=pick(TALK);const b=buddyId();$('#talkArt').innerHTML=b!=null?art(b,tierOf(S.owned[b])):'';$('#talkOv').classList.add('on');SFX.flip();say('Grown-up time! '+$('#talkT').textContent);return true}
  const k=ADV.games[Math.min(ADV.games.length-1,Math.floor(ADV.q/(ADV.per||4)))];if(G.key!==k){G=GKEY[k];$('#gTitle').textContent=G.name;toast(`Next: ${G.name}!`);buddySay(`Now ${G.name}!`)}return false}
 $('#advBtn').onclick=()=>{ac();SFX.tap();startAdv()};
 $('#talkGo').onclick=()=>{SFX.tap();$('#talkOv').classList.remove('on');nextRound()};
@@ -1817,13 +1959,13 @@ function drawParent(){$$('#ptabs button').forEach(b=>b.classList.toggle('on',b.d
  if(ptab==='stats'){let tot=0,first=0;Object.values(S.stats).forEach(g=>Object.values(g).forEach(s=>{tot+=s.n;first+=s.first}));
   let h=`<h2>Max's progress</h2><p class="small">"First try" means he picked the right answer with no mistakes. Green is 90% or more (ready for harder), yellow is 70–89%, red is under 70% (could use practice). Use − and + to change a game's level. Levels now move by mastery: up after 4 of his last 5 answers at a level are right on the first try, and quietly down one level after 3 misses in a row or under 60% over his last 10. About 1 question in 5 reviews an easier level, and missed questions come back 1 and 3 days later.</p>
   <p><b>${tot}</b> questions answered · <b>${pc(first,tot)??0}%</b> right on the first try · ${S.coins} coins · ${Object.keys(S.owned).length}/${BASE.length} critters · ${S.packs} packs opened</p><div class="tscroll"><table><thead><tr><th>Game</th><th>Level now</th><th class="n">Questions</th><th class="n">First try</th><th class="n">Mistakes</th><th>By level</th></tr></thead><tbody>`;
-  for(const kind of['math','read','pt']){h+=`<tr><td colspan="6"><b>${kind=='math'?'Math':kind=='pt'?'Português':'Reading'}</b></td></tr>`;
-   [...GAMES,...PTG].filter(g=>g.kind===kind).forEach(g=>{const st=gs(g.key),ss=S.stats[g.key]||{};let n=0,f=0,w=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first;w+=s.wrong});const p=pc(f,n);
+  for(const kind of['math','read','pt','hunt']){h+=`<tr><td colspan="6"><b>${kind=='math'?'Math':kind=='pt'?'Português':kind=='hunt'?'Critter Hunt':'Reading'}</b></td></tr>`;
+   [...GAMES,...PTG,...HUNTG].filter(g=>g.kind===kind).forEach(g=>{const st=gs(g.key),ss=S.stats[g.key]||{};let n=0,f=0,w=0;Object.values(ss).forEach(s=>{n+=s.n;f+=s.first;w+=s.wrong});const p=pc(f,n);
     const by=Object.keys(ss).sort((a,b)=>a-b).map(l=>{const s=ss[l],q=pc(s.first,s.n);return `<span class="pct" style="background:${pcol(q)}" title="Level ${l}">L${l}: ${q}%</span>`}).join(' ');
     h+=`<tr><td>${g.name}</td><td><span class="lv"><button data-lv="${g.key}" data-d="-1" aria-label="Lower level">−</button>${st.lvl}/${g.max}<button data-lv="${g.key}" data-d="1" aria-label="Raise level">+</button></span></td><td class="n">${n}</td><td class="n"><span class="pct" style="background:${pcol(p)}">${p==null?'–':p+'%'}</span></td><td class="n">${w}</td><td>${by||'<span class="small">not played yet</span>'}</td></tr>`})}
   h+=`</tbody></table></div>`;
   if((S.events||[]).length)h+=`<h3>Recent level changes</h3><div class="tscroll"><table><tbody>${S.events.slice(0,12).map(e=>`<tr><td>${new Date(e.t).toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}</td><td>${esc(GKEY[e.g]?.name||e.g)}</td><td style="white-space:normal">${esc(e.m)}</td></tr>`).join('')}</tbody></table></div>`;
-  const tags=[];GAMES.forEach(g=>Object.entries(S.stats[g.key]||{}).forEach(([l,s])=>Object.entries(s.tags||{}).forEach(([t,v])=>tags.push({g:g.name,l,t,n:v[0],p:pc(v[1],v[0])}))));
+  const tags=[];[...GAMES,...PTG,...HUNTG].forEach(g=>Object.entries(S.stats[g.key]||{}).forEach(([l,s])=>Object.entries(s.tags||{}).forEach(([t,v])=>tags.push({g:g.name,l,t,n:v[0],p:pc(v[1],v[0])}))));
   const agg={};tags.forEach(x=>{const k=x.g+'|'+x.t;agg[k]=agg[k]||{g:x.g,t:x.t,n:0,f:0};agg[k].n+=x.n;agg[k].f+=Math.round(x.p*x.n/100)});
   const rows=Object.values(agg).filter(x=>x.n>=3).sort((a,b)=>a.f/a.n-b.f/b.n);
   if(rows.length)h+=`<h3>By skill (3 or more tries)</h3><div class="tscroll"><table><thead><tr><th>Game</th><th>Skill</th><th class="n">Tries</th><th class="n">First try</th></tr></thead><tbody>${rows.map(x=>{const p=pc(x.f,x.n);return `<tr><td>${x.g}</td><td>${esc(x.t)}</td><td class="n">${x.n}</td><td class="n"><span class="pct" style="background:${pcol(p)}">${p}%</span></td></tr>`}).join('')}</tbody></table></div>`;
@@ -1844,7 +1986,7 @@ $('#parentClose').onclick=()=>{$('#parentOv').classList.remove('on');refresh()};
 /* =============== start =============== */
 const sky=$('#sky');for(let j=0;j<50;j++){const s=document.createElement('i');s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';sky.appendChild(s)}
 addEventListener('resize',()=>{if(R&&R.redraw&&$('#game').classList.contains('on'))R.redraw()});
-window.__game={PTG,PW,PTU,ptS,pickWord,drawPT,sayPT,ptMark,pwLearned,AB,addLP,unlN,UNL,PROB,svPages,get SV(){return SV},sceneStory,CHAL,get chI(){return chI},newChal,drawWorld,openCare,startQuest,finishQuest,care,visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
+window.__game={HUNTG,huntS,huntBuild,TRB,PTG,PW,PTU,ptS,pickWord,drawPT,sayPT,ptMark,pwLearned,AB,addLP,unlN,UNL,PROB,svPages,get SV(){return SV},sceneStory,CHAL,get chI(){return chI},newChal,drawWorld,openCare,startQuest,finishQuest,care,visitNow,startVisit,seasonOn,specHTML,weekIdx,tapWords,SPELL,startAdv,get ADV(){return ADV},day,weekHTML,gArt,gCount,addGuard,buy,MON,GAMES,PACKS,art,newScene,startMk,viewStory,makeStory,gallery,scenePNG,get SC(){return SC},get S(){return S},get R(){return R},openGame,rollRar,genSym,SYML};
 drawHome();drawCoins();
 }
 </script>
